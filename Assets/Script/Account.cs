@@ -9,6 +9,8 @@ public class Account : MonoBehaviour {
 	public GameObject usernameInput;
 	public GameObject passwordInput;
 
+	public string a;
+
 	private void setUsernameInput(string input){
 		Text text = usernameInput.GetComponent<Text> ();
 		text.text = input;
