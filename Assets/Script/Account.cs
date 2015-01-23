@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 using Parse;
 
 public class Account : MonoBehaviour {
-	public GameObject usernameInput;
-	public GameObject passwordInput;
+	public GameObject inpUsername;
+	public GameObject inpPassword;
 
 	private string getUsernameInput(){
-		return usernameInput.GetComponent<Text> ().text;
+		return inpUsername.GetComponent<Text> ().text;
 	}
 
 	private string getPasswordInput(){
-		return passwordInput.GetComponent<Text> ().text;
+		return inpPassword.GetComponent<Text> ().text;
 	}
 
 	public void signUp(){
@@ -58,7 +58,7 @@ public class Account : MonoBehaviour {
 		});
 	}
 
-	public bool checkCurrentUser(){
+	public static bool hasCurrentUser(){
 		if (ParseUser.CurrentUser != null){
 			return true;
 		}else{
