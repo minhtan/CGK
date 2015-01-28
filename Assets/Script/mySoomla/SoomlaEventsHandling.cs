@@ -7,7 +7,7 @@ using Parse;
 
 public class SoomlaEventsHandling : MonoBehaviour
 {
-
+    public string key;
         /// <summary>
         /// Constructor.
         /// Subscribes to potential events.
@@ -156,7 +156,7 @@ public class SoomlaEventsHandling : MonoBehaviour
         {
             if (Account.hasCurrentUser())
             {
-                addCoin(amountAdded);
+                addCoin(amountAdded, key);
             } else {
                 Debug.Log("User need to sign in");
                 Notification.invalidUser();
@@ -208,9 +208,10 @@ public class SoomlaEventsHandling : MonoBehaviour
 		}
 #endif
 
-        private void addCoin(int amount) {
+        private void addCoin(int amount, string key) {
             IDictionary<string, object> dict = new Dictionary<string, object>() { 
-                 {"amount", amount}
+                 {"amount", amount},
+                 {"key", key}
             };
             ParseCloud.CallFunctionAsync<IDictionary<string, object>>("addCoin", dict).ContinueWith(t =>
             {
