@@ -9,6 +9,17 @@ public class Account : MonoBehaviour {
 	public GameObject inpUsername;
 	public GameObject inpPassword;
 
+    void Start() {
+        if (hasCurrentUser())
+        {
+            myGUI.signIn(true);
+        }
+        else 
+        {
+            myGUI.signIn(false);    
+        }
+    }
+
 	private string getUsernameInput(){
 		return inpUsername.GetComponent<Text> ().text;
 	}
@@ -39,8 +50,10 @@ public class Account : MonoBehaviour {
 				object errorCode;
 				if (result.TryGetValue("errorCode", out errorCode)) {
 					Debug.Log ("Error: " + result["errorCode"] + ", " + result["message"]);
+                    myGUI.signIn(false);
 				} else {
 					Debug.Log ("Success: " + result["successCode"]);
+                    myGUI.signIn(true);
 				}
 			}
 		});
@@ -52,8 +65,10 @@ public class Account : MonoBehaviour {
 		ParseUser.LogInAsync (username, password).ContinueWith (t => {
 			if (t.IsFaulted || t.IsCanceled) {
 				Debug.Log ("Sign in failed");
+                myGUI.signIn(false);
 			} else {
 				Debug.Log ("Sign in successfully");
+                myGUI.signIn(true);
 			}
 		});
 	}

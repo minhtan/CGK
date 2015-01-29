@@ -4,7 +4,7 @@ using System.Collections;
 public class myGUI : MonoBehaviour {
 
     public GameObject signInPanel;
-    public GameObject storePanel;
+    public GameObject gamePanel;
     private static myGUI mg;
 
     void Start() {
@@ -14,9 +14,10 @@ public class myGUI : MonoBehaviour {
     public static void signIn(bool success) {
         if (success) {
             mg.signInPanel.SetActive(false);
-            mg.storePanel.SetActive(true);
+            mg.gamePanel.SetActive(true);
         } else {
             mg.signInPanel.SetActive(true);
+            mg.gamePanel.SetActive(false);
         }
     }
 }

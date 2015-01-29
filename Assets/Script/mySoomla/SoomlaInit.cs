@@ -7,7 +7,7 @@ using Soomla.Profile;
 public class SoomlaInit : MonoBehaviour {
     // Initialize
     void Start() {
-        //SoomlaHighway.Initialize ();
+        SoomlaHighway.Initialize();
         SoomlaStore.Initialize(new SoomlaItems());
         SoomlaProfile.Initialize();
         SoomlaStore.StartIabServiceInBg();

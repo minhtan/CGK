@@ -156,7 +156,7 @@ public class SoomlaEventsHandling : MonoBehaviour
         {
             if (Account.hasCurrentUser())
             {
-                addCoin(amountAdded, key);
+                addCoin(amountAdded, this.key);
             } else {
                 Debug.Log("User need to sign in");
                 Notification.invalidUser();
