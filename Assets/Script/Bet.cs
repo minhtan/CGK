@@ -8,6 +8,7 @@ using Parse;
 
 public class Bet : MonoBehaviour {
 	private int coin;
+    public string key;
 
 	public void getMyCoin(){
 		if (Account.hasCurrentUser ()) {
@@ -71,5 +72,48 @@ public class Bet : MonoBehaviour {
             Notification.invalidUser();
         }
 	}
+
+    public void takeMyCoin(string bundle) {
+        if (Account.hasCurrentUser())
+        {
+            IDictionary<string, object> dict = new Dictionary<string, object>() { 
+                {"key", this.key},
+			    {"bundle", bundle}
+            };
+            ParseCloud.CallFunctionAsync<IDictionary<string, object>>("takeMyCoin", dict).ContinueWith(t =>
+            {
+                if (t.IsFaulted)
+                {
+                    using (IEnumerator<System.Exception> enumerator = t.Exception.InnerExceptions.GetEnumerator())
+                    {
+                        if (enumerator.MoveNext())
+                        {
+                            ParseException error = (ParseException)enumerator.Current;
+                            Debug.Log("Error: " + error.Code + ", " + error.Message);
+                        }
+                    }
+                }
+                else
+                {
+                    IDictionary<string, object> result = t.Result;
+                    object errorCode;
+                    if (result.TryGetValue("errorCode", out errorCode))
+                    {
+                        Debug.Log("Error: " + result["errorCode"] + ", " + result["message"]);
+                    }
+                    else
+                    {
+                        coin = Convert.ToInt32(result["coin"]);
+                        Debug.Log(coin);
+                    }
+                }
+            });
+        }
+        else
+        {
+            Debug.Log("User need to sign in");
+            Notification.invalidUser();
+        }
+    }
 
 }
