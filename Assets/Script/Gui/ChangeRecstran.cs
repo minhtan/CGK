@@ -14,8 +14,8 @@ public class ChangeRecstran : MonoBehaviour {
     }
 	// Use this for initialization
 	void Start () {
-        float widthChildren = anchorParent.getAnchorXDelta() * Screen.width;
-        float heightchildren = Screen.height * ratio;
+        float widthChildren = anchorParent.getAnchorXDelta() * (1024);
+        float heightchildren = 200f;
         GetComponent<RectTransform>().sizeDelta = new Vector2(widthChildren, heightchildren);
         rectChildren.offsetMax = new Vector2(0, heightchildren);
 	}

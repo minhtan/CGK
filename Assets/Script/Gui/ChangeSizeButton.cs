@@ -11,8 +11,7 @@ public class ChangeSizeButton : MonoBehaviour {
 
     void Start() { 
         rectParent = panelParent.GetComponent<AnchorDelta>();
-        float widthParent = rectParent.getAnchorXDelta() * Screen.width;
-        float heightParent = rectParent.getAnchorYDelta() * Screen.height;
+        float widthParent = rectParent.getAnchorXDelta() * 1024;
         rectChildren = GetComponent<RectTransform>();
         
         if (anchorYDelta == 0.1f)
@@ -28,7 +27,7 @@ public class ChangeSizeButton : MonoBehaviour {
             anchorYDelta = anchorYDelta - 0.1f;
             
         }
-        rectChildren.sizeDelta = new Vector2(widthParent, anchorYDelta * Screen.height);
-        rectChildren.anchoredPosition = new Vector2(0, - (ratio * Screen.height));
+        rectChildren.sizeDelta = new Vector2(widthParent, anchorYDelta * 768);
+        rectChildren.anchoredPosition = new Vector2(0, - (ratio * 768));
     }
 }
