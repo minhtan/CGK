@@ -23,6 +23,7 @@ public class myGUI : MonoBehaviour {
     public GameObject panelCoverPnlBet;
     public Account account;
     private bool isLogin = false;
+    public Animator animLogin;
     void Start() {
         mg = this;
         RectTransform transform = settingAnim.gameObject.transform as RectTransform;
@@ -51,10 +52,12 @@ public class myGUI : MonoBehaviour {
 
     public void signIn() {
         isLogin = true;
-        if (account.GetComponent<Account>().getIsTrue())
+        if (account.getIsTrue())
         {
-            mg.signInPanel.SetActive(false);
-            mg.storePanel.SetActive(true);
+            animLogin.enabled = true;
+            bool isPanelDown = animLogin.GetBool("isPnlDown");
+            animLogin.SetBool("isPnlDown", !isPanelDown);
+            isLogin = false;
         } else {
             mg.signInPanel.SetActive(true);
         }
