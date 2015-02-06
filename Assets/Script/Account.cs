@@ -8,6 +8,7 @@ using Parse;
 public class Account : MonoBehaviour {
 	public GameObject inpUsername;
 	public GameObject inpPassword;
+    private bool isTrue = false;
 
 	private string getUsernameInput(){
 		return inpUsername.GetComponent<Text> ().text;
@@ -46,14 +47,20 @@ public class Account : MonoBehaviour {
 		});
 	}
 
+    public bool getIsTrue(){
+        return isTrue;
+    }
+
 	public void signIn(){
 		string username = getUsernameInput ();
 		string password = getPasswordInput ();
 		ParseUser.LogInAsync (username, password).ContinueWith (t => {
 			if (t.IsFaulted || t.IsCanceled) {
 				Debug.Log ("Sign in failed");
+                isTrue = false;
 			} else {
 				Debug.Log ("Sign in successfully");
+                isTrue = true;
 			}
 		});
 	}

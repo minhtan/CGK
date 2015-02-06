@@ -20,15 +20,26 @@ public class SizeFolowCanvas : MonoBehaviour {
     //chinh size cho panel Animal
     public GameObject panelAnimal;
     private RectTransform rectPanelAnimal;
-
+    //chinh size cho panel time bet
+    public GameObject panelTimeBet;
+    private RectTransform rectTimeBet;
     //chinh size panelShop
     public GameObject panelShop;
+    //chinh size panel cover panel bet
+    public GameObject panelCoverPanelBet;
+    private RectTransform rectCoverPnlBet;
+    //chinh size panel acount;
+    public GameObject panelAcount;
+    private RectTransform rectAcount;
 
     void Awake(){
         rectCanvas = GetComponent<RectTransform>();
         rectSetting = btnSetting.GetComponent<RectTransform>();
         rectPanelBet = panelBet.GetComponent<RectTransform>();
         rectPanelAnimal = panelAnimal.GetComponent<RectTransform>();
+        rectTimeBet = panelTimeBet.GetComponent<RectTransform>();
+        rectCoverPnlBet = panelCoverPanelBet.GetComponent<RectTransform>();
+        rectAcount = panelAcount.GetComponent<RectTransform>();
     }
 
 	void Start () {
@@ -37,15 +48,19 @@ public class SizeFolowCanvas : MonoBehaviour {
         float heightBet = sizeBtnSetting + sizeBtnSetting / 2;
         float ratioBetVsScreen = heightBet / heightScreenStandard;
         btnSettingSize(ratioScreen);
-        panelBetSize(ratioScreen, widthCanvas, ratioBetVsScreen);
-        panelAnimalSize(heightBet, ratioScreen, widthCanvas, ratioBetVsScreen);
+        panelBetSize(ratioScreen, widthCanvas, ratioBetVsScreen, rectPanelBet);
+        panelBetSize(ratioScreen, widthCanvas, ratioBetVsScreen, rectCoverPnlBet);
+        panelAnimalVsTimeBetSize(heightBet, ratioScreen, widthCanvas, ratioBetVsScreen, rectPanelAnimal);
+        panelAnimalVsTimeBetSize(heightBet, ratioScreen, widthCanvas, ratioBetVsScreen, rectTimeBet);
         positionAnimal(ratioScreen);
-        panelShopSize(widthCanvas);
+        panelFullScreenSize(widthCanvas, panelShop);
+        panelFullScreenSize(widthCanvas, panelAcount);
 	}
 
-    private void panelShopSize(float widthCanvas) {
-        panelShop.GetComponent<RectTransform>().sizeDelta = new Vector2(widthCanvas, heightScreenStandard);
+    private void panelFullScreenSize(float widthCanvas, GameObject panel) {
+        panel.GetComponent<RectTransform>().sizeDelta = new Vector2(widthCanvas, heightScreenStandard);
     }
+
 
     private void btnSettingSize(float ratioScreen) {
         rectSetting.sizeDelta = new Vector2(sizeBtnSetting / ratioScreen, sizeBtnSetting);
@@ -55,19 +70,19 @@ public class SizeFolowCanvas : MonoBehaviour {
         txtCoin.GetComponent<RectTransform>().sizeDelta = new Vector2(sizeBtnSetting / ratioScreen, sizeBtnSetting / 2);
     }
 
-    private void panelBetSize(float ratioScreen, float widthCanvas, float ratioBetVsScreen)
+    private void panelBetSize(float ratioScreen, float widthCanvas, float ratioBetVsScreen, RectTransform rect)
     {
         float widthBet = Screen.width / ratioScreen - sizeBtnSetting / ratioScreen;
-        rectPanelBet.anchorMax = new Vector2(widthBet / widthCanvas, ratioBetVsScreen);
+        rect.anchorMax = new Vector2(widthBet / widthCanvas, ratioBetVsScreen);
     }
 
-    private void panelAnimalSize(float heightBet, float ratioScreen, float widthCanvas, float ratioBetVsScreen)
+    private void panelAnimalVsTimeBetSize(float heightBet, float ratioScreen, float widthCanvas, float ratioBetVsScreen, RectTransform rect)
     { 
-        float heightAnimal = heightScreenStandard - heightBet;
-        float widthAnimal = Screen.width / ratioScreen;
+        float height = heightScreenStandard - heightBet;
+        float width = Screen.width / ratioScreen;
         
-        rectPanelAnimal.anchorMin = new Vector2(0, ratioBetVsScreen);
-        rectPanelAnimal.anchorMax = new Vector2(widthAnimal / widthCanvas, heightAnimal / heightScreenStandard + ratioBetVsScreen);
+        rect.anchorMin = new Vector2(0, ratioBetVsScreen);
+        rect.anchorMax = new Vector2(width / widthCanvas, height / heightScreenStandard + ratioBetVsScreen);
     }
 
     private float getDeltaAnchorPanelAnimal(float anchorMiny, float anchorMaxY) {

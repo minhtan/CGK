@@ -3,27 +3,22 @@ using System.Collections;
 
 public class pnlAccount : MonoBehaviour {
 
-
+    public static pnlAccount pnlAcc;
     public GameObject panelChildren;
     private RectTransform rectChildren;
-    private RectTransform rectParent;
     public Animator animLogin;
     public GameObject canvas;
 
     void Awake() { 
         rectChildren = panelChildren.GetComponent<RectTransform>();
-        rectParent = GetComponent<RectTransform>();
     }
 
 	void Start () {
-       
-        float heightParent = rectParent.sizeDelta.y;
-        float widthParent = rectParent.sizeDelta.x;
-        rectChildren.sizeDelta = new Vector2(widthParent, heightParent);
+        pnlAcc = this;
 	}
 
-    public void loginAnim() {
-        animLogin.enabled = true;
-        canvas.SetActive(true);
+    public static void loginAnim() {
+        pnlAcc.animLogin.enabled = true;
+        pnlAcc.canvas.SetActive(true);
     }
 }

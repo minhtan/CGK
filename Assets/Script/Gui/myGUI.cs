@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System;
 public class myGUI : MonoBehaviour {
 
     public GameObject signInPanel;
@@ -9,20 +10,49 @@ public class myGUI : MonoBehaviour {
     private int flag;
     private bool isHeldDown;
     private bool isCoroutineRun = false;
-   // private bool isUp = false;
+    // animation cac button;
     public Animator settingAnim;
     public Animator imgSettingAnim;
     public Animator panelShopAnim;
+    // nut start bet
+    private DateTime endTime;
+    private bool isCountdownRunning = true;
+    public Text timer;
+    public GameObject btnStart;
+    public GameObject parentBtnBet;
+    public GameObject panelCoverPnlBet;
+    public Account account;
+    private bool isLogin = false;
     void Start() {
         mg = this;
         RectTransform transform = settingAnim.gameObject.transform as RectTransform;
         Vector2 position = transform.anchoredPosition;
         position.y -= transform.rect.height;
         transform.anchoredPosition = position;
+       
     }
 
-    public static void signIn(bool success) {
-        if (success) {
+    void Update()
+    {
+        if (isHeldDown && !isCoroutineRun)
+        {
+            isCoroutineRun = true;
+            StartCoroutine(btnBetDown());
+        }
+        if (!isCountdownRunning)
+        {
+            StartCoroutine(countdown());
+        }
+        showTimer();
+        if(isLogin){
+            signIn();
+        }
+    }
+
+    public void signIn() {
+        isLogin = true;
+        if (account.GetComponent<Account>().getIsTrue())
+        {
             mg.signInPanel.SetActive(false);
             mg.storePanel.SetActive(true);
         } else {
@@ -53,14 +83,7 @@ public class myGUI : MonoBehaviour {
         isCoroutineRun = false;
     }
 
-    void Update()
-    {
-        if (isHeldDown && !isCoroutineRun)
-        {
-            isCoroutineRun = true;
-            StartCoroutine(btnBetDown());
-        }
-    }
+   
 
     public void btnDown(int number) {
         isHeldDown = true;
@@ -91,6 +114,40 @@ public class myGUI : MonoBehaviour {
         }
 
     }
+
+    // start bet button click
+    public void btnStartBetClick()
+    {
+        endTime = DateTime.Now.AddSeconds(15);
+        isCountdownRunning = false;
+    }
+
+    private IEnumerator countdown()
+    {
+        isCountdownRunning = true;
+        while (endTime > DateTime.Now)
+        {
+            yield return new WaitForSeconds(1f);
+        }
+
+
+    }
+
+    public void showTimer()
+    {
+        TimeSpan timeSpan = endTime.Subtract(DateTime.Now);
+        if (timeSpan.TotalSeconds < 0)
+        {
+            timer.enabled = false;
+        }
+        else {
+            timer.enabled = true;
+            timer.text = timeSpan.Seconds + "";
+            btnStart.SetActive(false);
+            panelCoverPnlBet.SetActive(true);
+        }
+    }
     
+
 
 }
