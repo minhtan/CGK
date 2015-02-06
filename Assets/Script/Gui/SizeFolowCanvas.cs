@@ -17,11 +17,12 @@ public class SizeFolowCanvas : MonoBehaviour {
     // chinh size cho panel Bet
     public GameObject panelBet;
     private RectTransform rectPanelBet;
-
     //chinh size cho panel Animal
     public GameObject panelAnimal;
     private RectTransform rectPanelAnimal;
 
+    //chinh size panelShop
+    public GameObject panelShop;
 
     void Awake(){
         rectCanvas = GetComponent<RectTransform>();
@@ -33,23 +34,45 @@ public class SizeFolowCanvas : MonoBehaviour {
 	void Start () {
         float widthCanvas = rectCanvas.sizeDelta.x;
         float ratioScreen = Screen.width / widthCanvas;
+        float heightBet = sizeBtnSetting + sizeBtnSetting / 2;
+        float ratioBetVsScreen = heightBet / heightScreenStandard;
+        btnSettingSize(ratioScreen);
+        panelBetSize(ratioScreen, widthCanvas, ratioBetVsScreen);
+        panelAnimalSize(heightBet, ratioScreen, widthCanvas, ratioBetVsScreen);
+        positionAnimal(ratioScreen);
+        panelShopSize(widthCanvas);
+	}
+
+    private void panelShopSize(float widthCanvas) {
+        panelShop.GetComponent<RectTransform>().sizeDelta = new Vector2(widthCanvas, heightScreenStandard);
+    }
+
+    private void btnSettingSize(float ratioScreen) {
         rectSetting.sizeDelta = new Vector2(sizeBtnSetting / ratioScreen, sizeBtnSetting);
         panelMash.GetComponent<RectTransform>().sizeDelta = new Vector2(sizeBtnSetting / ratioScreen, heightPanelMash);
         btnMusic.GetComponent<RectTransform>().sizeDelta = new Vector2(sizeBtnSetting / ratioScreen, sizeBtnSetting);
         btnShop.GetComponent<RectTransform>().sizeDelta = new Vector2(sizeBtnSetting / ratioScreen, sizeBtnSetting);
         txtCoin.GetComponent<RectTransform>().sizeDelta = new Vector2(sizeBtnSetting / ratioScreen, sizeBtnSetting / 2);
-        //size  panel bet
-        float heightBet = sizeBtnSetting + sizeBtnSetting / 2;
+    }
+
+    private void panelBetSize(float ratioScreen, float widthCanvas, float ratioBetVsScreen)
+    {
         float widthBet = Screen.width / ratioScreen - sizeBtnSetting / ratioScreen;
-        rectPanelBet.anchorMax = new Vector2(widthBet / widthCanvas, heightBet / heightScreenStandard);
-        //size panel animal
+        rectPanelBet.anchorMax = new Vector2(widthBet / widthCanvas, ratioBetVsScreen);
+    }
+
+    private void panelAnimalSize(float heightBet, float ratioScreen, float widthCanvas, float ratioBetVsScreen)
+    { 
         float heightAnimal = heightScreenStandard - heightBet;
         float widthAnimal = Screen.width / ratioScreen;
-        rectPanelAnimal.anchorMin = new Vector2(0, heightBet / heightScreenStandard);
-        rectPanelAnimal.anchorMax = new Vector2(widthAnimal / widthCanvas, heightAnimal / heightScreenStandard + heightBet / heightScreenStandard);
-        positionAnimal(ratioScreen);
-	}
+        
+        rectPanelAnimal.anchorMin = new Vector2(0, ratioBetVsScreen);
+        rectPanelAnimal.anchorMax = new Vector2(widthAnimal / widthCanvas, heightAnimal / heightScreenStandard + ratioBetVsScreen);
+    }
 
+    private float getDeltaAnchorPanelAnimal(float anchorMiny, float anchorMaxY) {
+        return (anchorMaxY - anchorMiny);
+    }
 
     private void positionAnimal(float ratioScreen)
     {
@@ -72,7 +95,6 @@ public class SizeFolowCanvas : MonoBehaviour {
             paddingTall = System.Convert.ToInt32((panelheight - 3 * spacing - cellsize * 4) / 2);
             gridLayout.padding.top = paddingTall;
             gridLayout.padding.bottom = paddingTall;
-            Debug.Log("theo width");
         }
         gridLayout.cellSize = new Vector2((cellsize), (cellsize));
     }

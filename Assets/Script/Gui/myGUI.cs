@@ -9,10 +9,10 @@ public class myGUI : MonoBehaviour {
     private int flag;
     private bool isHeldDown;
     private bool isCoroutineRun = false;
-    private bool isUp = false;
+   // private bool isUp = false;
     public Animator settingAnim;
     public Animator imgSettingAnim;
-
+    public Animator panelShopAnim;
     void Start() {
         mg = this;
         RectTransform transform = settingAnim.gameObject.transform as RectTransform;
@@ -71,19 +71,7 @@ public class myGUI : MonoBehaviour {
         isHeldDown = false;
     }
 
-    public void btnSettingClick() {
-        if (isUp)
-        {
-            settingAnim.SetBool("isUp", false);
-            isUp = false;
-        }
-        else {
-            settingAnim.SetBool("isUp", true);
-            isUp = true;
-        }
-    }
-
-    public void ToggleMenu()
+    public void btnSettingClick()
     {
         imgSettingAnim.enabled = true;
         bool isHiddenImg = imgSettingAnim.GetBool("isHidden");
@@ -92,5 +80,17 @@ public class myGUI : MonoBehaviour {
         bool isHidden = settingAnim.GetBool("isHidden");
         settingAnim.SetBool("isHidden", !isHidden);
     }
+
+    public void btnShopClick() {
+        panelShopAnim.enabled = true;
+        bool isShopDown = panelShopAnim.GetBool("isShopDown");
+        panelShopAnim.SetBool("isShopDown", !isShopDown);
+        if(isShopDown){
+            bool isHidden = settingAnim.GetBool("isHidden");
+            settingAnim.SetBool("isHidden", !isHidden);
+        }
+
+    }
+    
 
 }
