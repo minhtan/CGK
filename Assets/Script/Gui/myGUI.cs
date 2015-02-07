@@ -21,9 +21,12 @@ public class myGUI : MonoBehaviour {
     public GameObject btnStart;
     public GameObject parentBtnBet;
     public GameObject panelCoverPnlBet;
+    //panel login
     public Account account;
     private bool isLogin = false;
     public Animator animLogin;
+    public GameObject panelError;
+
     void Start() {
         mg = this;
         RectTransform transform = settingAnim.gameObject.transform as RectTransform;
@@ -59,7 +62,7 @@ public class myGUI : MonoBehaviour {
             animLogin.SetBool("isPnlDown", !isPanelDown);
             isLogin = false;
         } else {
-            mg.signInPanel.SetActive(true);
+            panelError.SetActive(true);
         }
     }
 

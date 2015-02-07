@@ -63,16 +63,16 @@ public class SizeFolowCanvas : MonoBehaviour {
 
 
     private void btnSettingSize(float ratioScreen) {
-        rectSetting.sizeDelta = new Vector2(sizeBtnSetting / ratioScreen, sizeBtnSetting);
-        panelMash.GetComponent<RectTransform>().sizeDelta = new Vector2(sizeBtnSetting / ratioScreen, heightPanelMash);
-        btnMusic.GetComponent<RectTransform>().sizeDelta = new Vector2(sizeBtnSetting / ratioScreen, sizeBtnSetting);
-        btnShop.GetComponent<RectTransform>().sizeDelta = new Vector2(sizeBtnSetting / ratioScreen, sizeBtnSetting);
-        txtCoin.GetComponent<RectTransform>().sizeDelta = new Vector2(sizeBtnSetting / ratioScreen, sizeBtnSetting / 2);
+        rectSetting.sizeDelta = new Vector2(sizeBtnSetting, sizeBtnSetting);
+        panelMash.GetComponent<RectTransform>().sizeDelta = new Vector2(sizeBtnSetting, heightPanelMash);
+        btnMusic.GetComponent<RectTransform>().sizeDelta = new Vector2(sizeBtnSetting, sizeBtnSetting);
+        btnShop.GetComponent<RectTransform>().sizeDelta = new Vector2(sizeBtnSetting, sizeBtnSetting);
+        txtCoin.GetComponent<RectTransform>().sizeDelta = new Vector2(sizeBtnSetting, sizeBtnSetting / 2);
     }
 
     private void panelBetSize(float ratioScreen, float widthCanvas, float ratioBetVsScreen, RectTransform rect)
     {
-        float widthBet = Screen.width / ratioScreen - sizeBtnSetting / ratioScreen;
+        float widthBet = Screen.width / ratioScreen - sizeBtnSetting;
         rect.anchorMax = new Vector2(widthBet / widthCanvas, ratioBetVsScreen);
     }
 
