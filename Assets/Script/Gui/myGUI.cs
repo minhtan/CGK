@@ -24,7 +24,8 @@ public class myGUI : MonoBehaviour {
     //panel login
     public Account account;
     private bool isLogin = false;
-    public Animator animLogin;
+    public Animator animDoorLeft;
+    public Animator animDoorRight;
     public GameObject panelError;
 
     void Start() {
@@ -48,22 +49,41 @@ public class myGUI : MonoBehaviour {
             StartCoroutine(countdown());
         }
         showTimer();
-        if(isLogin){
-            signIn();
+        if(account.getIsLoginClick()){
+            StartCoroutine(animLogin());
+            account.setIsLoginClick(false);
+        }
+        
+        
+    }
+
+    private IEnumerator animLogin() {
+        yield return new WaitForSeconds(2f);
+        if (account.getIsTrue())
+        {
+            
+            animDoorLeft.enabled = true;
+            animDoorRight.enabled = true;
+            bool isDoorLeft = animDoorLeft.GetBool("isDoorLeftRun");
+            bool isDoorRight = animDoorRight.GetBool("isDoorRightRun");
+            if (isDoorLeft && isDoorRight)
+            {
+                animDoorLeft.SetBool("isDoorLeftRun", !isDoorLeft);
+                animDoorLeft.SetBool("isDoorRightRun", !isDoorRight);
+            }
+        }
+        else {
+            panelError.SetActive(true);
         }
     }
 
-    public void signIn() {
-        isLogin = true;
-        if (account.getIsTrue())
-        {
-            animLogin.enabled = true;
-            bool isPanelDown = animLogin.GetBool("isPnlDown");
-            animLogin.SetBool("isPnlDown", !isPanelDown);
-            isLogin = false;
-        } else {
-            panelError.SetActive(true);
-        }
+    private void loginAnimation() {
+        bool isPanelDown = animDoorLeft.GetBool("isPnlDown");
+        animDoorLeft.SetBool("isPnlDown", !isPanelDown);
+    }
+
+    public void btnLogoutClick() {
+        loginAnimation();
     }
 
     public void btnBetClick(int number) {
