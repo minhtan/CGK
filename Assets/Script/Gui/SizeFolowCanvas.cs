@@ -13,6 +13,7 @@ public class SizeFolowCanvas : MonoBehaviour {
     public GameObject btnMusic;
     public GameObject btnShop;
     public Text txtCoin;
+    public GameObject btnLogout;
     private RectTransform rectSetting;
     // chinh size cho panel Bet
     public GameObject panelBet;
@@ -54,7 +55,7 @@ public class SizeFolowCanvas : MonoBehaviour {
         panelAnimalVsTimeBetSize(heightBet, ratioScreen, widthCanvas, ratioBetVsScreen, rectTimeBet);
         positionAnimal(ratioScreen);
         panelFullScreenSize(widthCanvas, panelShop);
-        panelFullScreenSize(widthCanvas, panelAcount);
+        panelFullScreenSize(widthCanvas / 2, panelAcount);
 	}
 
     private void panelFullScreenSize(float widthCanvas, GameObject panel) {
@@ -63,16 +64,21 @@ public class SizeFolowCanvas : MonoBehaviour {
 
 
     private void btnSettingSize(float ratioScreen) {
-        rectSetting.sizeDelta = new Vector2(sizeBtnSetting / ratioScreen, sizeBtnSetting);
-        panelMash.GetComponent<RectTransform>().sizeDelta = new Vector2(sizeBtnSetting / ratioScreen, heightPanelMash);
-        btnMusic.GetComponent<RectTransform>().sizeDelta = new Vector2(sizeBtnSetting / ratioScreen, sizeBtnSetting);
-        btnShop.GetComponent<RectTransform>().sizeDelta = new Vector2(sizeBtnSetting / ratioScreen, sizeBtnSetting);
-        txtCoin.GetComponent<RectTransform>().sizeDelta = new Vector2(sizeBtnSetting / ratioScreen, sizeBtnSetting / 2);
+        rectSetting.sizeDelta = new Vector2(sizeBtnSetting, sizeBtnSetting);
+        sizeBtnChildrenSetting(panelMash, sizeBtnSetting, heightPanelMash);
+        sizeBtnChildrenSetting(btnMusic, sizeBtnSetting, sizeBtnSetting);
+        sizeBtnChildrenSetting(btnShop, sizeBtnSetting, sizeBtnSetting);
+        sizeBtnChildrenSetting(btnLogout, sizeBtnSetting, sizeBtnSetting);
+        txtCoin.GetComponent<RectTransform>().sizeDelta = new Vector2(sizeBtnSetting, sizeBtnSetting / 2);
+    }
+
+    private void sizeBtnChildrenSetting(GameObject obj, float width, float height) {
+        obj.GetComponent<RectTransform>().sizeDelta = new Vector2(width, height);
     }
 
     private void panelBetSize(float ratioScreen, float widthCanvas, float ratioBetVsScreen, RectTransform rect)
     {
-        float widthBet = Screen.width / ratioScreen - sizeBtnSetting / ratioScreen;
+        float widthBet = Screen.width / ratioScreen - sizeBtnSetting;
         rect.anchorMax = new Vector2(widthBet / widthCanvas, ratioBetVsScreen);
     }
 

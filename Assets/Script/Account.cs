@@ -4,18 +4,18 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Parse;
-
+using UnityEngine.UI;
 public class Account : MonoBehaviour {
-	public GameObject inpUsername;
-	public GameObject inpPassword;
-    private bool isTrue = false;
-
+	public Text inpUsername;
+	public Text inpPassword;
+    private bool isLoginTrue = false;
+    private bool isLoginClick = false;
 	private string getUsernameInput(){
-		return inpUsername.GetComponent<Text> ().text;
+		return inpUsername.text;
 	}
 
 	private string getPasswordInput(){
-		return inpPassword.GetComponent<Text> ().text;
+		return inpPassword.text;
 	}
 
 	public void signUp(){
@@ -48,19 +48,28 @@ public class Account : MonoBehaviour {
 	}
 
     public bool getIsTrue(){
-        return isTrue;
+        return isLoginTrue;
+    }
+
+    public bool getIsLoginClick() {
+        return isLoginClick;
+    }
+
+    public void setIsLoginClick(bool isClick) {
+        isLoginClick = isClick;
     }
 
 	public void signIn(){
+        isLoginClick = true;
 		string username = getUsernameInput ();
 		string password = getPasswordInput ();
 		ParseUser.LogInAsync (username, password).ContinueWith (t => {
 			if (t.IsFaulted || t.IsCanceled) {
 				Debug.Log ("Sign in failed");
-                isTrue = false;
+                isLoginTrue = false; 
 			} else {
 				Debug.Log ("Sign in successfully");
-                isTrue = true;
+                isLoginTrue = true;
 			}
 		});
 	}

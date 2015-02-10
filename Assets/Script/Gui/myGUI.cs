@@ -21,8 +21,13 @@ public class myGUI : MonoBehaviour {
     public GameObject btnStart;
     public GameObject parentBtnBet;
     public GameObject panelCoverPnlBet;
+    //panel login
     public Account account;
     private bool isLogin = false;
+    public Animator animDoorLeft;
+    public Animator animDoorRight;
+    public GameObject panelError;
+
     void Start() {
         mg = this;
         RectTransform transform = settingAnim.gameObject.transform as RectTransform;
@@ -44,20 +49,41 @@ public class myGUI : MonoBehaviour {
             StartCoroutine(countdown());
         }
         showTimer();
-        if(isLogin){
-            signIn();
+        if(account.getIsLoginClick()){
+            StartCoroutine(animLogin());
+            account.setIsLoginClick(false);
+        }
+        
+        
+    }
+
+    private IEnumerator animLogin() {
+        yield return new WaitForSeconds(2f);
+        if (account.getIsTrue())
+        {
+            
+            animDoorLeft.enabled = true;
+            animDoorRight.enabled = true;
+            bool isDoorLeft = animDoorLeft.GetBool("isDoorLeftRun");
+            bool isDoorRight = animDoorRight.GetBool("isDoorRightRun");
+            if (isDoorLeft && isDoorRight)
+            {
+                animDoorLeft.SetBool("isDoorLeftRun", !isDoorLeft);
+                animDoorLeft.SetBool("isDoorRightRun", !isDoorRight);
+            }
+        }
+        else {
+            panelError.SetActive(true);
         }
     }
 
-    public void signIn() {
-        isLogin = true;
-        if (account.GetComponent<Account>().getIsTrue())
-        {
-            mg.signInPanel.SetActive(false);
-            mg.storePanel.SetActive(true);
-        } else {
-            mg.signInPanel.SetActive(true);
-        }
+    private void loginAnimation() {
+        bool isPanelDown = animDoorLeft.GetBool("isPnlDown");
+        animDoorLeft.SetBool("isPnlDown", !isPanelDown);
+    }
+
+    public void btnLogoutClick() {
+        loginAnimation();
     }
 
     public void btnBetClick(int number) {
