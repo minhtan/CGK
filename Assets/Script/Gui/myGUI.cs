@@ -26,6 +26,7 @@ public class myGUI : MonoBehaviour {
     private bool isLogin = false;
     public Animator animDoorLeft;
     public Animator animDoorRight;
+    public Animator animInputPass;
     public GameObject panelError;
 
     void Start() {
@@ -52,9 +53,7 @@ public class myGUI : MonoBehaviour {
         if(account.getIsLoginClick()){
             StartCoroutine(animLogin());
             account.setIsLoginClick(false);
-        }
-        
-        
+        }    
     }
 
     private IEnumerator animLogin() {
@@ -64,12 +63,15 @@ public class myGUI : MonoBehaviour {
             
             animDoorLeft.enabled = true;
             animDoorRight.enabled = true;
+            animInputPass.enabled = true;
             bool isDoorLeft = animDoorLeft.GetBool("isDoorLeftRun");
             bool isDoorRight = animDoorRight.GetBool("isDoorRightRun");
+            bool isPassLeft = animInputPass.GetBool("isPassRun");    
             if (isDoorLeft && isDoorRight)
             {
+                animInputPass.SetBool("isPassRun", !isPassLeft);
                 animDoorLeft.SetBool("isDoorLeftRun", !isDoorLeft);
-                animDoorLeft.SetBool("isDoorRightRun", !isDoorRight);
+                animDoorLeft.SetBool("isDoorRightRun", !isDoorRight);  
             }
         }
         else {
