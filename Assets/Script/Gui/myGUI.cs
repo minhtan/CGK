@@ -91,6 +91,12 @@ public class myGUI : MonoBehaviour {
 
     public void btnLogoutClick() {
         runAnimationLogin(false, false, false);
+        StartCoroutine(logoutWait());
+    }
+
+    private IEnumerator logoutWait() {
+        yield return new WaitForSeconds(1.5f);
+        canvasGame.SetActive(false);
     }
 
     public void btnBetClick(int number) {
