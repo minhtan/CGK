@@ -28,6 +28,9 @@ public class myGUI : MonoBehaviour {
     public Animator animDoorRight;
     public Animator animInputPass;
     public GameObject panelError;
+    // canvas game
+    public GameObject canvasGame;
+    public GameObject canvasLogin;
 
     void Start() {
         mg = this;
@@ -56,7 +59,10 @@ public class myGUI : MonoBehaviour {
         }    
     }
 
-    private IEnumerator animLogin() {
+    public void btnLoginClick() {
+        canvasGame.SetActive(true);
+    }
+    private IEnumerator animLogin() {   
         yield return new WaitForSeconds(2f);
         if (account.getIsTrue())
         {
@@ -66,26 +72,25 @@ public class myGUI : MonoBehaviour {
             animInputPass.enabled = true;
             bool isDoorLeft = animDoorLeft.GetBool("isDoorLeftRun");
             bool isDoorRight = animDoorRight.GetBool("isDoorRightRun");
-            bool isPassLeft = animInputPass.GetBool("isPassRun");    
-            if (isDoorLeft && isDoorRight)
-            {
-                animInputPass.SetBool("isPassRun", !isPassLeft);
-                animDoorLeft.SetBool("isDoorLeftRun", !isDoorLeft);
-                animDoorLeft.SetBool("isDoorRightRun", !isDoorRight);  
-            }
+            bool isPassLeft = animInputPass.GetBool("isPassRun");
+            runAnimationLogin(true, true, true);
         }
         else {
             panelError.SetActive(true);
         }
     }
 
-    private void loginAnimation() {
-        bool isPanelDown = animDoorLeft.GetBool("isPnlDown");
-        animDoorLeft.SetBool("isPnlDown", !isPanelDown);
+    private void runAnimationLogin(bool isDoorLeft, bool isDoorRight, bool isPassLeft) {
+
+            animInputPass.SetBool("isPassRun", !isPassLeft);
+            animDoorLeft.SetBool("isDoorLeftRun", !isDoorLeft);
+            animDoorRight.SetBool("isDoorRightRun", !isDoorRight);
+        
+
     }
 
     public void btnLogoutClick() {
-        loginAnimation();
+        runAnimationLogin(false, false, false);
     }
 
     public void btnBetClick(int number) {
