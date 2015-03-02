@@ -9,7 +9,7 @@ using Parse;
 public class Bet : MonoBehaviour {
 	private int coin;
     public string key;
-
+    
 	public void getMyCoin(){
 		if (Account.hasCurrentUser ()) {
 			IDictionary<string,object> dict = new Dictionary<string, object>();
@@ -60,8 +60,11 @@ public class Bet : MonoBehaviour {
 				    if (result.TryGetValue("errorCode", out errorCode)) {
 					    Debug.Log ("Error: " + result["errorCode"] + ", " + result["message"]);
 				    } else {
-					    Debug.Log(Convert.ToInt32(result["result"]));
-                        Debug.Log(Convert.ToInt32(result["coin"]));
+                        int[] re = new int[2];
+                        re[0] = Convert.ToInt32(result["result"]);
+                        re[1] = Convert.ToInt32(result["coin"]);
+					    Debug.Log(re[0]);
+                        Debug.Log(re[1]);
 				    }
 			    }
 		    });
