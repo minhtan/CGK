@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 public class myGUI : MonoBehaviour {
 
-    public GameObject signInPanel;
+    //public GameObject signInPanel;
     public GameObject storePanel;
     private static myGUI mg;
     private int flag;
@@ -47,6 +47,7 @@ public class myGUI : MonoBehaviour {
     private bool isCycleRunning = false;
     private bool serverFlag = false;
     private bool x = false;
+    private int result;
 
     void Awake() { 
         rectAnimal = panelAnimal.GetComponent<RectTransform>();
@@ -86,7 +87,7 @@ public class myGUI : MonoBehaviour {
             StartCoroutine(cycleAnimal(listAnimal.Count));
         }
         if (serverFlag && !isCycleRunning) {
-            StartCoroutine(cycleOnce(10));
+            StartCoroutine(cycleOnce(result));
         }
     }
 
@@ -103,8 +104,9 @@ public class myGUI : MonoBehaviour {
         return listAnimal;
     }
 
-    public void stopCycle(int animal) {
-        serverFlag = true;
+    public static void stopCycle(int result) {
+        mg.serverFlag = true;
+        mg.result = result;
     }
 
     private IEnumerator cycleOnce(int number) {

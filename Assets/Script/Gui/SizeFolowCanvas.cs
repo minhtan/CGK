@@ -29,9 +29,6 @@ public class SizeFolowCanvas : MonoBehaviour {
     //chinh size panel cover panel bet
     public GameObject panelCoverPanelBet;
     private RectTransform rectCoverPnlBet;
-    //chinh size panel acount;
-    public GameObject panelAcount;
-    private RectTransform rectAcount;
 
     void Awake(){
         rectCanvas = GetComponent<RectTransform>();
@@ -40,7 +37,7 @@ public class SizeFolowCanvas : MonoBehaviour {
         rectPanelAnimal = panelAnimal.GetComponent<RectTransform>();
         rectTimeBet = panelTimeBet.GetComponent<RectTransform>();
         rectCoverPnlBet = panelCoverPanelBet.GetComponent<RectTransform>();
-        rectAcount = panelAcount.GetComponent<RectTransform>();
+        //rectAcount = panelAcount.GetComponent<RectTransform>();
     }
 
 	void Start () {
@@ -55,7 +52,6 @@ public class SizeFolowCanvas : MonoBehaviour {
         panelAnimalVsTimeBetSize(heightBet, ratioScreen, widthCanvas, ratioBetVsScreen, rectTimeBet);
         positionAnimal(ratioScreen);
         panelFullScreenSize(widthCanvas, panelShop);
-        panelFullScreenSize(widthCanvas / 2, panelAcount);
 	}
 
     private void panelFullScreenSize(float widthCanvas, GameObject panel) {
