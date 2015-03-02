@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using System;
+using System.Collections.Generic;
 public class myGUI : MonoBehaviour {
 
     public GameObject signInPanel;
@@ -27,10 +28,29 @@ public class myGUI : MonoBehaviour {
     public Animator animDoorLeft;
     public Animator animDoorRight;
     public Animator animInputPass;
+    public Text txtUserName;
+    public Text txtPass;
+    public Text placeHolderUsername;
+    public Text placeHolderPass;
+    //panel error
     public GameObject panelError;
+    public GameObject btnExitError;
     // canvas game
     public GameObject canvasGame;
     public GameObject canvasLogin;
+    //panel animal
+    public GameObject panelAnimal;
+    private RectTransform rectAnimal;
+    public Sprite spriteAnimal;
+    public Sprite spriteIdleAnimal;
+    private List <GameObject> listAnimal;
+    private bool isFullAnimal = false;
+
+    void Awake() { 
+        rectAnimal = panelAnimal.GetComponent<RectTransform>();
+        listAnimal = new List<GameObject>();
+        swapListAnimal(addListAnimal());
+    }
 
     void Start() {
         mg = this;
@@ -56,26 +76,134 @@ public class myGUI : MonoBehaviour {
         if(account.getIsLoginClick()){
             StartCoroutine(animLogin());
             account.setIsLoginClick(false);
-        }    
+        } 
+        if(!isFullAnimal){
+            isFullAnimal = true;
+            StartCoroutine(animalRunning(randomPosition()));
+        }
+        
     }
 
+    // animal 
+    private List<GameObject> addListAnimal()
+    {
+        foreach (Transform trans in rectAnimal)
+        {
+            if (trans.gameObject.name.Contains("ImgAnimal"))
+            {
+                listAnimal.Add(trans.gameObject);
+            }
+        }
+        return listAnimal;
+    }
+
+    private void swapListAnimal(List<GameObject> list)
+    {
+        for (int i = 0; i < list.Count - 1; i++)
+        {
+            for (int j = i + 1; j < list.Count; j++)
+            {
+                string[] nameA = list[i].name.Split('_');
+                string[] nameB = list[j].name.Split('_');
+                int number1 = System.Convert.ToInt32(nameA[1]);
+                int number2 = System.Convert.ToInt32(nameB[1]);
+                if (number1 > number2)
+                {
+                    GameObject temp = list[i];
+                    list[i] = list[j];
+                    list[j] = temp;
+                }
+            }
+        }
+    }
+
+    private int randomPosition() {
+        return UnityEngine.Random.Range(0,23);
+    }
+
+    private IEnumerator animalRunning(int randomStopAnimal)
+    {
+        int randomCycle = Convert.ToInt32(UnityEngine.Random.Range(3,5));
+        Debug.Log(randomStopAnimal);
+        for (int j = 1; j <= 2; j++)
+        {
+            if (j == 2)
+            {
+                for (int k = 0; k < randomStopAnimal; k++)
+                {
+                    if (k < randomStopAnimal - 1)
+                    {
+                        if (k == 0)
+                        {
+                            listAnimal[k].GetComponent<Image>().sprite = spriteAnimal;
+                        }
+                        else
+                        {
+                            listAnimal[k - 1].GetComponent<Image>().sprite = spriteIdleAnimal;
+                            listAnimal[k].GetComponent<Image>().sprite = spriteAnimal;
+                        }
+                        yield return new WaitForSeconds(0.2f);
+                    }
+                    else 
+                    {
+                        Debug.Log(isFullAnimal);
+                        listAnimal[k - 1].GetComponent<Image>().sprite = spriteIdleAnimal;
+                        listAnimal[k].GetComponent<Image>().sprite = spriteAnimal;
+                        yield return new WaitForSeconds(2f);
+                        listAnimal[k].GetComponent<Image>().sprite = spriteIdleAnimal;
+                        isFullAnimal = false;
+                    }
+                }
+            }
+            else 
+            {
+                for (int i = 0; i < listAnimal.Count; i++)
+                {
+                    if (i < 23)
+                    {
+                        if (i == 0)
+                        {
+                            listAnimal[i].GetComponent<Image>().sprite = spriteAnimal;
+                        }
+                        else
+                        {
+                            listAnimal[i - 1].GetComponent<Image>().sprite = spriteIdleAnimal;
+                            listAnimal[i].GetComponent<Image>().sprite = spriteAnimal;
+                        }
+                        yield return new WaitForSeconds(0.2f);
+                    }
+                    if (i == 23)
+                    {
+                        listAnimal[i - 1].GetComponent<Image>().sprite = spriteIdleAnimal;
+                        listAnimal[i].GetComponent<Image>().sprite = spriteAnimal;
+                        yield return new WaitForSeconds(0.2f);
+                        listAnimal[i].GetComponent<Image>().sprite = spriteIdleAnimal;
+                    }
+                }
+            }
+        }
+    }
+
+    //login
     public void btnLoginClick() {
         canvasGame.SetActive(true);
     }
+
     private IEnumerator animLogin() {   
         yield return new WaitForSeconds(2f);
         if (account.getIsTrue())
         {
-            
+            placeHolderUsername.enabled = true;
+            placeHolderPass.enabled = true;
+            txtUserName.text = "";
+            txtPass.text = "";
             animDoorLeft.enabled = true;
             animDoorRight.enabled = true;
             animInputPass.enabled = true;
-            bool isDoorLeft = animDoorLeft.GetBool("isDoorLeftRun");
-            bool isDoorRight = animDoorRight.GetBool("isDoorRightRun");
-            bool isPassLeft = animInputPass.GetBool("isPassRun");
             runAnimationLogin(true, true, true);
         }
         else {
+            canvasGame.SetActive(false);
             panelError.SetActive(true);
         }
     }
@@ -89,6 +217,7 @@ public class myGUI : MonoBehaviour {
 
     }
 
+    // logout
     public void btnLogoutClick() {
         runAnimationLogin(false, false, false);
         StartCoroutine(logoutWait());
@@ -99,6 +228,7 @@ public class myGUI : MonoBehaviour {
         canvasGame.SetActive(false);
     }
 
+    //bet
     public void btnBetClick(int number) {
 
         Text text = GameObject.Find("TxtBet" + number).GetComponent<Text>();
@@ -122,8 +252,7 @@ public class myGUI : MonoBehaviour {
         isCoroutineRun = false;
     }
 
-   
-
+    //setting
     public void btnDown(int number) {
         isHeldDown = true;
         flag = number;
@@ -186,7 +315,9 @@ public class myGUI : MonoBehaviour {
             panelCoverPnlBet.SetActive(true);
         }
     }
-    
 
+    public void btnExitErrorClick() {
+        panelError.SetActive(false);
+    }
 
 }
