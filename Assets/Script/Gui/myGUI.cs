@@ -44,7 +44,9 @@ public class myGUI : MonoBehaviour {
     public Sprite spriteAnimal;
     public Sprite spriteIdleAnimal;
     private List <GameObject> listAnimal;
-    private bool isFullAnimal = false;
+    private bool isCycleRunning = false;
+    private bool serverFlag = false;
+    private bool x = false;
 
     void Awake() { 
         rectAnimal = panelAnimal.GetComponent<RectTransform>();
@@ -77,11 +79,15 @@ public class myGUI : MonoBehaviour {
             StartCoroutine(animLogin());
             account.setIsLoginClick(false);
         } 
-        if(!isFullAnimal){
-            isFullAnimal = true;
-            StartCoroutine(animalRunning(randomPosition()));
+
+        if(!isCycleRunning && !x){
+            isCycleRunning = true;
+            x = true;
+            StartCoroutine(cycleAnimal(listAnimal.Count));
         }
-        
+        if (serverFlag && !isCycleRunning) {
+            StartCoroutine(cycleOnce(10));
+        }
     }
 
     // animal 
@@ -95,6 +101,66 @@ public class myGUI : MonoBehaviour {
             }
         }
         return listAnimal;
+    }
+
+    public void stopCycle(int animal) {
+        serverFlag = true;
+    }
+
+    private IEnumerator cycleOnce(int number) {
+        for (int i = 0; i < number; i++)
+        {
+            if (i < number - 1)
+            {
+                if (i == 0)
+                {
+                    listAnimal[i].GetComponent<Image>().sprite = spriteAnimal;
+                }
+                else
+                {
+                    listAnimal[i - 1].GetComponent<Image>().sprite = spriteIdleAnimal;
+                    listAnimal[i].GetComponent<Image>().sprite = spriteAnimal;
+                }
+                yield return new WaitForSeconds(0.2f);
+            }
+            else
+            {
+                listAnimal[i - 1].GetComponent<Image>().sprite = spriteIdleAnimal;
+                listAnimal[i].GetComponent<Image>().sprite = spriteAnimal;
+            }
+        } 
+
+    }
+
+    private IEnumerator cycleAnimal(int number)
+    {
+        while (!serverFlag)
+        {
+            for (int i = 0; i < number; i++)
+            {
+                if (i < number - 1)
+                {
+                    if (i == 0)
+                    {
+                        listAnimal[i].GetComponent<Image>().sprite = spriteAnimal;
+                    }
+                    else
+                    {
+                        listAnimal[i - 1].GetComponent<Image>().sprite = spriteIdleAnimal;
+                        listAnimal[i].GetComponent<Image>().sprite = spriteAnimal;
+                    }
+                    yield return new WaitForSeconds(0.2f);
+                }
+                else
+                {
+                    listAnimal[i - 1].GetComponent<Image>().sprite = spriteIdleAnimal;
+                    listAnimal[i].GetComponent<Image>().sprite = spriteAnimal;
+                    yield return new WaitForSeconds(0.2f);
+                    listAnimal[i].GetComponent<Image>().sprite = spriteIdleAnimal;
+                }
+            } 
+        }
+        isCycleRunning = false;
     }
 
     private void swapListAnimal(List<GameObject> list)
@@ -123,15 +189,15 @@ public class myGUI : MonoBehaviour {
 
     private IEnumerator animalRunning(int randomStopAnimal)
     {
-        int randomCycle = Convert.ToInt32(UnityEngine.Random.Range(3,5));
+        int randomCycle = Convert.ToInt32(UnityEngine.Random.Range(2,5));
         Debug.Log(randomStopAnimal);
-        for (int j = 1; j <= 2; j++)
-        {
-            if (j == 2)
+            for (int j = 1; j <= randomCycle; j++)
             {
-                for (int k = 0; k < randomStopAnimal; k++)
+            if (j == randomCycle)
+            {
+                for (int k = 0; k <= 0; k++)
                 {
-                    if (k < randomStopAnimal - 1)
+                    if (k <= 0)
                     {
                         if (k == 0)
                         {
@@ -146,13 +212,12 @@ public class myGUI : MonoBehaviour {
                     }
                     else 
                     {
-                        Debug.Log(isFullAnimal);
                         listAnimal[k - 1].GetComponent<Image>().sprite = spriteIdleAnimal;
                         listAnimal[k].GetComponent<Image>().sprite = spriteAnimal;
-                        yield return new WaitForSeconds(2f);
-                        listAnimal[k].GetComponent<Image>().sprite = spriteIdleAnimal;
-                        isFullAnimal = false;
                     }
+                    yield return new WaitForSeconds(2f);
+                    listAnimal[k].GetComponent<Image>().sprite = spriteIdleAnimal;
+                    isCycleRunning = false;
                 }
             }
             else 
