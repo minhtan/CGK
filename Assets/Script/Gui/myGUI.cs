@@ -80,13 +80,13 @@ public class myGUI : MonoBehaviour {
             StartCoroutine(animLogin());
             account.setIsLoginClick(false);
         } 
-
         if(!isCycleRunning && !x){
             isCycleRunning = true;
             x = true;
             StartCoroutine(cycleAnimal(listAnimal.Count));
         }
         if (serverFlag && !isCycleRunning) {
+            isCycleRunning = true;
             StartCoroutine(cycleOnce(result));
         }
     }
@@ -109,29 +109,128 @@ public class myGUI : MonoBehaviour {
         mg.result = result;
     }
 
-    private IEnumerator cycleOnce(int number) {
-        for (int i = 0; i < number; i++)
+    private int divisionNumber(int number) {
+        int position = 0;
+        if (number == 0)
         {
-            if (i < number - 1)
+            position = 2;
+        }
+        else if (number == 1)
+        {
+            position = 1;
+        }
+        else
+        {
+            position = 0;
+        }
+        return position;
+    }
+
+    private IEnumerator cycleOnce(int number) {
+        if (number < 3)
+        {
+            for (int k = 0; k < 2; k++)
             {
-                if (i == 0)
+                if (k == 0)
                 {
-                    listAnimal[i].GetComponent<Image>().sprite = spriteAnimal;
+                    for (int i = 0; i < listAnimal.Count; i++)
+                    {
+                        if (i == 0)
+                        {
+                            listAnimal[i].GetComponent<Image>().sprite = spriteAnimal;
+                        }
+                        else if(i < listAnimal.Count - divisionNumber(number))
+                        {
+                            listAnimal[i - 1].GetComponent<Image>().sprite = spriteIdleAnimal;
+                            listAnimal[i].GetComponent<Image>().sprite = spriteAnimal;  
+                        }
+                        yield return new WaitForSeconds(0.2f);
+                        if (number == 2 && i == listAnimal.Count - 1)
+                        {
+                            yield return new WaitForSeconds(0.4f);
+                            listAnimal[i].GetComponent<Image>().sprite = spriteIdleAnimal;
+                        }
+                        else if (number == 0 && i == listAnimal.Count - 2)
+                        {
+                            listAnimal[i - 1].GetComponent<Image>().sprite = spriteIdleAnimal;
+                            yield return new WaitForSeconds(0.4f);
+                            listAnimal[i].GetComponent<Image>().sprite = spriteAnimal;
+                        }else if(number == 0 && i == listAnimal.Count - 1){
+                            yield return new WaitForSeconds(0.2f);
+                            listAnimal[i - 1].GetComponent<Image>().sprite = spriteIdleAnimal;
+                            yield return new WaitForSeconds(0.6f);
+                            listAnimal[i].GetComponent<Image>().sprite = spriteAnimal;
+                            yield return new WaitForSeconds(0.2f);
+                            listAnimal[i].GetComponent<Image>().sprite = spriteIdleAnimal;  
+                        }
+                        else if (number == 1 && i == listAnimal.Count - 1)
+                        {
+                            listAnimal[i - 1].GetComponent<Image>().sprite = spriteIdleAnimal;
+                            yield return new WaitForSeconds(0.4f);
+                            listAnimal[i].GetComponent<Image>().sprite = spriteAnimal;
+                            yield return new WaitForSeconds(0.2f);
+                            listAnimal[i].GetComponent<Image>().sprite = spriteIdleAnimal;
+                        }
+                    }
+                }
+                else {
+                    if (number == 0)
+                    {
+                        yield return new WaitForSeconds(1f);
+                        listAnimal[number].GetComponent<Image>().sprite = spriteAnimal;
+                    }
+                    else if (number == 1)
+                    {
+                        yield return new WaitForSeconds(0.6f);
+                        listAnimal[number - 1].GetComponent<Image>().sprite = spriteAnimal;
+                        yield return new WaitForSeconds(0.2f);
+                        listAnimal[number - 1].GetComponent<Image>().sprite = spriteIdleAnimal;
+                        yield return new WaitForSeconds(1f);
+                        listAnimal[number].GetComponent<Image>().sprite = spriteAnimal;
+                    }
+                    else
+                    {
+                        yield return new WaitForSeconds(0.2f);
+                        listAnimal[number - 2].GetComponent<Image>().sprite = spriteAnimal;
+                        yield return new WaitForSeconds(0.2f);
+                        listAnimal[number - 2].GetComponent<Image>().sprite = spriteIdleAnimal;
+                        yield return new WaitForSeconds(0.6f);
+                        listAnimal[number - 1].GetComponent<Image>().sprite = spriteAnimal;
+                        yield return new WaitForSeconds(0.2f);
+                        listAnimal[number - 1].GetComponent<Image>().sprite = spriteIdleAnimal;
+                        yield return new WaitForSeconds(1f);
+                        listAnimal[number].GetComponent<Image>().sprite = spriteAnimal;
+                    }
+                }
+            }
+        }
+        else {
+            for (int i = 0; i <= number; i++)
+            {
+                if (i < number - 2)
+                {
+                    if (i == 0)
+                    {
+                        listAnimal[i].GetComponent<Image>().sprite = spriteAnimal;
+                    }
+                    else
+                    {
+                        listAnimal[i - 1].GetComponent<Image>().sprite = spriteIdleAnimal;
+                        listAnimal[i].GetComponent<Image>().sprite = spriteAnimal;
+                    }
+                    yield return new WaitForSeconds(0.2f);
                 }
                 else
                 {
+                    yield return new WaitForSeconds(0.4f);
+                    listAnimal[i - 2].GetComponent<Image>().sprite = spriteIdleAnimal;
+                    listAnimal[i - 1].GetComponent<Image>().sprite = spriteAnimal;
+                    yield return new WaitForSeconds(0.8f);
                     listAnimal[i - 1].GetComponent<Image>().sprite = spriteIdleAnimal;
                     listAnimal[i].GetComponent<Image>().sprite = spriteAnimal;
                 }
-                yield return new WaitForSeconds(0.2f);
-            }
-            else
-            {
-                listAnimal[i - 1].GetComponent<Image>().sprite = spriteIdleAnimal;
-                listAnimal[i].GetComponent<Image>().sprite = spriteAnimal;
-            }
-        } 
-
+            } 
+        }
     }
 
     private IEnumerator cycleAnimal(int number)
@@ -364,8 +463,6 @@ public class myGUI : MonoBehaviour {
         {
             yield return new WaitForSeconds(1f);
         }
-
-
     }
 
     public void showTimer()
