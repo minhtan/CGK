@@ -24,7 +24,6 @@ public class myGUI : MonoBehaviour {
     public GameObject panelCoverPnlBet;
     //panel login
     public Account account;
-    private bool isLogin = false;
     public Animator animDoorLeft;
     public Animator animDoorRight;
     public Animator animInputPass;
@@ -49,6 +48,13 @@ public class myGUI : MonoBehaviour {
     private bool x = false;
     private int result;
     private float timeAnimalTransite = 0.1f;
+    private bool animalStopRunning = false;
+    //Text coin
+    public Text textCoin;
+    private int coinServer;
+    private int lastCoin;
+    private int presentCoin;
+    private bool isSuccessCoinServer = false;
 
     void Awake() { 
         rectAnimal = panelAnimal.GetComponent<RectTransform>();
@@ -58,11 +64,55 @@ public class myGUI : MonoBehaviour {
 
     void Start() {
         mg = this;
+        //test get coin from server
+        Bet.bet.getMyCoin();
+        //end
         RectTransform transform = settingAnim.gameObject.transform as RectTransform;
         Vector2 position = transform.anchoredPosition;
         position.y -= transform.rect.height;
         transform.anchoredPosition = position;
+        lastCoin = System.Convert.ToInt32(textCoin.text);
        
+    }
+
+    private void showTimer()
+    {
+        TimeSpan timeSpan = endTime.Subtract(DateTime.Now);
+        if (timeSpan.TotalSeconds <= 0)
+        {
+            timer.enabled = false;
+            panelCoverPnlBet.SetActive(true);
+        }
+        else
+        {
+            timer.enabled = true;
+            timer.text = timeSpan.Seconds + "";
+            btnStart.SetActive(false);
+            panelCoverPnlBet.SetActive(false);
+        }
+    }
+    // start bet button click
+    public void btnStartBetClick()
+    {
+        endTime = DateTime.Now.AddSeconds(5);
+        isCountdownRunning = false;
+    }
+
+    //lay coin tu server ve khi login
+
+    public static void getCoinServer(int coin) {
+        mg.presentCoin = coin;
+        mg.isSuccessCoinServer = true;
+    }
+
+    private IEnumerator countdown()
+    {
+        isCountdownRunning = true;
+        while (endTime > DateTime.Now)
+        {
+            yield return new WaitForSeconds(1f);
+        }
+        Bet.bet.betRequest();
     }
 
     void Update()
@@ -76,7 +126,12 @@ public class myGUI : MonoBehaviour {
         {
             StartCoroutine(countdown());
         }
+
         showTimer();
+        if (isSuccessCoinServer)
+        {
+            textCoin.text = presentCoin + "";
+        }
         if(account.getIsLoginClick()){
             StartCoroutine(animLogin());
             account.setIsLoginClick(false);
@@ -88,7 +143,8 @@ public class myGUI : MonoBehaviour {
         }
         if (serverFlag && !isCycleRunning) {
             isCycleRunning = true;
-            StartCoroutine(cycleOnce(0));
+            StartCoroutine(cycleOnce(result));
+            StartCoroutine(animCoin());
         }
     }
 
@@ -105,9 +161,10 @@ public class myGUI : MonoBehaviour {
         return listAnimal;
     }
 
-    public static void stopCycle(int result) {
+    public static void stopCycle(int result, int coin) {
         mg.serverFlag = true;
         mg.result = result;
+        mg.coinServer = coin;
     }
 
     private int divisionNumber(int number) {
@@ -125,6 +182,26 @@ public class myGUI : MonoBehaviour {
             position = 1;
         }
         return position;
+    }
+
+    //anim so coin tang len hoac giam di 
+    private IEnumerator animCoin() {
+        
+        if (coinServer < lastCoin)
+        {
+            for (int i = lastCoin; i >= coinServer; i--)
+            {
+                yield return new WaitForSeconds(0.1f);
+                textCoin.text = "Coin: " + i;
+            }
+        }
+        else {
+            for (int i = lastCoin; i <= coinServer; i++)
+            {
+                yield return new WaitForSeconds(0.1f);
+                textCoin.text = "Coin: " + i;
+            }
+        }
     }
 
     private IEnumerator cycleOnce(int number) {
@@ -183,8 +260,7 @@ public class myGUI : MonoBehaviour {
                             listAnimal[i - 1].GetComponent<animalControl>().hide();
                             listAnimal[i].GetComponent<animalControl>().show();
                             yield return new WaitForSeconds(timeAnimalTransite * 4);
-                            listAnimal[i].GetComponent<animalControl>().hide();
-                            
+                            listAnimal[i].GetComponent<animalControl>().hide();    
                         }
                     }
                 }
@@ -237,6 +313,7 @@ public class myGUI : MonoBehaviour {
             listAnimal[number - 1].GetComponent<animalControl>().hide();
             listAnimal[number].GetComponent<animalControl>().show();
         }
+
     }
 
     private IEnumerator cycleAnimal(int number)
@@ -366,6 +443,7 @@ public class myGUI : MonoBehaviour {
         yield return new WaitForSeconds(2f);
         if (account.getIsTrue())
         {
+            Bet.bet.getMyCoin();
             placeHolderUsername.enabled = true;
             placeHolderPass.enabled = true;
             txtUserName.text = "";
@@ -409,6 +487,7 @@ public class myGUI : MonoBehaviour {
         if (value < 99)
         {
             value++;
+
         }
         if (value < 10)
         {
@@ -456,39 +535,8 @@ public class myGUI : MonoBehaviour {
 
     }
 
-    // start bet button click
-    public void btnStartBetClick()
+    public void btnExitErrorClick()
     {
-        endTime = DateTime.Now.AddSeconds(15);
-        isCountdownRunning = false;
-    }
-
-    private IEnumerator countdown()
-    {
-        isCountdownRunning = true;
-        while (endTime > DateTime.Now)
-        {
-            yield return new WaitForSeconds(1f);
-        }
-    }
-
-    public void showTimer()
-    {
-        TimeSpan timeSpan = endTime.Subtract(DateTime.Now);
-        if (timeSpan.TotalSeconds < 0)
-        {
-            timer.enabled = false;
-        }
-        else {
-            timer.enabled = true;
-            timer.text = timeSpan.Seconds + "";
-            btnStart.SetActive(false);
-            panelCoverPnlBet.SetActive(true);
-        }
-    }
-
-    public void btnExitErrorClick() {
         panelError.SetActive(false);
     }
-
 }

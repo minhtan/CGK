@@ -5,13 +5,8 @@ public class pnlAccount : MonoBehaviour {
 
     public static pnlAccount pnlAcc;
     public GameObject panelChildren;
-    private RectTransform rectChildren;
     public Animator animLogin;
     public GameObject canvas;
-
-    void Awake() { 
-        rectChildren = panelChildren.GetComponent<RectTransform>();
-    }
 
 	void Start () {
         pnlAcc = this;

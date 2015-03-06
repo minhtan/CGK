@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Parse;
-using UnityEngine.UI;
+
 public class Account : MonoBehaviour {
 	public Text inpUsername;
 	public Text inpPassword;

@@ -9,7 +9,7 @@ using Parse;
 public class Bet : MonoBehaviour {
 	private int coin;
     public string key;
-    private static Bet bet;
+    public static Bet bet;
 
     void Start() {
         bet = this;
@@ -34,6 +34,7 @@ public class Bet : MonoBehaviour {
 					} else {
 						coin = Convert.ToInt32(result["coin"]);
 						Debug.Log(coin);
+                        myGUI.getCoinServer(coin);
 					}
 				}
 			});
@@ -70,7 +71,7 @@ public class Bet : MonoBehaviour {
                         re[1] = Convert.ToInt32(result["coin"]);
 					    Debug.Log(re[0]);
                         Debug.Log(re[1]);
-                        myGUI.stopCycle(re[0]);
+                        myGUI.stopCycle(re[0],re[1]);
 				    }
 			    }
 		    });
