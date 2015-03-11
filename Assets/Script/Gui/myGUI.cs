@@ -54,7 +54,12 @@ public class myGUI : MonoBehaviour {
     public Text textCoin;
     private int coinServer;
     private int presentCoin;
-    private bool isSuccessCoinServer = false;
+    private bool isRepeatCycle = false;
+    //check bet
+    private bool isBet = false;
+    //timer
+    private int totalTimeRuning = 5;
+    private bool isCoinServer = false;
 
     void Awake() { 
         rectAnimal = panelAnimal.GetComponent<RectTransform>();
@@ -68,7 +73,6 @@ public class myGUI : MonoBehaviour {
         Vector2 position = transform.anchoredPosition;
         position.y -= transform.rect.height;
         transform.anchoredPosition = position;
-        
     }
 
     private void showTimer()
@@ -84,13 +88,12 @@ public class myGUI : MonoBehaviour {
             panelCoverPnlBet.SetActive(false);
             timer.enabled = true;
             timer.text = timeSpan.Seconds + "";
-            btnStart.SetActive(false);
-            btnStart.SetActive(false);
+            btnStart.SetActive(false);       
         }
     }
 
     private void startTimeBet() {
-        endTime = DateTime.Now.AddSeconds(5);
+        endTime = DateTime.Now.AddSeconds(totalTimeRuning);
         isCountdownRunning = false;
         isStartTime = true;
     }
@@ -100,10 +103,13 @@ public class myGUI : MonoBehaviour {
         startTimeBet();
     }
     //lay coin tu server ve khi login
-
     public static void getCoinServer(int coin) {
         mg.presentCoin = coin;
-        mg.isSuccessCoinServer = true;
+        mg.isCoinServer = true;
+    }
+
+    private int random(int begin, int end) {
+        return UnityEngine.Random.Range(begin,end);
     }
 
     private IEnumerator countdown()
@@ -113,11 +119,46 @@ public class myGUI : MonoBehaviour {
         {
             yield return new WaitForSeconds(1f);
         }
-        Bet.bet.betRequest();
+        isCycleRunning = true;
+        if (checkBet())
+        {
+            StartCoroutine(cycleAnimal(listAnimal.Count, random(1,2)));
+            Bet.bet.betRequest();               
+        }
+        else {
+            StartCoroutine(cycleAnimal(listAnimal.Count, random(2,4)));
+            serverFlag = true;
+            result = random(0,23);
+        }
     }
 
 
+    //check xem co dat cuoc khong
+    private bool checkBet() {
+        for (int i = 0; i < 8; i++)
+        {
+            int coin = System.Convert.ToInt32(GameObject.Find("TxtBet" + i).GetComponent<Text>().text);
+            if (coin > 0)
+            {   
+                return true;
+            }
+        }
+        return false;
+    }
 
+    //tach chuoi text coin
+    private int splitTextCoin() {
+        string[] arrTextCoin = textCoin.text.Split(' ');
+        int lastCoin = System.Convert.ToInt32(arrTextCoin[1]);
+        return lastCoin;
+    }
+
+    //randomAnimalPosition
+    private int randomAnimalPosition(int result) {
+        int random = UnityEngine.Random.Range(1,3);
+    
+        return result +(random - 1) * 8 ;
+    }
 
     void Update()
     {
@@ -126,27 +167,23 @@ public class myGUI : MonoBehaviour {
             isCoroutineRun = true;
             StartCoroutine(btnBetDown());
         }
-        if (!isCountdownRunning)
+        if (!isCountdownRunning && isStartTime)
         {
             StartCoroutine(countdown());
         }
         if(isStartTime){
             showTimer();
-        }
-        
-        if(account.getIsLoginClick()){
-            StartCoroutine(animLogin());
-            account.setIsLoginClick(false);
-        } 
-        if(!isCycleRunning && !x){
-            isCycleRunning = true;
-            x = true;
-            StartCoroutine(cycleAnimal(listAnimal.Count));
+        }  
+        if(isCoinServer){
+            isCoinServer = false;
+            animLogin();
         }
         if (serverFlag && !isCycleRunning) {
             isCycleRunning = true;
-            StartCoroutine(cycleOnce(result)); 
-            
+            StartCoroutine(cycleOnce(randomAnimalPosition(result))); 
+        }
+        if(isRepeatCycle){
+            resetCycle();
         }
     }
 
@@ -189,22 +226,34 @@ public class myGUI : MonoBehaviour {
     //anim so coin tang len hoac giam di 
 
     private IEnumerator animCoin(int lastCoin) {
-        
-        //if (coinServer < lastCoin)
-        //{
-        //    for (int i = lastCoin; i >= coinServer; i--)
-        //    {
-        //        yield return new WaitForSeconds(1f);
-        //        textCoin.text = "Coin: " + i;
-        //    }
-        //}
         if (coinServer > lastCoin)
         {
             for (int i = lastCoin; i <= coinServer; i++)
             {
-                yield return new WaitForSeconds(1f);
+                yield return new WaitForSeconds(0.2f);
                 textCoin.text = "Coin: " + i;
             }
+        }
+        yield return new WaitForSeconds(3f);
+        isRepeatCycle = true;
+    }
+
+    private void resetCycle() {
+        isRepeatCycle = false;
+        isCycleRunning = false;
+        x = false;
+        serverFlag = false;
+        isCountdownRunning = false;
+        isStartTime = true;
+        endTime = DateTime.Now.AddSeconds(totalTimeRuning);
+        presentCoin = splitTextCoin();
+        for (int i = 0; i < 8; i ++)
+        {
+            GameObject.Find("TxtBet" + i).GetComponent<Text>().text = "00";
+        }
+        for (int i = 0; i < listAnimal.Count; i++)
+        {
+            listAnimal[i].GetComponent<animalControl>().hide();
         }
     }
 
@@ -320,9 +369,9 @@ public class myGUI : MonoBehaviour {
         StartCoroutine(animCoin(presentCoin));
     }
 
-    private IEnumerator cycleAnimal(int number)
+    private IEnumerator cycleAnimal(int number, int cycleTurn)
     {
-        while (!serverFlag)
+        while (!serverFlag || cycleTurn > 0)
         {
             for (int i = 0; i < number; i++)
             {
@@ -347,7 +396,8 @@ public class myGUI : MonoBehaviour {
                     listAnimal[i].GetComponent<animalControl>().hide();
 
                 }
-            } 
+            }
+            cycleTurn--;
         }
         isCycleRunning = false;
     }
@@ -372,103 +422,14 @@ public class myGUI : MonoBehaviour {
         }
     }
 
-    private int randomPosition() {
-        return UnityEngine.Random.Range(0,23);
-    }
-
-    private IEnumerator animalRunning(int randomStopAnimal)
-    {
-        int randomCycle = Convert.ToInt32(UnityEngine.Random.Range(2,5));
-        Debug.Log(randomStopAnimal);
-            for (int j = 1; j <= randomCycle; j++)
-            {
-            if (j == randomCycle)
-            {
-                for (int k = 0; k <= 0; k++)
-                {
-                    if (k <= 0)
-                    {
-                        if (k == 0)
-                        {
-                            listAnimal[k].GetComponent<animalControl>().show();
-                        }
-                        else
-                        {
-                            listAnimal[k - 1].GetComponent<animalControl>().hide();
-                            listAnimal[k].GetComponent<animalControl>().show();
-                        }
-                        yield return new WaitForSeconds(0.2f);
-                    }
-                    else 
-                    {
-                        listAnimal[k - 1].GetComponent<animalControl>().hide();
-                        listAnimal[k].GetComponent<animalControl>().show();
-                    }
-                    yield return new WaitForSeconds(2f);
-                    listAnimal[k].GetComponent<animalControl>().hide();
-                    isCycleRunning = false;
-                }
-            }
-            else 
-            {
-                for (int i = 0; i < listAnimal.Count; i++)
-                {
-                    if (i < 23)
-                    {
-                        if (i == 0)
-                        {
-                            listAnimal[i].GetComponent<animalControl>().show();
-                        }
-                        else
-                        {
-                            listAnimal[i - 1].GetComponent<animalControl>().hide();
-                            listAnimal[i].GetComponent<animalControl>().show();
-                        }
-                        yield return new WaitForSeconds(0.2f);
-                    }
-                    if (i == 23)
-                    {
-                        listAnimal[i - 1].GetComponent<animalControl>().hide();
-                        listAnimal[i].GetComponent<animalControl>().show();
-                        yield return new WaitForSeconds(0.2f);
-                        listAnimal[i].GetComponent<animalControl>().hide();
-                    }
-                }
-            }
-        }
-    }
-
     //login
-    public void btnLoginClick() {
+    private void animLogin() {   
+        textCoin.text = "Coin: " + presentCoin;
         canvasGame.SetActive(true);
-    }
-
-    private IEnumerator animLogin() {   
-        yield return new WaitForSeconds(2f);
-        if (account.getIsTrue())
-        {
-            Bet.bet.getMyCoin();
-            yield return new WaitForSeconds(3f);
-            if (isSuccessCoinServer)
-            {
-                textCoin.text = "Coin: " + presentCoin;
-                placeHolderUsername.enabled = true;
-                placeHolderPass.enabled = true;
-                txtUserName.text = "";
-                txtPass.text = "";
-                animDoorLeft.enabled = true;
-                animDoorRight.enabled = true;
-                animInputPass.enabled = true;
-                runAnimationLogin(true, true, true);
-            }
-            else { 
-                //lam j o day khi ko lay duoc coin tu server
-            }   
-        }
-        else {
-            canvasGame.SetActive(false);
-            panelError.SetActive(true);
-        }
+        animDoorLeft.enabled = true;
+        animDoorRight.enabled = true;
+        animInputPass.enabled = true;
+        runAnimationLogin(true, true, true); 
     }
 
     private void runAnimationLogin(bool isDoorLeft, bool isDoorRight, bool isPassLeft) {
@@ -498,6 +459,7 @@ public class myGUI : MonoBehaviour {
         {
             value++;
             presentCoin--;
+
         }
         if (value < 10)
         {

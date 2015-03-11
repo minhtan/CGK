@@ -47,29 +47,16 @@ public class Account : MonoBehaviour {
 		});
 	}
 
-    public bool getIsTrue(){
-        return isLoginTrue;
-    }
-
-    public bool getIsLoginClick() {
-        return isLoginClick;
-    }
-
-    public void setIsLoginClick(bool isClick) {
-        isLoginClick = isClick;
-    }
-
 	public void signIn(){
-        isLoginClick = true;
 		string username = getUsernameInput ();
 		string password = getPasswordInput ();
 		ParseUser.LogInAsync (username, password).ContinueWith (t => {
 			if (t.IsFaulted || t.IsCanceled) {
 				Debug.Log ("Sign in failed");
-                isLoginTrue = false; 
+                Notification.messageError("Sign in failed");
 			} else {
 				Debug.Log ("Sign in successfully");
-                isLoginTrue = true;
+                Bet.bet.getMyCoin();
 			}
 		});
 	}
@@ -99,6 +86,7 @@ public class Account : MonoBehaviour {
                     {
                         ParseException error = (ParseException)enumerator.Current;
                         Debug.Log("Error: " + error.Code + ", " + error.Message);
+                        
                     }
                 }
             }

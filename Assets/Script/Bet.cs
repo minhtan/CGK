@@ -24,6 +24,7 @@ public class Bet : MonoBehaviour {
 						if (enumerator.MoveNext()) {
 							ParseException error = (ParseException) enumerator.Current;
 							Debug.Log("Error: " + error.Code + ", " + error.Message);
+                            Notification.messageError("Error: " + error.Code + ", " + error.Message);
 						}
 					}
 				}else{
@@ -31,6 +32,7 @@ public class Bet : MonoBehaviour {
 					object errorCode;
 					if (result.TryGetValue("errorCode", out errorCode)) {
 						Debug.Log ("Error: " + result["errorCode"] + ", " + result["message"]);
+                        Notification.messageError("Error: " + result["errorCode"] + ", " + result["message"]);
 					} else {
 						coin = Convert.ToInt32(result["coin"]);
 						Debug.Log(coin);
@@ -40,7 +42,7 @@ public class Bet : MonoBehaviour {
 			});
 		} else {
 			Debug.Log ("User need to sign in");
-            Notification.invalidUser();
+            Notification.messageError("User need to sign in");
 		}
 	}
 
@@ -58,6 +60,7 @@ public class Bet : MonoBehaviour {
 					    if (enumerator.MoveNext()) {
 						    ParseException error = (ParseException) enumerator.Current;
 						    Debug.Log("Error: " + error.Code + ", " + error.Message);
+                            Notification.messageError("Error: " + error.Code + ", " + error.Message);
 					    }
 				    }
 			    }else{
@@ -65,6 +68,7 @@ public class Bet : MonoBehaviour {
 				    object errorCode;
 				    if (result.TryGetValue("errorCode", out errorCode)) {
 					    Debug.Log ("Error: " + result["errorCode"] + ", " + result["message"]);
+                        Notification.messageError("Error: " + result["errorCode"] + ", " + result["message"]);
 				    } else {
                         int[] re = new int[2];
                         re[0] = Convert.ToInt32(result["result"]);
@@ -79,7 +83,7 @@ public class Bet : MonoBehaviour {
         else
         {
             Debug.Log("User need to sign in");
-            Notification.invalidUser();
+            Notification.messageError("User need to sign in");
         }
 	}
 
@@ -100,6 +104,7 @@ public class Bet : MonoBehaviour {
                         {
                             ParseException error = (ParseException)enumerator.Current;
                             Debug.Log("Error: " + error.Code + ", " + error.Message);
+                            Notification.messageError("Error: " + error.Code + ", " + error.Message);
                         }
                     }
                 }
@@ -110,6 +115,7 @@ public class Bet : MonoBehaviour {
                     if (result.TryGetValue("errorCode", out errorCode))
                     {
                         Debug.Log("Error: " + result["errorCode"] + ", " + result["message"]);
+                        Notification.messageError("Error: " + result["errorCode"] + ", " + result["message"]);
                     }
                     else
                     {
@@ -122,7 +128,7 @@ public class Bet : MonoBehaviour {
         else
         {
             Debug.Log("User need to sign in");
-            Notification.invalidUser();
+            Notification.messageError("User need to sign in");
         }
     }
 
