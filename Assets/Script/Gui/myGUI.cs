@@ -49,10 +49,10 @@ public class myGUI : MonoBehaviour {
     private int result;
     private float timeAnimalTransite = 0.1f;
     private bool animalStopRunning = false;
+    private bool isStartTime = false;
     //Text coin
     public Text textCoin;
     private int coinServer;
-    private int lastCoin;
     private int presentCoin;
     private bool isSuccessCoinServer = false;
 
@@ -64,15 +64,11 @@ public class myGUI : MonoBehaviour {
 
     void Start() {
         mg = this;
-        //test get coin from server
-        Bet.bet.getMyCoin();
-        //end
         RectTransform transform = settingAnim.gameObject.transform as RectTransform;
         Vector2 position = transform.anchoredPosition;
         position.y -= transform.rect.height;
         transform.anchoredPosition = position;
-        lastCoin = System.Convert.ToInt32(textCoin.text);
-       
+        
     }
 
     private void showTimer()
@@ -85,19 +81,24 @@ public class myGUI : MonoBehaviour {
         }
         else
         {
+            panelCoverPnlBet.SetActive(false);
             timer.enabled = true;
             timer.text = timeSpan.Seconds + "";
             btnStart.SetActive(false);
-            panelCoverPnlBet.SetActive(false);
+            btnStart.SetActive(false);
         }
+    }
+
+    private void startTimeBet() {
+        endTime = DateTime.Now.AddSeconds(5);
+        isCountdownRunning = false;
+        isStartTime = true;
     }
     // start bet button click
     public void btnStartBetClick()
     {
-        endTime = DateTime.Now.AddSeconds(5);
-        isCountdownRunning = false;
+        startTimeBet();
     }
-
     //lay coin tu server ve khi login
 
     public static void getCoinServer(int coin) {
@@ -115,6 +116,9 @@ public class myGUI : MonoBehaviour {
         Bet.bet.betRequest();
     }
 
+
+
+
     void Update()
     {
         if (isHeldDown && !isCoroutineRun)
@@ -126,12 +130,10 @@ public class myGUI : MonoBehaviour {
         {
             StartCoroutine(countdown());
         }
-
-        showTimer();
-        if (isSuccessCoinServer)
-        {
-            textCoin.text = presentCoin + "";
+        if(isStartTime){
+            showTimer();
         }
+        
         if(account.getIsLoginClick()){
             StartCoroutine(animLogin());
             account.setIsLoginClick(false);
@@ -143,8 +145,8 @@ public class myGUI : MonoBehaviour {
         }
         if (serverFlag && !isCycleRunning) {
             isCycleRunning = true;
-            StartCoroutine(cycleOnce(result));
-            StartCoroutine(animCoin());
+            StartCoroutine(cycleOnce(result)); 
+            
         }
     }
 
@@ -185,20 +187,22 @@ public class myGUI : MonoBehaviour {
     }
 
     //anim so coin tang len hoac giam di 
-    private IEnumerator animCoin() {
+
+    private IEnumerator animCoin(int lastCoin) {
         
-        if (coinServer < lastCoin)
+        //if (coinServer < lastCoin)
+        //{
+        //    for (int i = lastCoin; i >= coinServer; i--)
+        //    {
+        //        yield return new WaitForSeconds(1f);
+        //        textCoin.text = "Coin: " + i;
+        //    }
+        //}
+        if (coinServer > lastCoin)
         {
-            for (int i = lastCoin; i >= coinServer; i--)
-            {
-                yield return new WaitForSeconds(0.1f);
-                textCoin.text = "Coin: " + i;
-            }
-        }
-        else {
             for (int i = lastCoin; i <= coinServer; i++)
             {
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitForSeconds(1f);
                 textCoin.text = "Coin: " + i;
             }
         }
@@ -313,7 +317,7 @@ public class myGUI : MonoBehaviour {
             listAnimal[number - 1].GetComponent<animalControl>().hide();
             listAnimal[number].GetComponent<animalControl>().show();
         }
-
+        StartCoroutine(animCoin(presentCoin));
     }
 
     private IEnumerator cycleAnimal(int number)
@@ -444,14 +448,22 @@ public class myGUI : MonoBehaviour {
         if (account.getIsTrue())
         {
             Bet.bet.getMyCoin();
-            placeHolderUsername.enabled = true;
-            placeHolderPass.enabled = true;
-            txtUserName.text = "";
-            txtPass.text = "";
-            animDoorLeft.enabled = true;
-            animDoorRight.enabled = true;
-            animInputPass.enabled = true;
-            runAnimationLogin(true, true, true);
+            yield return new WaitForSeconds(3f);
+            if (isSuccessCoinServer)
+            {
+                textCoin.text = "Coin: " + presentCoin;
+                placeHolderUsername.enabled = true;
+                placeHolderPass.enabled = true;
+                txtUserName.text = "";
+                txtPass.text = "";
+                animDoorLeft.enabled = true;
+                animDoorRight.enabled = true;
+                animInputPass.enabled = true;
+                runAnimationLogin(true, true, true);
+            }
+            else { 
+                //lam j o day khi ko lay duoc coin tu server
+            }   
         }
         else {
             canvasGame.SetActive(false);
@@ -464,8 +476,6 @@ public class myGUI : MonoBehaviour {
             animInputPass.SetBool("isPassRun", !isPassLeft);
             animDoorLeft.SetBool("isDoorLeftRun", !isDoorLeft);
             animDoorRight.SetBool("isDoorRightRun", !isDoorRight);
-        
-
     }
 
     // logout
@@ -484,10 +494,10 @@ public class myGUI : MonoBehaviour {
 
         Text text = GameObject.Find("TxtBet" + number).GetComponent<Text>();
         int value = System.Convert.ToInt32(text.text);
-        if (value < 99)
+        if (value < 99 && presentCoin > 0)
         {
             value++;
-
+            presentCoin--;
         }
         if (value < 10)
         {
@@ -501,10 +511,11 @@ public class myGUI : MonoBehaviour {
     IEnumerator btnBetDown(){
         btnBetClick(flag);
         yield return new WaitForSeconds(0.1f);
+        textCoin.text = "Coin: " + presentCoin;
         isCoroutineRun = false;
     }
 
-    //setting
+    
     public void btnDown(int number) {
         isHeldDown = true;
         flag = number;
@@ -514,6 +525,7 @@ public class myGUI : MonoBehaviour {
         isHeldDown = false;
     }
 
+    //setting
     public void btnSettingClick()
     {
         imgSettingAnim.enabled = true;
