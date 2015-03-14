@@ -8,8 +8,6 @@ using Parse;
 public class Account : MonoBehaviour {
 	public Text inpUsername;
 	public Text inpPassword;
-    private bool isLoginTrue = false;
-    private bool isLoginClick = false;
 	private string getUsernameInput(){
 		return inpUsername.text;
 	}
@@ -17,6 +15,15 @@ public class Account : MonoBehaviour {
 	private string getPasswordInput(){
 		return inpPassword.text;
 	}
+
+    private bool checkString(string username, string password) {
+        Debug.Log(username.Length);
+        if(username.Length > 2){ 
+            return true;
+        }        
+        return false;
+    }
+
 
 	public void signUp(){
 		string username = getUsernameInput ();
@@ -50,15 +57,25 @@ public class Account : MonoBehaviour {
 	public void signIn(){
 		string username = getUsernameInput ();
 		string password = getPasswordInput ();
-		ParseUser.LogInAsync (username, password).ContinueWith (t => {
-			if (t.IsFaulted || t.IsCanceled) {
-				Debug.Log ("Sign in failed");
-                Notification.messageError("Sign in failed");
-			} else {
-				Debug.Log ("Sign in successfully");
-                Bet.bet.getMyCoin();
-			}
-		});
+        if (checkString(username, password))
+        {
+            ParseUser.LogInAsync(username, password).ContinueWith(t =>
+            {
+                if (t.IsFaulted || t.IsCanceled)
+                {
+                    Debug.Log("Sign in failed");
+                    Notification.messageError("Sign in failed");
+                }
+                else
+                {
+                    Debug.Log("Sign in successfully");
+                    Bet.bet.getMyCoin();
+                }
+            });
+        }
+        else {
+            myGUI.messageError("Độ dài phải lớn hơn 2 và nhỏ hơn 100","Lỗi đăng nhập");
+        }
 	}
 
 	public static bool hasCurrentUser(){

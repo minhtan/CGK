@@ -45,21 +45,20 @@ public class myGUI : MonoBehaviour {
     private List <GameObject> listAnimal;
     private bool isCycleRunning = false;
     private bool serverFlag = false;
-    private bool x = false;
     private int result;
     private float timeAnimalTransite = 0.1f;
-    private bool animalStopRunning = false;
     private bool isStartTime = false;
     //Text coin
     public Text textCoin;
     private int coinServer;
     private int presentCoin;
     private bool isRepeatCycle = false;
-    //check bet
-    private bool isBet = false;
     //timer
     private int totalTimeRuning = 5;
     private bool isCoinServer = false;
+    //Error
+    public Text message;
+    public Text titleError;
 
     void Awake() { 
         rectAnimal = panelAnimal.GetComponent<RectTransform>();
@@ -75,33 +74,38 @@ public class myGUI : MonoBehaviour {
         transform.anchoredPosition = position;
     }
 
-    private void showTimer()
+    void Update()
     {
-        TimeSpan timeSpan = endTime.Subtract(DateTime.Now);
-        if (timeSpan.TotalSeconds <= 0)
+        if (isHeldDown && !isCoroutineRun)
         {
-            timer.enabled = false;
-            panelCoverPnlBet.SetActive(true);
+            isCoroutineRun = true;
+            StartCoroutine(btnBetDown());
         }
-        else
+        if (!isCountdownRunning && isStartTime)
         {
-            panelCoverPnlBet.SetActive(false);
-            timer.enabled = true;
-            timer.text = timeSpan.Seconds + "";
-            btnStart.SetActive(false);       
+            StartCoroutine(countdown());
+        }
+        if (isStartTime)
+        {
+            showTimer();
+        }
+        if (isCoinServer)
+        {
+            isCoinServer = false;
+            animLogin();
+        }
+        if (serverFlag && !isCycleRunning)
+        {
+            isCycleRunning = true;
+            Debug.Log(result + "---------------------");
+            StartCoroutine(cycleOnce(randomAnimalPosition(result)));
+        }
+        if (isRepeatCycle)
+        {
+            resetCycle();
         }
     }
 
-    private void startTimeBet() {
-        endTime = DateTime.Now.AddSeconds(totalTimeRuning);
-        isCountdownRunning = false;
-        isStartTime = true;
-    }
-    // start bet button click
-    public void btnStartBetClick()
-    {
-        startTimeBet();
-    }
     //lay coin tu server ve khi login
     public static void getCoinServer(int coin) {
         mg.presentCoin = coin;
@@ -110,40 +114,6 @@ public class myGUI : MonoBehaviour {
 
     private int random(int begin, int end) {
         return UnityEngine.Random.Range(begin,end);
-    }
-
-    private IEnumerator countdown()
-    {
-        isCountdownRunning = true;
-        while (endTime > DateTime.Now)
-        {
-            yield return new WaitForSeconds(1f);
-        }
-        isCycleRunning = true;
-        if (checkBet())
-        {
-            StartCoroutine(cycleAnimal(listAnimal.Count, random(1,2)));
-            Bet.bet.betRequest();               
-        }
-        else {
-            StartCoroutine(cycleAnimal(listAnimal.Count, random(2,4)));
-            serverFlag = true;
-            result = random(0,23);
-        }
-    }
-
-
-    //check xem co dat cuoc khong
-    private bool checkBet() {
-        for (int i = 0; i < 8; i++)
-        {
-            int coin = System.Convert.ToInt32(GameObject.Find("TxtBet" + i).GetComponent<Text>().text);
-            if (coin > 0)
-            {   
-                return true;
-            }
-        }
-        return false;
     }
 
     //tach chuoi text coin
@@ -158,33 +128,6 @@ public class myGUI : MonoBehaviour {
         int random = UnityEngine.Random.Range(1,3);
     
         return result +(random - 1) * 8 ;
-    }
-
-    void Update()
-    {
-        if (isHeldDown && !isCoroutineRun)
-        {
-            isCoroutineRun = true;
-            StartCoroutine(btnBetDown());
-        }
-        if (!isCountdownRunning && isStartTime)
-        {
-            StartCoroutine(countdown());
-        }
-        if(isStartTime){
-            showTimer();
-        }  
-        if(isCoinServer){
-            isCoinServer = false;
-            animLogin();
-        }
-        if (serverFlag && !isCycleRunning) {
-            isCycleRunning = true;
-            StartCoroutine(cycleOnce(randomAnimalPosition(result))); 
-        }
-        if(isRepeatCycle){
-            resetCycle();
-        }
     }
 
     // animal 
@@ -224,7 +167,6 @@ public class myGUI : MonoBehaviour {
     }
 
     //anim so coin tang len hoac giam di 
-
     private IEnumerator animCoin(int lastCoin) {
         if (coinServer > lastCoin)
         {
@@ -241,7 +183,6 @@ public class myGUI : MonoBehaviour {
     private void resetCycle() {
         isRepeatCycle = false;
         isCycleRunning = false;
-        x = false;
         serverFlag = false;
         isCountdownRunning = false;
         isStartTime = true;
@@ -353,7 +294,7 @@ public class myGUI : MonoBehaviour {
                 else
                 {
                     listAnimal[i - 1].GetComponent<animalControl>().hide();
-                    listAnimal[i].GetComponent<animalControl>().show();
+                    listAnimal[i].GetComponent<animalControl>().show();;
                     yield return new WaitForSeconds(timeAnimalTransite);
                 }   
             }
@@ -450,43 +391,6 @@ public class myGUI : MonoBehaviour {
         canvasGame.SetActive(false);
     }
 
-    //bet
-    public void btnBetClick(int number) {
-
-        Text text = GameObject.Find("TxtBet" + number).GetComponent<Text>();
-        int value = System.Convert.ToInt32(text.text);
-        if (value < 99 && presentCoin > 0)
-        {
-            value++;
-            presentCoin--;
-
-        }
-        if (value < 10)
-        {
-            text.text = "0" + System.Convert.ToString(value);
-        }
-        else {
-            text.text = System.Convert.ToString(value);
-        }
-    }
-
-    IEnumerator btnBetDown(){
-        btnBetClick(flag);
-        yield return new WaitForSeconds(0.1f);
-        textCoin.text = "Coin: " + presentCoin;
-        isCoroutineRun = false;
-    }
-
-    
-    public void btnDown(int number) {
-        isHeldDown = true;
-        flag = number;
-    }
-
-    public void btnUp() {
-        isHeldDown = false;
-    }
-
     //setting
     public void btnSettingClick()
     {
@@ -509,8 +413,123 @@ public class myGUI : MonoBehaviour {
 
     }
 
+    //bet
+    private void showTimer()
+    {
+        TimeSpan timeSpan = endTime.Subtract(DateTime.Now);
+        if (timeSpan.TotalSeconds <= 0)
+        {
+            timer.enabled = false;
+            panelCoverPnlBet.SetActive(true);
+            isHeldDown = false;
+        }
+        else
+        {
+            panelCoverPnlBet.SetActive(false);
+            timer.enabled = true;
+            timer.text = timeSpan.Seconds + "";
+            btnStart.SetActive(false);
+        }
+    }
+
+    private void startTimeBet()
+    {
+        endTime = DateTime.Now.AddSeconds(totalTimeRuning);
+        isCountdownRunning = false;
+        isStartTime = true;
+    }
+
+    // start bet button click
+    public void btnStartBetClick()
+    {
+        startTimeBet();
+    }
+
+    public void btnBetClick(int number)
+    {
+
+        Text text = GameObject.Find("TxtBet" + number).GetComponent<Text>();
+        int value = System.Convert.ToInt32(text.text);
+        if (value < 99 && presentCoin > 0)
+        {
+            value++;
+            presentCoin--;
+
+        }
+        if (value < 10)
+        {
+            text.text = "0" + System.Convert.ToString(value);
+        }
+        else
+        {
+            text.text = System.Convert.ToString(value);
+        }
+    }
+
+    IEnumerator btnBetDown()
+    {
+        btnBetClick(flag);
+        yield return new WaitForSeconds(0.1f);
+        textCoin.text = "Coin: " + presentCoin;
+        isCoroutineRun = false;
+    }
+
+
+    public void btnDown(int number)
+    {
+        isHeldDown = true;
+        flag = number;
+    }
+
+    public void btnUp()
+    {
+        isHeldDown = false;
+    }
+
+    private IEnumerator countdown()
+    {
+        isCountdownRunning = true;
+        while (endTime > DateTime.Now)
+        {
+            yield return new WaitForSeconds(1f);
+        }
+        isCycleRunning = true;
+        if (checkBet())
+        {
+            StartCoroutine(cycleAnimal(listAnimal.Count, random(1, 2)));
+            Bet.bet.betRequest();
+        }
+        else
+        {
+            StartCoroutine(cycleAnimal(listAnimal.Count, random(2, 4)));
+            serverFlag = true;
+            result = random(0, 7);
+        }
+    }
+
+    //check xem co dat cuoc khong
+    private bool checkBet()
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            int coin = System.Convert.ToInt32(GameObject.Find("TxtBet" + i).GetComponent<Text>().text);
+            if (coin > 0)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void btnExitErrorClick()
     {
         panelError.SetActive(false);
+    }
+
+    public static void messageError(string message, string titleError)
+    {
+        mg.panelError.SetActive(true);
+        mg.titleError.text = titleError;
+        mg.message.text = message;
     }
 }

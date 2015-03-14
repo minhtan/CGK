@@ -29,6 +29,10 @@ public class SizeFolowCanvas : MonoBehaviour {
     //chinh size panel cover panel bet
     public GameObject panelCoverPanelBet;
     private RectTransform rectCoverPnlBet;
+    //shopping
+    public GameObject pnlMainShop;
+    public GameObject pnlListItem;
+    public float ratioHeightShop = 0.8f;
 
     void Awake(){
         rectCanvas = GetComponent<RectTransform>();
@@ -51,24 +55,25 @@ public class SizeFolowCanvas : MonoBehaviour {
         panelAnimalVsTimeBetSize(heightBet, ratioScreen, widthCanvas, ratioBetVsScreen, rectPanelAnimal);
        // panelAnimalVsTimeBetSize(heightBet, ratioScreen, widthCanvas, ratioBetVsScreen, rectTimeBet);
         positionAnimal(ratioScreen);
-        panelFullScreenSize(widthCanvas, panelShop);
+        changeSize(panelShop, widthCanvas, heightScreenStandard);
+        //shop
+        float spacingItem = pnlListItem.GetComponent<HorizontalLayoutGroup>().spacing;
+        float heightShop = spacingItem / 768;
+        pnlMainShop.GetComponent<RectTransform>().anchorMin = new Vector2(spacingItem/widthCanvas, heightShop);
+        pnlMainShop.GetComponent<RectTransform>().anchorMax = new Vector2(1 - spacingItem / widthCanvas, ratioHeightShop- heightShop); ;
+
 	}
-
-    private void panelFullScreenSize(float widthCanvas, GameObject panel) {
-        panel.GetComponent<RectTransform>().sizeDelta = new Vector2(widthCanvas, heightScreenStandard);
-    }
-
 
     private void btnSettingSize(float ratioScreen) {
         rectSetting.sizeDelta = new Vector2(sizeBtnSetting, sizeBtnSetting);
-        sizeBtnChildrenSetting(panelMash, sizeBtnSetting, heightPanelMash);
-        sizeBtnChildrenSetting(btnMusic, sizeBtnSetting, sizeBtnSetting);
-        sizeBtnChildrenSetting(btnShop, sizeBtnSetting, sizeBtnSetting);
-        sizeBtnChildrenSetting(btnLogout, sizeBtnSetting, sizeBtnSetting);
+        changeSize(panelMash, sizeBtnSetting, heightPanelMash);
+        changeSize(btnMusic, sizeBtnSetting, sizeBtnSetting);
+        changeSize(btnShop, sizeBtnSetting, sizeBtnSetting);
+        changeSize(btnLogout, sizeBtnSetting, sizeBtnSetting);
         txtCoin.GetComponent<RectTransform>().sizeDelta = new Vector2(sizeBtnSetting, sizeBtnSetting / 2);
     }
 
-    private void sizeBtnChildrenSetting(GameObject obj, float width, float height) {
+    private void changeSize(GameObject obj, float width, float height) {
         obj.GetComponent<RectTransform>().sizeDelta = new Vector2(width, height);
     }
 
