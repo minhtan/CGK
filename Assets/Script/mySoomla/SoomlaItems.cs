@@ -25,6 +25,11 @@ public class SoomlaItems : IStoreAssets
         return new VirtualCurrencyPack[] { COIN_PACK_10, COIN_PACK_60, COIN_PACK_120, COIN_PACK_250, COIN_PACK_600, COIN_PACK_1250};
     }
 
+    public static VirtualCurrencyPack[] getMyCurrencyPack()
+    {
+        return new VirtualCurrencyPack[] { TEN_COIN_PACK, TEST_GOOD };
+    }
+
     public VirtualCategory[] GetCategories()
     {
         return new VirtualCategory[] {};
