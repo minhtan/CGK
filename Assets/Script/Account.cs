@@ -17,8 +17,8 @@ public class Account : MonoBehaviour {
 	}
 
     private bool checkString(string username, string password) {
-        Debug.Log(username.Length);
-        if(username.Length > 2){ 
+        if (username.Length > 2 && password.Length > 2)
+        { 
             return true;
         }        
         return false;
@@ -28,30 +28,44 @@ public class Account : MonoBehaviour {
 	public void signUp(){
 		string username = getUsernameInput ();
 		string password = getPasswordInput ();
-		IDictionary<string,object> dict = new Dictionary<string, object>()
-		{
-			{"username", username},
-			{"password", password}
-		};
-
-		ParseCloud.CallFunctionAsync<IDictionary<string, object>> ("signUp", dict).ContinueWith (t => {
-			if (t.IsFaulted){
-				using (IEnumerator<System.Exception> enumerator = t.Exception.InnerExceptions.GetEnumerator()) {
-					if (enumerator.MoveNext()) {
-						ParseException error = (ParseException) enumerator.Current;
-						Debug.Log("Error: " + error.Code + ", " + error.Message);
-					}
-				}
-			}else{
-				IDictionary<string, object> result = t.Result;
-				object errorCode;
-				if (result.TryGetValue("errorCode", out errorCode)) {
-					Debug.Log ("Error: " + result["errorCode"] + ", " + result["message"]);
-				} else {
-					Debug.Log ("Success: " + result["successCode"]);
-				}
-			}
-		});
+        if (checkString(username, password))
+        {
+            IDictionary<string, object> dict = new Dictionary<string, object>()
+		    {
+			    {"username", username},
+			    {"password", password}
+		    };
+            ParseCloud.CallFunctionAsync<IDictionary<string, object>>("signUp", dict).ContinueWith(t =>
+            {
+                if (t.IsFaulted)
+                {
+                    using (IEnumerator<System.Exception> enumerator = t.Exception.InnerExceptions.GetEnumerator())
+                    {
+                        if (enumerator.MoveNext())
+                        {
+                            ParseException error = (ParseException)enumerator.Current;
+                            Debug.Log("Error: " + error.Code + ", " + error.Message);
+                        }
+                    }
+                }
+                else
+                {
+                    IDictionary<string, object> result = t.Result;
+                    object errorCode;
+                    if (result.TryGetValue("errorCode", out errorCode))
+                    {
+                        Debug.Log("Error: " + result["errorCode"] + ", " + result["message"]);
+                    }
+                    else
+                    {
+                        Debug.Log("Success: " + result["successCode"]);
+                    }
+                }
+            });
+        }
+        else {
+            myGUI.messageError("Độ dài phải lớn hơn 2", "Lỗi đăng ký");
+        }	
 	}
 
 	public void signIn(){
@@ -64,7 +78,7 @@ public class Account : MonoBehaviour {
                 if (t.IsFaulted || t.IsCanceled)
                 {
                     Debug.Log("Sign in failed");
-                    Notification.messageError("Sign in failed");
+                    myGUI.messageError("Đăng nhập sai tài khoản","Lỗi đăng nhập");
                 }
                 else
                 {
@@ -74,7 +88,7 @@ public class Account : MonoBehaviour {
             });
         }
         else {
-            myGUI.messageError("Độ dài phải lớn hơn 2 và nhỏ hơn 100","Lỗi đăng nhập");
+            myGUI.messageError("Độ dài phải lớn hơn 2","Lỗi đăng nhập");
         }
 	}
 

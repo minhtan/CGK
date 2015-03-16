@@ -56,9 +56,13 @@ public class myGUI : MonoBehaviour {
     //timer
     private int totalTimeRuning = 5;
     private bool isCoinServer = false;
+    public GameObject txtTimer;
     //Error
     public Text message;
     public Text titleError;
+    private bool isError = false;
+    private string txttitleError;
+    private string txtContentError;
 
     void Awake() { 
         rectAnimal = panelAnimal.GetComponent<RectTransform>();
@@ -97,12 +101,18 @@ public class myGUI : MonoBehaviour {
         if (serverFlag && !isCycleRunning)
         {
             isCycleRunning = true;
-            Debug.Log(result + "---------------------");
             StartCoroutine(cycleOnce(randomAnimalPosition(result)));
         }
         if (isRepeatCycle)
         {
             resetCycle();
+        }
+        if(isError){
+            isError = false;
+            titleError.text = txttitleError;
+            message.text = txtContentError;
+            panelError.SetActive(true);    
+            Debug.Log("------------------------------");
         }
     }
 
@@ -116,17 +126,9 @@ public class myGUI : MonoBehaviour {
         return UnityEngine.Random.Range(begin,end);
     }
 
-    //tach chuoi text coin
-    private int splitTextCoin() {
-        string[] arrTextCoin = textCoin.text.Split(' ');
-        int lastCoin = System.Convert.ToInt32(arrTextCoin[1]);
-        return lastCoin;
-    }
-
     //randomAnimalPosition
     private int randomAnimalPosition(int result) {
-        int random = UnityEngine.Random.Range(1,3);
-    
+        int random = UnityEngine.Random.Range(1,3);    
         return result +(random - 1) * 8 ;
     }
 
@@ -170,13 +172,15 @@ public class myGUI : MonoBehaviour {
     private IEnumerator animCoin(int lastCoin) {
         if (coinServer > lastCoin)
         {
+            SoundControlCS.sound.playWinCoin();
             for (int i = lastCoin; i <= coinServer; i++)
             {
-                yield return new WaitForSeconds(0.2f);
-                textCoin.text = "Coin: " + i;
-            }
+                yield return new WaitForSeconds(0.1f);
+                textCoin.text = i + "";      
+            }            
         }
-        yield return new WaitForSeconds(3f);
+        SoundControlCS.sound.stopWinCoin();
+        yield return new WaitForSeconds(3f);        
         isRepeatCycle = true;
     }
 
@@ -187,7 +191,7 @@ public class myGUI : MonoBehaviour {
         isCountdownRunning = false;
         isStartTime = true;
         endTime = DateTime.Now.AddSeconds(totalTimeRuning);
-        presentCoin = splitTextCoin();
+        presentCoin = System.Convert.ToInt32(textCoin.text);
         for (int i = 0; i < 8; i ++)
         {
             GameObject.Find("TxtBet" + i).GetComponent<Text>().text = "00";
@@ -363,14 +367,20 @@ public class myGUI : MonoBehaviour {
         }
     }
 
+
+    public GameObject inputPass;
+    public GameObject inputUser;
+
     //login
     private void animLogin() {   
-        textCoin.text = "Coin: " + presentCoin;
+        textCoin.text = "" + presentCoin;
         canvasGame.SetActive(true);
         animDoorLeft.enabled = true;
         animDoorRight.enabled = true;
         animInputPass.enabled = true;
-        runAnimationLogin(true, true, true); 
+        runAnimationLogin(true, true, true);
+        inputPass.GetComponent<InputField>().text = "";
+        inputUser.GetComponent<InputField>().text = "";
     }
 
     private void runAnimationLogin(bool isDoorLeft, bool isDoorRight, bool isPassLeft) {
@@ -434,6 +444,7 @@ public class myGUI : MonoBehaviour {
 
     private void startTimeBet()
     {
+        txtTimer.SetActive(true);
         endTime = DateTime.Now.AddSeconds(totalTimeRuning);
         isCountdownRunning = false;
         isStartTime = true;
@@ -470,7 +481,7 @@ public class myGUI : MonoBehaviour {
     {
         btnBetClick(flag);
         yield return new WaitForSeconds(0.1f);
-        textCoin.text = "Coin: " + presentCoin;
+        textCoin.text = presentCoin + "";
         isCoroutineRun = false;
     }
 
@@ -528,8 +539,8 @@ public class myGUI : MonoBehaviour {
 
     public static void messageError(string message, string titleError)
     {
-        mg.panelError.SetActive(true);
-        mg.titleError.text = titleError;
-        mg.message.text = message;
+        mg.txttitleError = titleError;
+        mg.txtContentError = message;
+        mg.isError = true;
     }
 }

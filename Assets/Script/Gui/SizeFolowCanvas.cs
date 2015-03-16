@@ -7,7 +7,7 @@ public class SizeFolowCanvas : MonoBehaviour {
     public int heightScreenStandard = 768;
     // chinh size cho nut setting 
     public GameObject btnSetting;
-    public float sizeBtnSetting;
+    public float sizeBtnSetting = 128.0f;
     public GameObject panelMash;
     public float heightPanelMash = 384;
     public GameObject btnMusic;
