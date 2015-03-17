@@ -18,6 +18,16 @@ public class languageVN : MonoBehaviour {
     public Text txtTitleItem4;
     public Text txtTitleItem5;
     public Text txtTitleItem6;
+
+    //text signUp
+    public Text txtUserUp;
+    public Text txtPassUp;
+    public Text txtPassReUp;
+    public Text txtEmail;
+    public Text txtPhone;
+    public Text btnSignUp;
+    public Text btnReset;
+
 	void Start () {
         txtLogin.text = "Đăng nhập";
         txtSignUp.text = "Đăng ký";
@@ -31,5 +41,12 @@ public class languageVN : MonoBehaviour {
         txtTitleItem4.text = "Gói 250 xèng";
         txtTitleItem5.text = "Gói 600 xèng";
         txtTitleItem6.text = "Gói 1250 xèng";
+        txtUserUp.text = "Tên đăng nhập";
+        txtPassUp.text = "Mật khẩu";
+        txtEmail.text = "Hòm thư";
+        txtPhone.text = "Số điện thoại";
+        txtPassReUp.text = "Xác nhận mật khẩu";
+        btnReset.text = "Làm lại";
+        btnSignUp.text = "Đăng ký";
 	}
 }

@@ -31,6 +31,8 @@ public class myGUI : MonoBehaviour {
     public Text txtPass;
     public Text placeHolderUsername;
     public Text placeHolderPass;
+    public GameObject inputPass;
+    public GameObject inputUser;
     //panel error
     public GameObject panelError;
     public GameObject btnExitError;
@@ -48,6 +50,7 @@ public class myGUI : MonoBehaviour {
     private int result;
     private float timeAnimalTransite = 0.1f;
     private bool isStartTime = false;
+    public GameObject imgAnimalWin;
     //Text coin
     public Text textCoin;
     private int coinServer;
@@ -93,6 +96,7 @@ public class myGUI : MonoBehaviour {
         {
             showTimer();
         }
+
         if (isCoinServer)
         {
             isCoinServer = false;
@@ -103,7 +107,7 @@ public class myGUI : MonoBehaviour {
             isCycleRunning = true;
             StartCoroutine(cycleOnce(randomAnimalPosition(result)));
         }
-        if (isRepeatCycle)
+        if (isRepeatCycle && !isLogout)
         {
             resetCycle();
         }
@@ -112,7 +116,6 @@ public class myGUI : MonoBehaviour {
             titleError.text = txttitleError;
             message.text = txtContentError;
             panelError.SetActive(true);    
-            Debug.Log("------------------------------");
         }
     }
 
@@ -173,11 +176,28 @@ public class myGUI : MonoBehaviour {
         if (coinServer > lastCoin)
         {
             SoundControlCS.sound.playWinCoin();
-            for (int i = lastCoin; i <= coinServer; i++)
+            if (coinServer - lastCoin > 999)
             {
-                yield return new WaitForSeconds(0.1f);
-                textCoin.text = i + "";      
-            }            
+                for (int i = lastCoin; i <= coinServer; i += 2)
+                {
+                    yield return new WaitForSeconds(0.05f);
+                    textCoin.text = i + "";
+                }
+            }
+            else {
+                for (int i = lastCoin; i <= coinServer; i++)
+                {
+                    yield return new WaitForSeconds(0.1f);
+                    textCoin.text = i + "";
+                }
+            }         
+        }
+        else {
+            for (int i = coinServer; i >= lastCoin; i--)
+            {
+                yield return new WaitForSeconds(0.05f);
+                textCoin.text = i + "";
+            }
         }
         SoundControlCS.sound.stopWinCoin();
         yield return new WaitForSeconds(3f);        
@@ -200,6 +220,7 @@ public class myGUI : MonoBehaviour {
         {
             listAnimal[i].GetComponent<animalControl>().hide();
         }
+        imgAnimalWin.SetActive(false);
     }
 
     private IEnumerator cycleOnce(int number) {
@@ -265,7 +286,8 @@ public class myGUI : MonoBehaviour {
                 else {
                     if (number == 0)
                     {
-                        listAnimal[number].GetComponent<animalControl>().show();
+                        listAnimal[number].GetComponent<animalControl>().show();                      
+                        imgAnimalWin.GetComponent<Image>().sprite = listAnimal[number].GetComponent<animalControl>().showSprite;
                     }
                     else if (number == 1)
                     {
@@ -273,6 +295,7 @@ public class myGUI : MonoBehaviour {
                         yield return new WaitForSeconds(timeAnimalTransite * 10);
                         listAnimal[number - 1].GetComponent<animalControl>().hide();
                         listAnimal[number].GetComponent<animalControl>().show();
+                        imgAnimalWin.GetComponent<Image>().sprite = listAnimal[number].GetComponent<animalControl>().showSprite;
                     }
                     else
                     {
@@ -283,6 +306,7 @@ public class myGUI : MonoBehaviour {
                         yield return new WaitForSeconds(timeAnimalTransite * 10);
                         listAnimal[number - 1].GetComponent<animalControl>().hide();
                         listAnimal[number].GetComponent<animalControl>().show();
+                        imgAnimalWin.GetComponent<Image>().sprite = listAnimal[number].GetComponent<animalControl>().showSprite;
                     }
                 }
             }
@@ -310,7 +334,9 @@ public class myGUI : MonoBehaviour {
             yield return new WaitForSeconds(timeAnimalTransite * 10);
             listAnimal[number - 1].GetComponent<animalControl>().hide();
             listAnimal[number].GetComponent<animalControl>().show();
+            imgAnimalWin.GetComponent<Image>().sprite = listAnimal[number].GetComponent<animalControl>().showSprite;
         }
+        imgAnimalWin.SetActive(true);
         StartCoroutine(animCoin(presentCoin));
     }
 
@@ -367,10 +393,6 @@ public class myGUI : MonoBehaviour {
         }
     }
 
-
-    public GameObject inputPass;
-    public GameObject inputUser;
-
     //login
     private void animLogin() {   
         textCoin.text = "" + presentCoin;
@@ -378,10 +400,13 @@ public class myGUI : MonoBehaviour {
         animDoorLeft.enabled = true;
         animDoorRight.enabled = true;
         animInputPass.enabled = true;
+        loginRepeat();
         runAnimationLogin(true, true, true);
         inputPass.GetComponent<InputField>().text = "";
         inputUser.GetComponent<InputField>().text = "";
     }
+
+    
 
     private void runAnimationLogin(bool isDoorLeft, bool isDoorRight, bool isPassLeft) {
 
@@ -390,8 +415,23 @@ public class myGUI : MonoBehaviour {
             animDoorRight.SetBool("isDoorRightRun", !isDoorRight);
     }
 
+    private void loginRepeat() {
+        imgAnimalWin.SetActive(false);
+        btnStart.SetActive(true);
+        for (int i = 0; i < 8; i++)
+        {
+            GameObject.Find("TxtBet" + i).GetComponent<Text>().text = "00";
+        }
+        for (int i = 0; i < listAnimal.Count; i++)
+        {
+            listAnimal[i].GetComponent<animalControl>().hide();
+        }
+    }
+
+    private bool isLogout = false;
     // logout
     public void btnLogoutClick() {
+        isLogout = true;
         runAnimationLogin(false, false, false);
         StartCoroutine(logoutWait());
     }
@@ -505,17 +545,20 @@ public class myGUI : MonoBehaviour {
             yield return new WaitForSeconds(1f);
         }
         isCycleRunning = true;
-        if (checkBet())
+        if (!isLogout)
         {
-            StartCoroutine(cycleAnimal(listAnimal.Count, random(1, 2)));
-            Bet.bet.betRequest();
-        }
-        else
-        {
-            StartCoroutine(cycleAnimal(listAnimal.Count, random(2, 4)));
-            serverFlag = true;
-            result = random(0, 7);
-        }
+            if (checkBet())
+            {
+                StartCoroutine(cycleAnimal(listAnimal.Count, random(1, 2)));
+                Bet.bet.betRequest();
+            }
+            else
+            {
+                StartCoroutine(cycleAnimal(listAnimal.Count, random(2, 4)));
+                serverFlag = true;
+                result = random(0, 7);
+            }
+        }   
     }
 
     //check xem co dat cuoc khong
@@ -532,9 +575,9 @@ public class myGUI : MonoBehaviour {
         return false;
     }
 
-    public void btnExitErrorClick()
+    public void btnExitClick(GameObject panel)
     {
-        panelError.SetActive(false);
+        panel.SetActive(false);
     }
 
     public static void messageError(string message, string titleError)

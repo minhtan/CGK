@@ -8,6 +8,11 @@ using Parse;
 public class Account : MonoBehaviour {
 	public Text inpUsername;
 	public Text inpPassword;
+    public Text inpEmail;
+    public Text inpPhone;
+    public Text inpUsername_Up;
+    public Text inpPassword_Up;
+
 	private string getUsernameInput(){
 		return inpUsername.text;
 	}
@@ -16,6 +21,21 @@ public class Account : MonoBehaviour {
 		return inpPassword.text;
 	}
 
+    private string getEmailInput() {
+        return inpEmail.text;
+    }
+
+    private string getPhoneInput() {
+        return inpPhone.text;
+    }
+
+    private string getUsernameUp() {
+        return inpUsername_Up.text;
+    }
+
+    private string getPasswordUp() {
+        return inpPassword_Up.text;
+    }
     private bool checkString(string username, string password) {
         if (username.Length > 2 && password.Length > 2)
         { 
@@ -24,16 +44,19 @@ public class Account : MonoBehaviour {
         return false;
     }
 
-
 	public void signUp(){
-		string username = getUsernameInput ();
-		string password = getPasswordInput ();
-        if (checkString(username, password))
+		string username = getUsernameUp ();
+		string password = getPasswordUp ();
+        string email = getEmailInput();
+        string phone = getPasswordInput();
+        if (RegexString.check(username, RegexString.usernameReg) || RegexString.check(password, RegexString.passReg))
         {
             IDictionary<string, object> dict = new Dictionary<string, object>()
 		    {
 			    {"username", username},
-			    {"password", password}
+			    {"password", password},
+                {"email",email},
+                {"phone",phone}
 		    };
             ParseCloud.CallFunctionAsync<IDictionary<string, object>>("signUp", dict).ContinueWith(t =>
             {
@@ -64,6 +87,7 @@ public class Account : MonoBehaviour {
             });
         }
         else {
+            Debug.Log("----------------------------------------------");
             myGUI.messageError("Độ dài phải lớn hơn 2", "Lỗi đăng ký");
         }	
 	}
