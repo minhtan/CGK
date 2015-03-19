@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-public class animalControl : MonoBehaviour {
+public class AnimalControl : MonoBehaviour {
 
     public Sprite hideSprite;
     public Sprite showSprite;
