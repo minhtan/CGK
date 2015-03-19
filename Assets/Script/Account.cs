@@ -8,9 +8,11 @@ using Parse;
 public class Account : MonoBehaviour {
 	public Text inpUsername;
 	public Text inpPassword;
+    //signUp
     public Text inpEmail;
     public Text inpPhone;
     public Text inpUsername_Up;
+    public Text inRePassword;
     public Text inpPassword_Up;
 
 	private string getUsernameInput(){
@@ -44,12 +46,18 @@ public class Account : MonoBehaviour {
         return false;
     }
 
+    private string getRePassword() {
+        return inRePassword.text;
+    }
+
 	public void signUp(){
 		string username = getUsernameUp ();
 		string password = getPasswordUp ();
+        string rePassword = getRePassword();
         string email = getEmailInput();
-        string phone = getPasswordInput();
-        if (RegexString.check(username, RegexString.usernameReg) || RegexString.check(password, RegexString.passReg))
+        string phone = getPhoneInput();
+        if (RegexString.isValid(username, RegexString.usernameReg) && RegexString.isValid(password, RegexString.passReg)
+        && RegexString.checkRePass(password, rePassword) && RegexString.isValid(email, RegexString.emailReg) && RegexString.isValid(phone, RegexString.phoneReg))
         {
             IDictionary<string, object> dict = new Dictionary<string, object>()
 		    {
@@ -87,8 +95,7 @@ public class Account : MonoBehaviour {
             });
         }
         else {
-            Debug.Log("----------------------------------------------");
-            myGUI.messageError("Độ dài phải lớn hơn 2", "Lỗi đăng ký");
+            myGUI.messageError("Đọc hướng dẫn đăng ký", "Lỗi đăng ký");
         }	
 	}
 

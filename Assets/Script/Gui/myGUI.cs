@@ -218,7 +218,7 @@ public class myGUI : MonoBehaviour {
         }
         for (int i = 0; i < listAnimal.Count; i++)
         {
-            listAnimal[i].GetComponent<animalControl>().hide();
+            listAnimal[i].GetComponent<AnimalControl>().hide();
         }
         imgAnimalWin.SetActive(false);
     }
@@ -234,79 +234,79 @@ public class myGUI : MonoBehaviour {
                     {
                         if (i == 0)
                         {
-                            listAnimal[i].GetComponent<animalControl>().show();
+                            listAnimal[i].GetComponent<AnimalControl>().show();
                             yield return new WaitForSeconds(timeAnimalTransite);
                         }
                         else if(i < listAnimal.Count - divisionNumber(number))
                         {
-                            listAnimal[i - 1].GetComponent<animalControl>().hide();
-                            listAnimal[i].GetComponent<animalControl>().show();
+                            listAnimal[i - 1].GetComponent<AnimalControl>().hide();
+                            listAnimal[i].GetComponent<AnimalControl>().show();
                             yield return new WaitForSeconds(timeAnimalTransite);
                         }
                         if (number == 0 && i == listAnimal.Count - 3)
                         {
-                            listAnimal[i - 1].GetComponent<animalControl>().hide();
-                            listAnimal[i].GetComponent<animalControl>().show();
+                            listAnimal[i - 1].GetComponent<AnimalControl>().hide();
+                            listAnimal[i].GetComponent<AnimalControl>().show();
                             yield return new WaitForSeconds(timeAnimalTransite * 4);
                         }
                         else if (number == 0 && i == listAnimal.Count - 2)
                         {
-                            listAnimal[i - 1].GetComponent<animalControl>().hide();
-                            listAnimal[i].GetComponent<animalControl>().show();
+                            listAnimal[i - 1].GetComponent<AnimalControl>().hide();
+                            listAnimal[i].GetComponent<AnimalControl>().show();
                             yield return new WaitForSeconds(timeAnimalTransite * 6);
                         }else if(number == 0 && i == listAnimal.Count - 1){
-                            listAnimal[i - 1].GetComponent<animalControl>().hide();
-                            listAnimal[i].GetComponent<animalControl>().show();
+                            listAnimal[i - 1].GetComponent<AnimalControl>().hide();
+                            listAnimal[i].GetComponent<AnimalControl>().show();
                             yield return new WaitForSeconds(timeAnimalTransite * 10);
-                            listAnimal[i].GetComponent<animalControl>().hide();
+                            listAnimal[i].GetComponent<AnimalControl>().hide();
                         }
                         else if (number == 1 && i == listAnimal.Count - 2)
                         {
-                            listAnimal[i - 1].GetComponent<animalControl>().hide();
-                            listAnimal[i].GetComponent<animalControl>().show();
+                            listAnimal[i - 1].GetComponent<AnimalControl>().hide();
+                            listAnimal[i].GetComponent<AnimalControl>().show();
                             yield return new WaitForSeconds(timeAnimalTransite * 4);
-                            listAnimal[i].GetComponent<animalControl>().hide();
+                            listAnimal[i].GetComponent<AnimalControl>().hide();
                         }
                         else if (number == 1 && i == listAnimal.Count - 1)
                         {
-                            listAnimal[i - 1].GetComponent<animalControl>().hide();
-                            listAnimal[i].GetComponent<animalControl>().show();
+                            listAnimal[i - 1].GetComponent<AnimalControl>().hide();
+                            listAnimal[i].GetComponent<AnimalControl>().show();
                             yield return new WaitForSeconds(timeAnimalTransite * 6);
-                            listAnimal[i].GetComponent<animalControl>().hide();
+                            listAnimal[i].GetComponent<AnimalControl>().hide();
                         }
                         else if (number == 2 && i == listAnimal.Count - 1)
                         {
-                            listAnimal[i - 1].GetComponent<animalControl>().hide();
-                            listAnimal[i].GetComponent<animalControl>().show();
+                            listAnimal[i - 1].GetComponent<AnimalControl>().hide();
+                            listAnimal[i].GetComponent<AnimalControl>().show();
                             yield return new WaitForSeconds(timeAnimalTransite * 4);
-                            listAnimal[i].GetComponent<animalControl>().hide();    
+                            listAnimal[i].GetComponent<AnimalControl>().hide();    
                         }
                     }
                 }
                 else {
                     if (number == 0)
                     {
-                        listAnimal[number].GetComponent<animalControl>().show();                      
-                        imgAnimalWin.GetComponent<Image>().sprite = listAnimal[number].GetComponent<animalControl>().showSprite;
+                        listAnimal[number].GetComponent<AnimalControl>().show();                      
+                        imgAnimalWin.GetComponent<Image>().sprite = listAnimal[number].GetComponent<AnimalControl>().showSprite;
                     }
                     else if (number == 1)
                     {
-                        listAnimal[number - 1].GetComponent<animalControl>().show();
+                        listAnimal[number - 1].GetComponent<AnimalControl>().show();
                         yield return new WaitForSeconds(timeAnimalTransite * 10);
-                        listAnimal[number - 1].GetComponent<animalControl>().hide();
-                        listAnimal[number].GetComponent<animalControl>().show();
-                        imgAnimalWin.GetComponent<Image>().sprite = listAnimal[number].GetComponent<animalControl>().showSprite;
+                        listAnimal[number - 1].GetComponent<AnimalControl>().hide();
+                        listAnimal[number].GetComponent<AnimalControl>().show();
+                        imgAnimalWin.GetComponent<Image>().sprite = listAnimal[number].GetComponent<AnimalControl>().showSprite;
                     }
                     else
                     {
-                        listAnimal[number - 2].GetComponent<animalControl>().show();
+                        listAnimal[number - 2].GetComponent<AnimalControl>().show();
                         yield return new WaitForSeconds(timeAnimalTransite *6);
-                        listAnimal[number - 2].GetComponent<animalControl>().hide();
-                        listAnimal[number - 1].GetComponent<animalControl>().show();
+                        listAnimal[number - 2].GetComponent<AnimalControl>().hide();
+                        listAnimal[number - 1].GetComponent<AnimalControl>().show();
                         yield return new WaitForSeconds(timeAnimalTransite * 10);
-                        listAnimal[number - 1].GetComponent<animalControl>().hide();
-                        listAnimal[number].GetComponent<animalControl>().show();
-                        imgAnimalWin.GetComponent<Image>().sprite = listAnimal[number].GetComponent<animalControl>().showSprite;
+                        listAnimal[number - 1].GetComponent<AnimalControl>().hide();
+                        listAnimal[number].GetComponent<AnimalControl>().show();
+                        imgAnimalWin.GetComponent<Image>().sprite = listAnimal[number].GetComponent<AnimalControl>().showSprite;
                     }
                 }
             }
@@ -316,25 +316,25 @@ public class myGUI : MonoBehaviour {
             {
                 if (i == 0)
                 {
-                    listAnimal[i].GetComponent<animalControl>().show();
+                    listAnimal[i].GetComponent<AnimalControl>().show();
                     yield return new WaitForSeconds(timeAnimalTransite);
                 }
                 else
                 {
-                    listAnimal[i - 1].GetComponent<animalControl>().hide();
-                    listAnimal[i].GetComponent<animalControl>().show();;
+                    listAnimal[i - 1].GetComponent<AnimalControl>().hide();
+                    listAnimal[i].GetComponent<AnimalControl>().show();;
                     yield return new WaitForSeconds(timeAnimalTransite);
                 }   
             }
-            listAnimal[number - 3].GetComponent<animalControl>().hide();
-            listAnimal[number - 2].GetComponent<animalControl>().show();
+            listAnimal[number - 3].GetComponent<AnimalControl>().hide();
+            listAnimal[number - 2].GetComponent<AnimalControl>().show();
             yield return new WaitForSeconds(timeAnimalTransite * 6);
-            listAnimal[number - 2].GetComponent<animalControl>().hide();
-            listAnimal[number - 1].GetComponent<animalControl>().show();
+            listAnimal[number - 2].GetComponent<AnimalControl>().hide();
+            listAnimal[number - 1].GetComponent<AnimalControl>().show();
             yield return new WaitForSeconds(timeAnimalTransite * 10);
-            listAnimal[number - 1].GetComponent<animalControl>().hide();
-            listAnimal[number].GetComponent<animalControl>().show();
-            imgAnimalWin.GetComponent<Image>().sprite = listAnimal[number].GetComponent<animalControl>().showSprite;
+            listAnimal[number - 1].GetComponent<AnimalControl>().hide();
+            listAnimal[number].GetComponent<AnimalControl>().show();
+            imgAnimalWin.GetComponent<Image>().sprite = listAnimal[number].GetComponent<AnimalControl>().showSprite;
         }
         imgAnimalWin.SetActive(true);
         StartCoroutine(animCoin(presentCoin));
@@ -350,21 +350,21 @@ public class myGUI : MonoBehaviour {
                 {
                     if (i == 0)
                     {
-                        listAnimal[i].GetComponent<animalControl>().show();
+                        listAnimal[i].GetComponent<AnimalControl>().show();
                     }
                     else
                     {
-                        listAnimal[i - 1].GetComponent<animalControl>().hide();
-                        listAnimal[i].GetComponent<animalControl>().show();
+                        listAnimal[i - 1].GetComponent<AnimalControl>().hide();
+                        listAnimal[i].GetComponent<AnimalControl>().show();
                     }
                     yield return new WaitForSeconds(timeAnimalTransite);
                 }
                 else
                 {
-                    listAnimal[i - 1].GetComponent<animalControl>().hide();
-                    listAnimal[i].GetComponent<animalControl>().show();
+                    listAnimal[i - 1].GetComponent<AnimalControl>().hide();
+                    listAnimal[i].GetComponent<AnimalControl>().show();
                     yield return new WaitForSeconds(timeAnimalTransite);
-                    listAnimal[i].GetComponent<animalControl>().hide();
+                    listAnimal[i].GetComponent<AnimalControl>().hide();
 
                 }
             }
@@ -424,7 +424,7 @@ public class myGUI : MonoBehaviour {
         }
         for (int i = 0; i < listAnimal.Count; i++)
         {
-            listAnimal[i].GetComponent<animalControl>().hide();
+            listAnimal[i].GetComponent<AnimalControl>().hide();
         }
     }
 
@@ -586,4 +586,7 @@ public class myGUI : MonoBehaviour {
         mg.txtContentError = message;
         mg.isError = true;
     }
+    
+
+
 }

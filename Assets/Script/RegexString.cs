@@ -11,10 +11,20 @@ public class RegexString : MonoBehaviour {
 
     public static RegexString regex; 
 
-    public static bool check(string text, Regex reg) {
+    public static bool isValid(string text, Regex reg) {
         if(reg.IsMatch(text)){
             return true;
         }
         return false;
+    }
+
+    public static bool checkRePass(string text1, string text2) {
+        if (text1.Equals(text2))
+        {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }
