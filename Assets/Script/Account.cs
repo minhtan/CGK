@@ -102,7 +102,7 @@ public class Account : MonoBehaviour {
 	public void signIn(){
 		string username = getUsernameInput ();
 		string password = getPasswordInput ();
-        if (checkString(username, password))
+        if (checkString(username, password) && myGUI.isConectInternet())
         {
             ParseUser.LogInAsync(username, password).ContinueWith(t =>
             {

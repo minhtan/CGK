@@ -607,4 +607,25 @@ public class myGUI : MonoBehaviour {
         pnlSignUp.SetActive(true);
         animSignUp.SetTrigger("closeSignUp");
     }
+
+    //ping kiem tra ket noi internet
+    System.Net.WebClient client;
+    System.IO.Stream stream;
+   
+    public static bool isConectInternet(){
+        try
+        {
+            mg.client = new System.Net.WebClient();
+            mg.stream = mg.client.OpenRead("http://www.google.com");
+            mg.stream.Close();
+            Debug.Log("conect internet");
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Debug.Log("Not conect internet");
+            return false;
+        }
+    }
+
 }
