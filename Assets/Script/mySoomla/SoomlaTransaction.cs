@@ -14,7 +14,6 @@ public class SoomlaTransaction : MonoBehaviour {
         else
         {
             SoomlaProfile.Login(Provider.GOOGLE);
-            StoreInventory.BuyItem(item);
         }
     }
 
