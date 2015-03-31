@@ -95,21 +95,21 @@ public class Account : MonoBehaviour {
             });
         }
         else {
-            myGUI.messageError("Đọc hướng dẫn đăng ký", "Lỗi đăng ký");
+            Notification.messageError("Đọc hướng dẫn trước khi đăng ký","Lỗi đăng ký");
         }	
 	}
 
 	public void signIn(){
 		string username = getUsernameInput ();
 		string password = getPasswordInput ();
-        if (checkString(username, password))
+        if (checkString(username, password) && myGUI.isConectInternet())
         {
             ParseUser.LogInAsync(username, password).ContinueWith(t =>
             {
                 if (t.IsFaulted || t.IsCanceled)
                 {
                     Debug.Log("Sign in failed");
-                    myGUI.messageError("Đăng nhập sai tài khoản","Lỗi đăng nhập");
+                    Notification.messageError("Đăng nhập sai tài khoản","Lỗi đăng nhập");
                 }
                 else
                 {
@@ -119,7 +119,7 @@ public class Account : MonoBehaviour {
             });
         }
         else {
-            myGUI.messageError("Độ dài phải lớn hơn 2","Lỗi đăng nhập");
+            Notification.messageError("Độ dài phải lớn hơn 2","Lỗi đăng nhập");
         }
 	}
 

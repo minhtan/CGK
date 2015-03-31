@@ -159,7 +159,7 @@ public class SoomlaEventsHandling : MonoBehaviour
                 addCoin(amountAdded, key);
             } else {
                 Debug.Log("User need to sign in");
-                Notification.messageError("User need to sign in");
+                Notification.messageError("User need to sign in","Lỗi đăng nhập");
             }
         }
 

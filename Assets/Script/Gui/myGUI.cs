@@ -12,9 +12,8 @@ public class myGUI : MonoBehaviour {
     private bool isHeldDown;
     private bool isCoroutineRun = false;
     // animation cac button;
-    public Animator settingAnim;
-    public Animator imgSettingAnim;
-    public Animator panelShopAnim;
+    public Animator animSetting;
+    public Animator animShop;
     // nut start bet
     private DateTime endTime;
     private bool isCountdownRunning = true;
@@ -24,15 +23,15 @@ public class myGUI : MonoBehaviour {
     public GameObject panelCoverPnlBet;
     //panel login
     public Account account;
-    public Animator animDoorLeft;
-    public Animator animDoorRight;
-    public Animator animInputPass;
+    public Animator animCanvasLogin;
     public Text txtUserName;
     public Text txtPass;
     public Text placeHolderUsername;
     public Text placeHolderPass;
     public GameObject inputPass;
     public GameObject inputUser;
+    public GameObject panelDoorLeft;
+    public GameObject panelDoorRight;
     //panel error
     public GameObject panelError;
     public GameObject btnExitError;
@@ -60,12 +59,16 @@ public class myGUI : MonoBehaviour {
     private int totalTimeRuning = 5;
     private bool isCoinServer = false;
     public GameObject txtTimer;
-    //Error
-    public Text message;
-    public Text titleError;
-    private bool isError = false;
-    private string txttitleError;
-    private string txtContentError;
+    // SignUp
+    public GameObject panelTerm;
+    public GameObject panelSignUpMain;
+    public Animator animSignUp;
+    public GameObject pnlCover;
+    //shop
+    public GameObject panelShop;
+    //logout
+    private bool isLogout = false;
+
 
     void Awake() { 
         rectAnimal = panelAnimal.GetComponent<RectTransform>();
@@ -75,7 +78,7 @@ public class myGUI : MonoBehaviour {
 
     void Start() {
         mg = this;
-        RectTransform transform = settingAnim.gameObject.transform as RectTransform;
+        RectTransform transform = animSetting.gameObject.transform as RectTransform;
         Vector2 position = transform.anchoredPosition;
         position.y -= transform.rect.height;
         transform.anchoredPosition = position;
@@ -100,7 +103,7 @@ public class myGUI : MonoBehaviour {
         if (isCoinServer)
         {
             isCoinServer = false;
-            animLogin();
+            animOpenLogin();
         }
         if (serverFlag && !isCycleRunning)
         {
@@ -110,12 +113,6 @@ public class myGUI : MonoBehaviour {
         if (isRepeatCycle && !isLogout)
         {
             resetCycle();
-        }
-        if(isError){
-            isError = false;
-            titleError.text = txttitleError;
-            message.text = txtContentError;
-            panelError.SetActive(true);    
         }
     }
 
@@ -394,25 +391,13 @@ public class myGUI : MonoBehaviour {
     }
 
     //login
-    private void animLogin() {   
+    private void animOpenLogin() {   
         textCoin.text = "" + presentCoin;
         canvasGame.SetActive(true);
-        animDoorLeft.enabled = true;
-        animDoorRight.enabled = true;
-        animInputPass.enabled = true;
+        animCanvasLogin.SetTrigger("openSignIn");    
         loginRepeat();
-        runAnimationLogin(true, true, true);
         inputPass.GetComponent<InputField>().text = "";
         inputUser.GetComponent<InputField>().text = "";
-    }
-
-    
-
-    private void runAnimationLogin(bool isDoorLeft, bool isDoorRight, bool isPassLeft) {
-
-            animInputPass.SetBool("isPassRun", !isPassLeft);
-            animDoorLeft.SetBool("isDoorLeftRun", !isDoorLeft);
-            animDoorRight.SetBool("isDoorRightRun", !isDoorRight);
     }
 
     private void loginRepeat() {
@@ -428,39 +413,56 @@ public class myGUI : MonoBehaviour {
         }
     }
 
-    private bool isLogout = false;
     // logout
+
     public void btnLogoutClick() {
         isLogout = true;
-        runAnimationLogin(false, false, false);
+        animCanvasLogin.SetTrigger("closeSignIn");
         StartCoroutine(logoutWait());
     }
 
-    private IEnumerator logoutWait() {
+    private IEnumerator logoutWait() {       
         yield return new WaitForSeconds(1.5f);
         canvasGame.SetActive(false);
     }
 
     //setting
+
+    private bool isSetting = false;
+    public GameObject panelOverSetting;
+
     public void btnSettingClick()
     {
-        imgSettingAnim.enabled = true;
-        bool isHiddenImg = imgSettingAnim.GetBool("isHidden");
-        imgSettingAnim.SetBool("isHidden", !isHiddenImg);
-        settingAnim.enabled = true;
-        bool isHidden = settingAnim.GetBool("isHidden");
-        settingAnim.SetBool("isHidden", !isHidden);
+        if (isSetting)
+        {
+            panelOverSetting.SetActive(true);
+            animSetting.SetTrigger("closeSetting");
+            isSetting = false;
+        }
+        else {
+            panelOverSetting.SetActive(false);
+            animSetting.SetTrigger("openSetting");
+            isSetting = true;
+        }
+        //bool isHidden = settingAnim.GetBool("isHidden");
+        //settingAnim.SetBool("isHidden", !isHidden);
     }
 
-    public void btnShopClick() {
-        panelShopAnim.enabled = true;
-        bool isShopDown = panelShopAnim.GetBool("isShopDown");
-        panelShopAnim.SetBool("isShopDown", !isShopDown);
-        if(isShopDown){
-            bool isHidden = settingAnim.GetBool("isHidden");
-            settingAnim.SetBool("isHidden", !isHidden);
-        }
+    public GameObject btnShop;
 
+    public void btnShopClick() {
+        panelShop.SetActive(true);
+        btnShop.GetComponent<Button>().interactable = false;
+        panelOverSetting.SetActive(true);
+        isSetting = false;
+        animShop.SetTrigger("openShop");
+    }
+
+    public void btnExitShopClick() {
+        animSetting.SetTrigger("closeSetting");
+        animShop.SetTrigger("closeShop");
+        btnShop.GetComponent<Button>().interactable = true;
+        panelOverSetting.SetActive(true);
     }
 
     //bet
@@ -579,14 +581,51 @@ public class myGUI : MonoBehaviour {
     {
         panel.SetActive(false);
     }
-
-    public static void messageError(string message, string titleError)
-    {
-        mg.txttitleError = titleError;
-        mg.txtContentError = message;
-        mg.isError = true;
-    }
     
+    //btn apply term
+    public Text txtTerm;
+    public void btnTermClick() {
+        pnlCover.SetActive(false);
+        txtTerm.text = "Ông Thảo chỉ đạo đối với những cây đã hạ chuyển thì phải thay thế cây xanh mới đảm bảo mật độ theo quy hoạch. Khu vực này cũng phải hoàn thiện hè đường, đảm bảo giao thông đô thị. Chủ tịch thành phố nhắc nhở đơn vị chức năng tổ chức chăm sóc, quản lý theo phân cấp, quy định." +
+       "Theo ông Thảo, việc bảo tồn, cải tạo, bổ sung, thay thế cây xanh trên địa bàn Thủ đô là việc làm cần thiết liên quan đến không chỉ đến quản lý phát triển đô thị mà còn là tâm tư tình cảm của nhân dân Thủ đô.";
+    }
 
+    public void closeSignUp() {
+        animSignUp.SetTrigger("openSignUp");
+        StartCoroutine(waitAnimCloseSignUp());
+    }
+
+    private IEnumerator waitAnimCloseSignUp() {
+        yield return new WaitForSeconds(1.0f);
+        pnlSignUp.SetActive(false);
+
+    }
+
+    public GameObject pnlSignUp;
+
+    public void openSignUp(){
+        pnlSignUp.SetActive(true);
+        animSignUp.SetTrigger("closeSignUp");
+    }
+
+    //ping kiem tra ket noi internet
+    System.Net.WebClient client;
+    System.IO.Stream stream;
+   
+    public static bool isConectInternet(){
+        try
+        {
+            mg.client = new System.Net.WebClient();
+            mg.stream = mg.client.OpenRead("http://www.google.com");
+            mg.stream.Close();
+            Debug.Log("conect internet");
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Debug.Log("Not conect internet");
+            return false;
+        }
+    }
 
 }
