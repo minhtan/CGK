@@ -10,6 +10,9 @@ public class Notification : MonoBehaviour {
     public static Notification notify;
     System.Net.WebClient client;
     System.IO.Stream stream;
+    private bool isError = false;
+    private string textError;
+
 
     void Awake() {
         notify = this; 
@@ -18,15 +21,29 @@ public class Notification : MonoBehaviour {
 
     private void conectInternet() { 
         if(!isConectInternet()){
-            messageError("Loi mang", "loi internte");
-
+            messageError("Không có kết nối mạng");
         }
     }
 
-    public static void messageError(string message, string title) {
-        notify.panelError.SetActive(true);
-        notify.message.text = message;
-        notify.title.text = title;
+    void Update() {
+        if (isError)
+        {
+            panelError.SetActive(true);
+            notify.message.text = textError;
+        }
+        else {
+            panelError.SetActive(false);
+        }
+    }
+
+    public void btnExitError() {
+        isError = false;
+    }
+
+    public static void messageError(string message)
+    {
+        notify.isError = true;
+        notify.textError = message;
     }
 
     public static bool isConectInternet()

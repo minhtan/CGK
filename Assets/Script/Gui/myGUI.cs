@@ -550,7 +550,8 @@ public class myGUI : MonoBehaviour {
         {
             if (checkBet())
             {
-                checkInternetBeforeBet();
+                StartCoroutine(cycleAnimal(listAnimal.Count, random(1, 2)));
+                Bet.bet.betRequest();
             }
             else
             {
@@ -561,25 +562,6 @@ public class myGUI : MonoBehaviour {
         }   
     }
 
-    private void checkInternetBeforeBet() {
-        if (Notification.isConectInternet())
-        {
-            Time.timeScale = 1;
-            panelError.SetActive(false);
-            StartCoroutine(cycleAnimal(listAnimal.Count, random(1, 2)));
-            Bet.bet.betRequest();
-        }
-        else
-        {
-            Time.timeScale = 0;
-            messageError("Kiem tra lai ket noi internet", "Loi internet");
-        }
-    }
-
-    //nut exit Loi mat internet
-    public void btnExitInternet() {
-        checkInternetBeforeBet();
-    }
     //check xem co dat cuoc khong
     private bool checkBet()
     {

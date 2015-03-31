@@ -95,7 +95,7 @@ public class Account : MonoBehaviour {
             });
         }
         else {
-            Notification.messageError("Đọc hướng dẫn trước khi đăng ký","Lỗi đăng ký");
+            Notification.messageError("Đọc hướng dẫn trước khi đăng ký");
         }	
 	}
 
@@ -104,27 +104,21 @@ public class Account : MonoBehaviour {
 		string password = getPasswordInput ();
         if (checkString(username, password))
         {
-            if (Notification.isConectInternet())
+            ParseUser.LogInAsync(username, password).ContinueWith(t =>
             {
-                ParseUser.LogInAsync(username, password).ContinueWith(t =>
+                if (t.IsFaulted || t.IsCanceled)
                 {
-                    if (t.IsFaulted || t.IsCanceled)
-                    {
-                        Debug.Log("Sign in failed");
-                        //Notification.messageError("Đăng nhập sai tài khoản", "Lỗi đăng nhập");
-                    }
-                    else
-                    {
-                        Debug.Log("Sign in successfully");
-                        Bet.bet.getMyCoin();
-                    }
-                });
-            }
-            else {
-                Notification.messageError("kiem tra mang", "Loi ket noi internet");
-            }           
+                    Debug.Log("Sign in failed");
+                    Notification.messageError("Đăng nhập sai tài khoản");
+                }
+                else
+                {
+                    Debug.Log("Sign in successfully");
+                    Bet.bet.getMyCoin();
+                }
+            });      
         }else {
-            Notification.messageError("Độ dài phải lớn hơn 2","Lỗi đăng nhập");
+            Notification.messageError("Độ dài phải lớn hơn 2");
         }
 	}
 
