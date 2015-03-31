@@ -99,7 +99,6 @@ public class myGUI : MonoBehaviour {
         {
             showTimer();
         }
-
         if (isCoinServer)
         {
             isCoinServer = false;
@@ -551,8 +550,7 @@ public class myGUI : MonoBehaviour {
         {
             if (checkBet())
             {
-                StartCoroutine(cycleAnimal(listAnimal.Count, random(1, 2)));
-                Bet.bet.betRequest();
+                checkInternetBeforeBet();
             }
             else
             {
@@ -563,6 +561,25 @@ public class myGUI : MonoBehaviour {
         }   
     }
 
+    private void checkInternetBeforeBet() {
+        if (Notification.isConectInternet())
+        {
+            Time.timeScale = 1;
+            panelError.SetActive(false);
+            StartCoroutine(cycleAnimal(listAnimal.Count, random(1, 2)));
+            Bet.bet.betRequest();
+        }
+        else
+        {
+            Time.timeScale = 0;
+            messageError("Kiem tra lai ket noi internet", "Loi internet");
+        }
+    }
+
+    //nut exit Loi mat internet
+    public void btnExitInternet() {
+        checkInternetBeforeBet();
+    }
     //check xem co dat cuoc khong
     private bool checkBet()
     {
@@ -598,7 +615,6 @@ public class myGUI : MonoBehaviour {
     private IEnumerator waitAnimCloseSignUp() {
         yield return new WaitForSeconds(1.0f);
         pnlSignUp.SetActive(false);
-
     }
 
     public GameObject pnlSignUp;
@@ -608,24 +624,13 @@ public class myGUI : MonoBehaviour {
         animSignUp.SetTrigger("closeSignUp");
     }
 
-    //ping kiem tra ket noi internet
-    System.Net.WebClient client;
-    System.IO.Stream stream;
-   
-    public static bool isConectInternet(){
-        try
-        {
-            mg.client = new System.Net.WebClient();
-            mg.stream = mg.client.OpenRead("http://www.google.com");
-            mg.stream.Close();
-            Debug.Log("conect internet");
-            return true;
-        }
-        catch (Exception ex)
-        {
-            Debug.Log("Not conect internet");
-            return false;
-        }
-    }
+    public Text message;
+    public Text title;
 
+    public static void messageError(string message, string title)
+    {
+        mg.panelError.SetActive(true);
+        mg.message.text = message;
+        mg.title.text = title;
+    }
 }

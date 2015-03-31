@@ -102,23 +102,28 @@ public class Account : MonoBehaviour {
 	public void signIn(){
 		string username = getUsernameInput ();
 		string password = getPasswordInput ();
-        if (checkString(username, password) && myGUI.isConectInternet())
+        if (checkString(username, password))
         {
-            ParseUser.LogInAsync(username, password).ContinueWith(t =>
+            if (Notification.isConectInternet())
             {
-                if (t.IsFaulted || t.IsCanceled)
+                ParseUser.LogInAsync(username, password).ContinueWith(t =>
                 {
-                    Debug.Log("Sign in failed");
-                    Notification.messageError("Đăng nhập sai tài khoản","Lỗi đăng nhập");
-                }
-                else
-                {
-                    Debug.Log("Sign in successfully");
-                    Bet.bet.getMyCoin();
-                }
-            });
-        }
-        else {
+                    if (t.IsFaulted || t.IsCanceled)
+                    {
+                        Debug.Log("Sign in failed");
+                        //Notification.messageError("Đăng nhập sai tài khoản", "Lỗi đăng nhập");
+                    }
+                    else
+                    {
+                        Debug.Log("Sign in successfully");
+                        Bet.bet.getMyCoin();
+                    }
+                });
+            }
+            else {
+                Notification.messageError("kiem tra mang", "Loi ket noi internet");
+            }           
+        }else {
             Notification.messageError("Độ dài phải lớn hơn 2","Lỗi đăng nhập");
         }
 	}
