@@ -32,6 +32,7 @@ public class myGUI : MonoBehaviour {
     public GameObject inputUser;
     public GameObject panelDoorLeft;
     public GameObject panelDoorRight;
+    public GameObject btnLogin;
     //panel error
     public GameObject panelError;
     public GameObject btnExitError;
@@ -68,7 +69,10 @@ public class myGUI : MonoBehaviour {
     public GameObject panelShop;
     //logout
     private bool isLogout = false;
-
+    public GameObject btnLogout;
+    // setting
+    private bool isSetting = false;
+    public GameObject panelOverSetting;
 
     void Awake() { 
         rectAnimal = panelAnimal.GetComponent<RectTransform>();
@@ -198,6 +202,7 @@ public class myGUI : MonoBehaviour {
         SoundControlCS.sound.stopWinCoin();
         yield return new WaitForSeconds(3f);        
         isRepeatCycle = true;
+        btnLogout.GetComponent<Button>().interactable = true;
     }
 
     private void resetCycle() {
@@ -402,6 +407,8 @@ public class myGUI : MonoBehaviour {
     private void loginRepeat() {
         imgAnimalWin.SetActive(false);
         btnStart.SetActive(true);
+        btnLogout.GetComponent<Button>().interactable = true;
+        isLogout = false;
         for (int i = 0; i < 8; i++)
         {
             GameObject.Find("TxtBet" + i).GetComponent<Text>().text = "00";
@@ -418,6 +425,8 @@ public class myGUI : MonoBehaviour {
         isLogout = true;
         animCanvasLogin.SetTrigger("closeSignIn");
         StartCoroutine(logoutWait());
+        isSetting = false;
+        btnLogin.GetComponent<Button>().interactable = true;
     }
 
     private IEnumerator logoutWait() {       
@@ -426,9 +435,6 @@ public class myGUI : MonoBehaviour {
     }
 
     //setting
-
-    private bool isSetting = false;
-    public GameObject panelOverSetting;
 
     public void btnSettingClick()
     {
@@ -546,6 +552,7 @@ public class myGUI : MonoBehaviour {
             yield return new WaitForSeconds(1f);
         }
         isCycleRunning = true;
+        btnLogout.GetComponent<Button>().interactable = false;
         if (!isLogout)
         {
             if (checkBet())
@@ -606,13 +613,7 @@ public class myGUI : MonoBehaviour {
         animSignUp.SetTrigger("closeSignUp");
     }
 
-    public Text message;
-    public Text title;
-
-    public static void messageError(string message, string title)
-    {
-        mg.panelError.SetActive(true);
-        mg.message.text = message;
-        mg.title.text = title;
+    public void btnLoginClick() {
+        btnLogin.GetComponent<Button>().interactable = false;
     }
 }

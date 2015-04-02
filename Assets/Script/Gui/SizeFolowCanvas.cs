@@ -9,9 +9,10 @@ public class SizeFolowCanvas : MonoBehaviour {
     public GameObject btnSetting;
     public float sizeBtnSetting = 128.0f;
     public GameObject panelMash;
-    public float heightPanelMash = 384;
+    public float heightPanelMash = 512;
     public GameObject btnMusic;
     public GameObject btnShop;
+    public GameObject btnShare;
     public Text txtCoin;
     public GameObject btnLogout;
     private RectTransform rectSetting;
@@ -68,6 +69,7 @@ public class SizeFolowCanvas : MonoBehaviour {
         rectSetting.sizeDelta = new Vector2(sizeBtnSetting, sizeBtnSetting);
         changeSize(panelMash, sizeBtnSetting, heightPanelMash);
         changeSize(btnMusic, sizeBtnSetting, sizeBtnSetting);
+        changeSize(btnShare, sizeBtnSetting, sizeBtnSetting);
         changeSize(btnShop, sizeBtnSetting, sizeBtnSetting);
         changeSize(btnLogout, sizeBtnSetting, sizeBtnSetting);
         txtCoin.GetComponent<RectTransform>().sizeDelta = new Vector2(sizeBtnSetting, sizeBtnSetting / 2);
