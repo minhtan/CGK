@@ -6,23 +6,16 @@ public class Notification : MonoBehaviour {
 
     public GameObject panelError;
     public Text message;
-    public Text title;
     public static Notification notify;
     System.Net.WebClient client;
     System.IO.Stream stream;
     private bool isError = false;
     private string textError;
-
+    public GameObject btnSignIn;
 
     void Awake() {
-        notify = this; 
-        conectInternet();
-    }
-
-    private void conectInternet() { 
-        if(!isConectInternet()){
-            messageError("Không có kết nối mạng");
-        }
+        notify = this;
+        isConectInternet();
     }
 
     void Update() {
@@ -37,7 +30,11 @@ public class Notification : MonoBehaviour {
     }
 
     public void btnExitError() {
-        isError = false;
+        if (isConectInternet())
+        {
+            isError = false;
+        }
+        btnSignIn.GetComponent<Button>().interactable = true;     
     }
 
     public static void messageError(string message)
@@ -59,6 +56,7 @@ public class Notification : MonoBehaviour {
         catch (Exception ex)
         {
             Debug.Log(ex);
+            messageError("Không có kết nối mạng");
             return false;
         }
     }

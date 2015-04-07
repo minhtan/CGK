@@ -94,7 +94,7 @@ public class myGUI : MonoBehaviour {
         {
             isCoroutineRun = true;
             StartCoroutine(btnBetDown());
-        }
+        }      
         if (!isCountdownRunning && isStartTime)
         {
             StartCoroutine(countdown());
@@ -505,7 +505,6 @@ public class myGUI : MonoBehaviour {
 
     public void btnBetClick(int number)
     {
-
         Text text = GameObject.Find("TxtBet" + number).GetComponent<Text>();
         int value = System.Convert.ToInt32(text.text);
         if (value < 99 && presentCoin > 0)
@@ -524,12 +523,12 @@ public class myGUI : MonoBehaviour {
         }
     }
 
-    IEnumerator btnBetDown()
+    private IEnumerator btnBetDown()
     {
-        btnBetClick(flag);
-        yield return new WaitForSeconds(0.1f);
-        textCoin.text = presentCoin + "";
-        isCoroutineRun = false;
+            btnBetClick(flag);
+            yield return new WaitForSeconds(0.1f);
+            textCoin.text = presentCoin + "";
+            isCoroutineRun = false;    
     }
 
 
@@ -555,7 +554,7 @@ public class myGUI : MonoBehaviour {
         btnLogout.GetComponent<Button>().interactable = false;
         if (!isLogout)
         {
-            if (checkBet())
+            if (checkBet() && Notification.isConectInternet())
             {
                 StartCoroutine(cycleAnimal(listAnimal.Count, random(1, 2)));
                 Bet.bet.betRequest();
@@ -583,9 +582,9 @@ public class myGUI : MonoBehaviour {
         return false;
     }
 
-    public void btnExitClick(GameObject panel)
+    public void btnExitClick()
     {
-        panel.SetActive(false);
+        panelError.SetActive(false);
     }
     
     //btn apply term
@@ -614,6 +613,6 @@ public class myGUI : MonoBehaviour {
     }
 
     public void btnLoginClick() {
-        btnLogin.GetComponent<Button>().interactable = false;
+       btnLogin.GetComponent<Button>().interactable = false;
     }
 }

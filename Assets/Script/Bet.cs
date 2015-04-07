@@ -59,15 +59,15 @@ public class Bet : MonoBehaviour {
 				    using (IEnumerator<System.Exception> enumerator = t.Exception.InnerExceptions.GetEnumerator()) {
 					    if (enumerator.MoveNext()) {
 						    ParseException error = (ParseException) enumerator.Current;
-						    Debug.Log("Error: " + error.Code + ", " + error.Message);
-                            Notification.messageError("Error: " + error.Code + ", " + error.Message);
+						    Debug.Log("Error 1: " + error.Code + ", " + error.Message);
+                            Notification.messageError("Không có kết nối mạng");
 					    }
 				    }
 			    }else{
 				    IDictionary<string, object> result = t.Result;
 				    object errorCode;
 				    if (result.TryGetValue("errorCode", out errorCode)) {
-					    Debug.Log ("Error: " + result["errorCode"] + ", " + result["message"]);
+					    Debug.Log ("Error 2: " + result["errorCode"] + ", " + result["message"]);
                         Notification.messageError("Error: " + result["errorCode"] + ", " + result["message"]);
 				    } else {
                         int[] re = new int[2];
