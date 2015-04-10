@@ -57,7 +57,7 @@ public class myGUI : MonoBehaviour {
     private int presentCoin;
     private bool isRepeatCycle = false;
     //timer
-    private int totalTimeRuning = 5;
+    private int totalTimeRuning = 15;
     private bool isCoinServer = false;
     public GameObject txtTimer;
     // SignUp
@@ -73,11 +73,17 @@ public class myGUI : MonoBehaviour {
     // setting
     private bool isSetting = false;
     public GameObject panelOverSetting;
+    private bool[] test;
 
     void Awake() { 
         rectAnimal = panelAnimal.GetComponent<RectTransform>();
         listAnimal = new List<GameObject>();
         swapListAnimal(addListAnimal());
+        test = new bool[8];
+        for (int i = 0; i < 8; i++)
+        {
+            test[i] = false;
+        }
     }
 
     void Start() {
@@ -86,15 +92,38 @@ public class myGUI : MonoBehaviour {
         Vector2 position = transform.anchoredPosition;
         position.y -= transform.rect.height;
         transform.anchoredPosition = position;
+        StartCoroutine(betClick());
     }
+
+    private IEnumerator betClick(){
+        while(true){
+            for (int i = 0; i < 8; i++)
+            {
+                if (test[i] == true)
+                {
+                    btnBetClick(i);
+                }
+            }
+            yield return new WaitForSeconds(0.1f);
+        }                           
+    }
+
+
 
     void Update()
     {
-        if (isHeldDown && !isCoroutineRun)
-        {
-            isCoroutineRun = true;
-            StartCoroutine(btnBetDown());
-        }      
+        
+
+        //if (isHeldDown && !isCoroutineRun)
+        //{
+        //    Debug.Log(Input.touchCount);
+        //    isCoroutineRun = true;
+        //    for (int i = 0; i < Input.touchCount; i++)
+        //    {
+        //        //StartCoroutine(btnBetDown());
+                
+        //    }  
+        //}
         if (!isCountdownRunning && isStartTime)
         {
             StartCoroutine(countdown());
@@ -503,7 +532,7 @@ public class myGUI : MonoBehaviour {
         startTimeBet();
     }
 
-    public void btnBetClick(int number)
+    private void btnBetClick(int number)
     {
         Text text = GameObject.Find("TxtBet" + number).GetComponent<Text>();
         int value = System.Convert.ToInt32(text.text);
@@ -526,20 +555,23 @@ public class myGUI : MonoBehaviour {
     private IEnumerator btnBetDown()
     {
             btnBetClick(flag);
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.05f);
             textCoin.text = presentCoin + "";
             isCoroutineRun = false;    
     }
 
+    private bool isTest = false;
 
     public void btnDown(int number)
     {
+        test[number] = true;
         isHeldDown = true;
         flag = number;
     }
 
-    public void btnUp()
+    public void btnUp(int number)
     {
+        test[number] = false;
         isHeldDown = false;
     }
 
