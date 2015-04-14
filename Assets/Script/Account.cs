@@ -6,22 +6,13 @@ using System.Threading.Tasks;
 using Parse;
 
 public class Account : MonoBehaviour {
-	public Text inpUsername;
-	public Text inpPassword;
+
     //signUp
     public Text inpEmail;
     public Text inpPhone;
     public Text inpUsername_Up;
     public Text inRePassword;
     public Text inpPassword_Up;
-
-	private string getUsernameInput(){
-		return inpUsername.text;
-	}
-
-	private string getPasswordInput(){
-		return inpPassword.text;
-	}
 
     private string getEmailInput() {
         return inpEmail.text;
@@ -56,7 +47,11 @@ public class Account : MonoBehaviour {
         string rePassword = getRePassword();
         string email = getEmailInput();
         string phone = getPhoneInput();
-        if (RegexString.isValid(username, RegexString.usernameReg) && RegexString.isValid(password, RegexString.passReg)
+        if (!RegexString.checkString(username, password))
+        {
+            Notification.messageError("Tên người dùng hoặc mật khẩu phải có nhiều hơn 2 kí tự");
+        }
+        else if (RegexString.isValid(username, RegexString.usernameReg) && RegexString.isValid(password, RegexString.passReg)
         && RegexString.checkRePass(password, rePassword) && RegexString.isValid(email, RegexString.emailReg) && RegexString.isValid(phone, RegexString.phoneReg))
         {
             IDictionary<string, object> dict = new Dictionary<string, object>()
@@ -99,27 +94,28 @@ public class Account : MonoBehaviour {
         }	
 	}
 
-	public void signIn(){
-		string username = getUsernameInput ();
-		string password = getPasswordInput ();
-        if (checkString(username, password))
+	public void signIn(string username, string password){
+        ParseUser.LogInAsync(username, password).ContinueWith(t =>
         {
-            ParseUser.LogInAsync(username, password).ContinueWith(t =>
+            if (t.IsFaulted || t.IsCanceled)
             {
-                if (t.IsFaulted || t.IsCanceled)
+                using (IEnumerator<System.Exception> enumerator = t.Exception.InnerExceptions.GetEnumerator())
                 {
-                    Debug.Log("Sign in failed");
-                    Notification.messageError("Đăng nhập sai tài khoản");
+                    if (enumerator.MoveNext())
+                    {
+                        ParseException error = (ParseException)enumerator.Current;
+                        Debug.Log("Error: " + error.Code + ", " + error.Message);
+                    }
                 }
-                else
-                {
-                    Debug.Log("Sign in successfully");
-                    Bet.bet.getMyCoin();
-                }
-            });      
-        }else {
-            Notification.messageError("Độ dài phải lớn hơn 2");
-        }
+                Notification.messageError("Lỗi mạng");
+                myGUI.loginFaild();
+            }
+            else
+            {
+                Debug.Log("Sign in successfully");
+                Bet.bet.getMyCoin();
+            }
+        });
 	}
 
 	public static bool hasCurrentUser(){

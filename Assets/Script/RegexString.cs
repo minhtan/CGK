@@ -27,4 +27,13 @@ public class RegexString : MonoBehaviour {
             return false;
         }
     }
+
+    public static bool checkString(string username, string password)
+    {
+        if (username.Length > 2 && password.Length > 2)
+        {
+            return true;
+        }
+        return false;
+    }
 }

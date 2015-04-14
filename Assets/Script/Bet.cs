@@ -25,6 +25,7 @@ public class Bet : MonoBehaviour {
 							ParseException error = (ParseException) enumerator.Current;
 							Debug.Log("Error: " + error.Code + ", " + error.Message);
                             Notification.messageError("Error: " + error.Code + ", " + error.Message);
+                            myGUI.loginFaild();
 						}
 					}
 				}else{
@@ -33,6 +34,7 @@ public class Bet : MonoBehaviour {
 					if (result.TryGetValue("errorCode", out errorCode)) {
 						Debug.Log ("Error: " + result["errorCode"] + ", " + result["message"]);
                         Notification.messageError("Error: " + result["errorCode"] + ", " + result["message"]);
+                        myGUI.loginFaild();
 					} else {
 						coin = Convert.ToInt32(result["coin"]);
 						Debug.Log(coin);

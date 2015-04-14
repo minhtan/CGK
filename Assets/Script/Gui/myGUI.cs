@@ -10,7 +10,6 @@ public class myGUI : MonoBehaviour {
     private static myGUI mg;
     private int flag;
     private bool isHeldDown;
-    private bool isCoroutineRun = false;
     // animation cac button;
     public Animator animSetting;
     public Animator animShop;
@@ -24,8 +23,6 @@ public class myGUI : MonoBehaviour {
     //panel login
     public Account account;
     public Animator animCanvasLogin;
-    public Text txtUserName;
-    public Text txtPass;
     public Text placeHolderUsername;
     public Text placeHolderPass;
     public GameObject inputPass;
@@ -83,7 +80,7 @@ public class myGUI : MonoBehaviour {
         for (int i = 0; i < 8; i++)
         {
             test[i] = false;
-        }
+        }      
     }
 
     void Start() {
@@ -95,53 +92,37 @@ public class myGUI : MonoBehaviour {
         StartCoroutine(betClick());
     }
 
-    private IEnumerator betClick(){
-        while(true){
-            for (int i = 0; i < 8; i++)
-            {
-                if (test[i] == true)
-                {
-                    btnBetClick(i);
-                }
-            }
-            yield return new WaitForSeconds(0.1f);
-        }                           
-    }
-
-
-
     void Update()
     {
-        
+        if(isLoginFalse){
+            animCanvasLogin.SetTrigger("closeLogin_gd1");
+            isLoginFalse = false;
+        }
 
-        //if (isHeldDown && !isCoroutineRun)
-        //{
-        //    Debug.Log(Input.touchCount);
-        //    isCoroutineRun = true;
-        //    for (int i = 0; i < Input.touchCount; i++)
-        //    {
-        //        //StartCoroutine(btnBetDown());
-                
-        //    }  
-        //}
         if (!isCountdownRunning && isStartTime)
         {
             StartCoroutine(countdown());
         }
+
         if (isStartTime)
         {
             showTimer();
         }
+
         if (isCoinServer)
         {
             isCoinServer = false;
-            animOpenLogin();
+            animCanvasLogin.SetTrigger("login_gd3");
+            canvasGame.SetActive(true);
+            textCoin.text = presentCoin + "";
         }
+
         if (serverFlag && !isCycleRunning)
         {
             isCycleRunning = true;
             StartCoroutine(cycleOnce(randomAnimalPosition(result)));
         }
+
         if (isRepeatCycle && !isLogout)
         {
             resetCycle();
@@ -425,19 +406,39 @@ public class myGUI : MonoBehaviour {
 
     //login
     private void animOpenLogin() {   
-        textCoin.text = "" + presentCoin;
-        canvasGame.SetActive(true);
-        animCanvasLogin.SetTrigger("openSignIn");    
-        loginRepeat();
-        inputPass.GetComponent<InputField>().text = "";
-        inputUser.GetComponent<InputField>().text = "";
+        animCanvasLogin.SetTrigger("login_gd1");    
     }
 
-    private void loginRepeat() {
-        imgAnimalWin.SetActive(false);
-        btnStart.SetActive(true);
-        btnLogout.GetComponent<Button>().interactable = true;
+    public void btnLoginClick()
+    {
+        if(isLogout){
+            imgAnimalWin.SetActive(false);
+            btnLogout.GetComponent<Button>().interactable = true;
+            btnLogin.GetComponent<Button>().interactable = false;
+            //btnStart.SetActive(true);
+        }
+       
+        string username = getUsernameInput();
+        string password = getPasswordInput();
         isLogout = false;
+        inputPass.GetComponent<InputField>().text = "";
+        inputUser.GetComponent<InputField>().text = "";
+        if (!RegexString.checkString(username, password))
+        {
+            Notification.messageError("Tên người dùng hoặc mật khẩu phải có nhiều hơn 2 kí tự");
+        }
+        else if (RegexString.isValid(username, RegexString.usernameReg) && RegexString.isValid(password, RegexString.passReg))
+        {
+            animOpenLogin();
+            account.signIn(username, password);
+        }
+        else
+        {
+            Notification.messageError("Tên người dùng hoặc mật khẩu không hợp lệ");
+        }
+    }
+
+    private IEnumerator guiReset() {
         for (int i = 0; i < 8; i++)
         {
             GameObject.Find("TxtBet" + i).GetComponent<Text>().text = "00";
@@ -446,25 +447,22 @@ public class myGUI : MonoBehaviour {
         {
             listAnimal[i].GetComponent<AnimalControl>().hide();
         }
+        yield return new WaitForSeconds(5f);
+        canvasGame.SetActive(false); 
     }
 
     // logout
-
     public void btnLogoutClick() {
         isLogout = true;
         animCanvasLogin.SetTrigger("closeSignIn");
-        StartCoroutine(logoutWait());
+        StartCoroutine(guiReset());
         isSetting = false;
+        isStartTime = false;
+        btnStart.SetActive(true);
         btnLogin.GetComponent<Button>().interactable = true;
     }
 
-    private IEnumerator logoutWait() {       
-        yield return new WaitForSeconds(1.5f);
-        canvasGame.SetActive(false);
-    }
-
     //setting
-
     public void btnSettingClick()
     {
         if (isSetting)
@@ -478,8 +476,6 @@ public class myGUI : MonoBehaviour {
             animSetting.SetTrigger("openSetting");
             isSetting = true;
         }
-        //bool isHidden = settingAnim.GetBool("isHidden");
-        //settingAnim.SetBool("isHidden", !isHidden);
     }
 
     public GameObject btnShop;
@@ -532,6 +528,21 @@ public class myGUI : MonoBehaviour {
         startTimeBet();
     }
 
+    private IEnumerator betClick()
+    {
+        while (true)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                if (test[i] == true)
+                {
+                    btnBetClick(i);
+                }
+            }
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
+
     private void btnBetClick(int number)
     {
         Text text = GameObject.Find("TxtBet" + number).GetComponent<Text>();
@@ -540,6 +551,7 @@ public class myGUI : MonoBehaviour {
         {
             value++;
             presentCoin--;
+            textCoin.text = presentCoin + "";
 
         }
         if (value < 10)
@@ -550,6 +562,7 @@ public class myGUI : MonoBehaviour {
         {
             text.text = System.Convert.ToString(value);
         }
+
     }
 
     private IEnumerator btnBetDown()
@@ -557,10 +570,7 @@ public class myGUI : MonoBehaviour {
             btnBetClick(flag);
             yield return new WaitForSeconds(0.05f);
             textCoin.text = presentCoin + "";
-            isCoroutineRun = false;    
     }
-
-    private bool isTest = false;
 
     public void btnDown(int number)
     {
@@ -580,12 +590,17 @@ public class myGUI : MonoBehaviour {
         isCountdownRunning = true;
         while (endTime > DateTime.Now)
         {
+            Debug.Log(isLogout);
             yield return new WaitForSeconds(1f);
+            if (isLogout) {
+                break;            
+            }
         }
-        isCycleRunning = true;
-        btnLogout.GetComponent<Button>().interactable = false;
+        Debug.Log(isLogout);
         if (!isLogout)
         {
+            isCycleRunning = true;
+            btnLogout.GetComponent<Button>().interactable = false;
             if (checkBet() && Notification.isConectInternet())
             {
                 StartCoroutine(cycleAnimal(listAnimal.Count, random(1, 2)));
@@ -644,7 +659,22 @@ public class myGUI : MonoBehaviour {
         animSignUp.SetTrigger("closeSignUp");
     }
 
-    public void btnLoginClick() {
-       btnLogin.GetComponent<Button>().interactable = false;
+    
+
+    private string getUsernameInput()
+    {
+        return inputUser.GetComponent<InputField>().text;
+    }
+
+    private string getPasswordInput()
+    {
+        return inputPass.GetComponent<InputField>().text;
+    }
+
+    private bool isLoginFalse = false;
+
+    public static void loginFaild()
+    {
+        mg.isLoginFalse = true;
     }
 }
