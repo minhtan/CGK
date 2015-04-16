@@ -12,6 +12,12 @@ public class Notification : MonoBehaviour {
     private bool isError = false;
     private string textError;
     public GameObject btnSignIn;
+    public GameObject txtForgotMeNot;
+    private bool isForgotError = false;
+    public static int NETWORK_ERROR = 0;
+    public static int WARRNING_ERROR = 1;
+    public static int FORGOT_ERROR = 2;
+    private bool isNetworkError = false;
 
     void Awake() {
         notify = this;
@@ -22,25 +28,51 @@ public class Notification : MonoBehaviour {
         if (isError)
         {
             panelError.SetActive(true);
-            notify.message.text = textError;
+            message.text = textError;
         }
         else {
             panelError.SetActive(false);
         }
+        if (isForgotError)
+        {
+            txtForgotMeNot.SetActive(true);
+        }
+        else {
+            txtForgotMeNot.SetActive(false);
+        }
     }
 
     public void btnExitError() {
-        if (isConectInternet())
+        isError = false;
+        if (isNetworkError)
         {
-            isError = false;
+            if (isConectInternet())
+            {
+                isNetworkError = false;
+            }    
+        }
+        if (isForgotError)
+        {
+            isForgotError = false;
         }
         btnSignIn.GetComponent<Button>().interactable = true;     
     }
 
-    public static void messageError(string message)
+    public static void messageError(string message, int errorCode)
     {
+        switch(errorCode){
+            case 0:
+                notify.isNetworkError = true;
+                break;
+            case 1: 
+                break;
+            case 2:
+                notify.isForgotError = true;
+                break;
+        }
         notify.isError = true;
         notify.textError = message;
+        
     }
 
     public static bool isConectInternet()
@@ -56,7 +88,7 @@ public class Notification : MonoBehaviour {
         catch (Exception ex)
         {
             Debug.Log(ex);
-            messageError("Không có kết nối mạng");
+            messageError("Không có kết nối mạng", Notification.NETWORK_ERROR);
             return false;
         }
     }

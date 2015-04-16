@@ -24,7 +24,7 @@ public class Bet : MonoBehaviour {
 						if (enumerator.MoveNext()) {
 							ParseException error = (ParseException) enumerator.Current;
 							Debug.Log("Error: " + error.Code + ", " + error.Message);
-                            Notification.messageError("Error: " + error.Code + ", " + error.Message);
+                            Notification.messageError("Error: " + error.Code + ", " + error.Message, Notification.WARRNING_ERROR);
                             myGUI.loginFaild();
 						}
 					}
@@ -33,7 +33,7 @@ public class Bet : MonoBehaviour {
 					object errorCode;
 					if (result.TryGetValue("errorCode", out errorCode)) {
 						Debug.Log ("Error: " + result["errorCode"] + ", " + result["message"]);
-                        Notification.messageError("Error: " + result["errorCode"] + ", " + result["message"]);
+                        Notification.messageError("Error: " + result["errorCode"] + ", " + result["message"], Notification.WARRNING_ERROR);
                         myGUI.loginFaild();
 					} else {
 						coin = Convert.ToInt32(result["coin"]);
@@ -44,7 +44,7 @@ public class Bet : MonoBehaviour {
 			});
 		} else {
 			Debug.Log ("User need to sign in");
-            Notification.messageError("User need to sign in");
+            Notification.messageError("User need to sign in", Notification.WARRNING_ERROR);
 		}
 	}
 
@@ -62,7 +62,7 @@ public class Bet : MonoBehaviour {
 					    if (enumerator.MoveNext()) {
 						    ParseException error = (ParseException) enumerator.Current;
 						    Debug.Log("Error 1: " + error.Code + ", " + error.Message);
-                            Notification.messageError("Không có kết nối mạng");
+                            Notification.messageError("Không có kết nối mạng", Notification.WARRNING_ERROR);
 					    }
 				    }
 			    }else{
@@ -70,7 +70,7 @@ public class Bet : MonoBehaviour {
 				    object errorCode;
 				    if (result.TryGetValue("errorCode", out errorCode)) {
 					    Debug.Log ("Error 2: " + result["errorCode"] + ", " + result["message"]);
-                        Notification.messageError("Error: " + result["errorCode"] + ", " + result["message"]);
+                        Notification.messageError("Error: " + result["errorCode"] + ", " + result["message"], Notification.WARRNING_ERROR);
 				    } else {
                         int[] re = new int[2];
                         re[0] = Convert.ToInt32(result["result"]);
@@ -85,7 +85,7 @@ public class Bet : MonoBehaviour {
         else
         {
             Debug.Log("User need to sign in");
-            Notification.messageError("Lỗi đăng nhập");
+            Notification.messageError("Lỗi đăng nhập", Notification.WARRNING_ERROR);
         }
 	}
 
@@ -116,7 +116,7 @@ public class Bet : MonoBehaviour {
                     if (result.TryGetValue("errorCode", out errorCode))
                     {
                         Debug.Log("Error: " + result["errorCode"] + ", " + result["message"]);
-                        Notification.messageError("Error: " + result["errorCode"] + ", " + result["message"]);
+                        Notification.messageError("Error: " + result["errorCode"] + ", " + result["message"], Notification.WARRNING_ERROR);
                     }
                     else
                     {
@@ -129,7 +129,7 @@ public class Bet : MonoBehaviour {
         else
         {
             Debug.Log("User need to sign in");
-            Notification.messageError("Lỗi đăng nhập");
+            Notification.messageError("Lỗi đăng nhập", Notification.WARRNING_ERROR);
         }
     }
 

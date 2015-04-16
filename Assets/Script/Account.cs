@@ -49,7 +49,7 @@ public class Account : MonoBehaviour {
         string phone = getPhoneInput();
         if (!RegexString.checkString(username, password))
         {
-            Notification.messageError("Tên người dùng hoặc mật khẩu phải có nhiều hơn 2 kí tự");
+            Notification.messageError("Tên người dùng hoặc mật khẩu phải có nhiều hơn 2 kí tự", Notification.WARRNING_ERROR);
         }
         else if (RegexString.isValid(username, RegexString.usernameReg) && RegexString.isValid(password, RegexString.passReg)
         && RegexString.checkRePass(password, rePassword) && RegexString.isValid(email, RegexString.emailReg) && RegexString.isValid(phone, RegexString.phoneReg))
@@ -70,7 +70,8 @@ public class Account : MonoBehaviour {
                         if (enumerator.MoveNext())
                         {
                             ParseException error = (ParseException)enumerator.Current;
-                            Debug.Log("Error: " + error.Code + ", " + error.Message);
+                            Debug.Log("Error: " + error.Code + ", " + error.Message );
+                            
                         }
                     }
                 }
@@ -81,16 +82,20 @@ public class Account : MonoBehaviour {
                     if (result.TryGetValue("errorCode", out errorCode))
                     {
                         Debug.Log("Error: " + result["errorCode"] + ", " + result["message"]);
+                        if(result["errorCode"].Equals("203")){
+                            Notification.messageError("Email đăng ký đã tồn tại", Notification.WARRNING_ERROR);
+                        }
                     }
                     else
                     {
+                        myGUI.checkCurrentUser();
                         Debug.Log("Success: " + result["successCode"]);
                     }
                 }
             });
         }
         else {
-            Notification.messageError("Đọc hướng dẫn trước khi đăng ký");
+            Notification.messageError("Đọc hướng dẫn trước khi đăng ký", Notification.WARRNING_ERROR);
         }	
 	}
 
@@ -104,10 +109,18 @@ public class Account : MonoBehaviour {
                     if (enumerator.MoveNext())
                     {
                         ParseException error = (ParseException)enumerator.Current;
-                        Debug.Log("Error: " + error.Code + ", " + error.Message);
+                        string[] errorNumber = System.Convert.ToString(error.Message).Split(' ');
+                        if (errorNumber[0].Equals("404"))
+                        {
+                            Notification.messageError("Lỗi đăng nhập", Notification.FORGOT_ERROR);
+                        }
+                        else {
+                            Notification.messageError("Không có kết nối mạng", Notification.NETWORK_ERROR);
+                        }
                     }
                 }
-                Notification.messageError("Lỗi mạng");
+                
+                
                 myGUI.loginFaild();
             }
             else

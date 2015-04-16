@@ -62,6 +62,8 @@ public class myGUI : MonoBehaviour {
     public GameObject panelSignUpMain;
     public Animator animSignUp;
     public GameObject pnlCover;
+    private bool isSignUpSuccess = false;
+
     //shop
     public GameObject panelShop;
     //logout
@@ -89,7 +91,20 @@ public class myGUI : MonoBehaviour {
         Vector2 position = transform.anchoredPosition;
         position.y -= transform.rect.height;
         transform.anchoredPosition = position;
+        checkCurrentUser();
         StartCoroutine(betClick());
+    }
+
+    public static void checkCurrentUser(){
+        if (Account.hasCurrentUser())
+        {
+            mg.animCanvasLogin.SetTrigger("login_skip_gd1");
+            Bet.bet.getMyCoin();
+        }
+    }
+
+    public static void signUpSuccess() {
+        mg.isSignUpSuccess = true;
     }
 
     void Update()
@@ -97,6 +112,10 @@ public class myGUI : MonoBehaviour {
         if(isLoginFalse){
             animCanvasLogin.SetTrigger("closeLogin_gd1");
             isLoginFalse = false;
+        }
+
+        if(isSignUpSuccess){
+            animSignUp.SetTrigger("openSignUp");
         }
 
         if (!isCountdownRunning && isStartTime)
@@ -415,17 +434,14 @@ public class myGUI : MonoBehaviour {
             imgAnimalWin.SetActive(false);
             btnLogout.GetComponent<Button>().interactable = true;
             btnLogin.GetComponent<Button>().interactable = false;
-            //btnStart.SetActive(true);
+            btnStart.SetActive(true);
         }
-       
         string username = getUsernameInput();
         string password = getPasswordInput();
         isLogout = false;
-        inputPass.GetComponent<InputField>().text = "";
-        inputUser.GetComponent<InputField>().text = "";
         if (!RegexString.checkString(username, password))
         {
-            Notification.messageError("Tên người dùng hoặc mật khẩu phải có nhiều hơn 2 kí tự");
+            Notification.messageError("Tên người dùng hoặc mật khẩu phải có nhiều hơn 2 kí tự", Notification.WARRNING_ERROR);
         }
         else if (RegexString.isValid(username, RegexString.usernameReg) && RegexString.isValid(password, RegexString.passReg))
         {
@@ -434,8 +450,10 @@ public class myGUI : MonoBehaviour {
         }
         else
         {
-            Notification.messageError("Tên người dùng hoặc mật khẩu không hợp lệ");
+            Notification.messageError("Tên người dùng hoặc mật khẩu không hợp lệ", Notification.WARRNING_ERROR);
         }
+        inputPass.GetComponent<InputField>().text = "";
+        inputUser.GetComponent<InputField>().text = "";
     }
 
     private IEnumerator guiReset() {
@@ -458,7 +476,6 @@ public class myGUI : MonoBehaviour {
         StartCoroutine(guiReset());
         isSetting = false;
         isStartTime = false;
-        btnStart.SetActive(true);
         btnLogin.GetComponent<Button>().interactable = true;
     }
 
@@ -590,7 +607,6 @@ public class myGUI : MonoBehaviour {
         isCountdownRunning = true;
         while (endTime > DateTime.Now)
         {
-            Debug.Log(isLogout);
             yield return new WaitForSeconds(1f);
             if (isLogout) {
                 break;            
