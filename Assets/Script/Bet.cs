@@ -24,7 +24,7 @@ public class Bet : MonoBehaviour {
 						if (enumerator.MoveNext()) {
 							ParseException error = (ParseException) enumerator.Current;
 							Debug.Log("Error: " + error.Code + ", " + error.Message);
-                            Notification.messageError("Error: " + error.Code + ", " + error.Message, Notification.WARRNING_ERROR);
+                            Notification.messageError("Không có kết nối mạng", Notification.WARRNING_ERROR);
                             myGUI.loginFaild();
 						}
 					}
@@ -32,7 +32,7 @@ public class Bet : MonoBehaviour {
 					IDictionary<string, object> result = t.Result;
 					object errorCode;
 					if (result.TryGetValue("errorCode", out errorCode)) {
-						Debug.Log ("Error: " + result["errorCode"] + ", " + result["message"]);
+						Debug.Log ("Error: " + result["errorCode"] + ", " + result["message"] + "222222222222222");
                         Notification.messageError("Error: " + result["errorCode"] + ", " + result["message"], Notification.WARRNING_ERROR);
                         myGUI.loginFaild();
 					} else {
@@ -61,8 +61,8 @@ public class Bet : MonoBehaviour {
 				    using (IEnumerator<System.Exception> enumerator = t.Exception.InnerExceptions.GetEnumerator()) {
 					    if (enumerator.MoveNext()) {
 						    ParseException error = (ParseException) enumerator.Current;
-						    Debug.Log("Error 1: " + error.Code + ", " + error.Message);
-                            Notification.messageError("Không có kết nối mạng", Notification.WARRNING_ERROR);
+						    Debug.Log("Error: " + error.Code + ", " + error.Message);
+                            Notification.messageError("Không có kết nối mạng", Notification.RELOAD_SENCE);
 					    }
 				    }
 			    }else{

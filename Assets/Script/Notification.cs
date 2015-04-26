@@ -17,7 +17,14 @@ public class Notification : MonoBehaviour {
     public static int NETWORK_ERROR = 0;
     public static int WARRNING_ERROR = 1;
     public static int FORGOT_ERROR = 2;
+    public static int END_COIN = 3;
+    public static int RELOAD_SENCE = 4;
     private bool isNetworkError = false;
+    public GameObject panelZeroCoin;
+    public Animator animShop;
+    public GameObject panelMainError;
+    private bool isReloadSence = false;
+
 
     void Awake() {
         notify = this;
@@ -55,6 +62,10 @@ public class Notification : MonoBehaviour {
         {
             isForgotError = false;
         }
+        if(isReloadSence){
+            Application.LoadLevel("game");
+            isReloadSence = false;
+        }
         btnSignIn.GetComponent<Button>().interactable = true;     
     }
 
@@ -68,11 +79,13 @@ public class Notification : MonoBehaviour {
                 break;
             case 2:
                 notify.isForgotError = true;
+                break; 
+            case 4:
+                notify.isReloadSence = true;
                 break;
         }
         notify.isError = true;
-        notify.textError = message;
-        
+        notify.textError = message;   
     }
 
     public static bool isConectInternet()

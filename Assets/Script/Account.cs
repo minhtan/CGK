@@ -11,8 +11,8 @@ public class Account : MonoBehaviour {
     public Text inpEmail;
     public Text inpPhone;
     public Text inpUsername_Up;
-    public Text inRePassword;
-    public Text inpPassword_Up;
+    public InputField inRePassword;
+    public InputField inpPassword_Up;
 
     private string getEmailInput() {
         return inpEmail.text;
@@ -70,8 +70,8 @@ public class Account : MonoBehaviour {
                         if (enumerator.MoveNext())
                         {
                             ParseException error = (ParseException)enumerator.Current;
-                            Debug.Log("Error: " + error.Code + ", " + error.Message );
-                            
+                            Debug.Log("Error: " + error.Code + ", " + error.Message);
+                            Notification.messageError("Không có kết nối mạng", Notification.WARRNING_ERROR);
                         }
                     }
                 }
@@ -82,13 +82,22 @@ public class Account : MonoBehaviour {
                     if (result.TryGetValue("errorCode", out errorCode))
                     {
                         Debug.Log("Error: " + result["errorCode"] + ", " + result["message"]);
-                        if(result["errorCode"].Equals("203")){
+                        int numberError = System.Convert.ToInt32(result["errorCode"]);
+                        if (numberError== 203)
+                        {
                             Notification.messageError("Email đăng ký đã tồn tại", Notification.WARRNING_ERROR);
+                        }
+                        else if (numberError == 202)
+                        {
+                            Notification.messageError("Tên đăng ký đã tồn tại", Notification.WARRNING_ERROR);
+                        }else if(numberError == 2){
+                            Notification.messageError("Đăng ký không hợp lệ", Notification.WARRNING_ERROR);
                         }
                     }
                     else
                     {
                         myGUI.checkCurrentUser();
+                        Notification.messageError("Đăng ký thành công", Notification.WARRNING_ERROR);
                         Debug.Log("Success: " + result["successCode"]);
                     }
                 }

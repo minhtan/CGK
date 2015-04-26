@@ -54,7 +54,7 @@ public class myGUI : MonoBehaviour {
     private int presentCoin;
     private bool isRepeatCycle = false;
     //timer
-    private int totalTimeRuning = 15;
+    private int totalTimeRuning = 5;
     private bool isCoinServer = false;
     public GameObject txtTimer;
     // SignUp
@@ -63,9 +63,9 @@ public class myGUI : MonoBehaviour {
     public Animator animSignUp;
     public GameObject pnlCover;
     private bool isSignUpSuccess = false;
-
     //shop
     public GameObject panelShop;
+    public GameObject btnShop;
     //logout
     private bool isLogout = false;
     public GameObject btnLogout;
@@ -73,6 +73,7 @@ public class myGUI : MonoBehaviour {
     private bool isSetting = false;
     public GameObject panelOverSetting;
     private bool[] test;
+    private IEnumerator stopBetClick;
 
     void Awake() { 
         rectAnimal = panelAnimal.GetComponent<RectTransform>();
@@ -82,7 +83,8 @@ public class myGUI : MonoBehaviour {
         for (int i = 0; i < 8; i++)
         {
             test[i] = false;
-        }      
+        }
+        stopBetClick = betClick();
     }
 
     void Start() {
@@ -92,7 +94,8 @@ public class myGUI : MonoBehaviour {
         position.y -= transform.rect.height;
         transform.anchoredPosition = position;
         checkCurrentUser();
-        StartCoroutine(betClick());
+        
+        StartCoroutine((stopBetClick));
     }
 
     public static void checkCurrentUser(){
@@ -435,6 +438,7 @@ public class myGUI : MonoBehaviour {
             btnLogout.GetComponent<Button>().interactable = true;
             btnLogin.GetComponent<Button>().interactable = false;
             btnStart.SetActive(true);
+            panelCoverPnlBet.SetActive(true);
         }
         string username = getUsernameInput();
         string password = getPasswordInput();
@@ -495,21 +499,26 @@ public class myGUI : MonoBehaviour {
         }
     }
 
-    public GameObject btnShop;
-
     public void btnShopClick() {
+        showShop();
+    }
+
+    private void showShop() {
         panelShop.SetActive(true);
         btnShop.GetComponent<Button>().interactable = false;
         panelOverSetting.SetActive(true);
-        isSetting = false;
         animShop.SetTrigger("openShop");
     }
 
     public void btnExitShopClick() {
+        exitShop();
+    }
+
+    private void exitShop() {
         animSetting.SetTrigger("closeSetting");
         animShop.SetTrigger("closeShop");
         btnShop.GetComponent<Button>().interactable = true;
-        panelOverSetting.SetActive(true);
+        isSetting = false;
     }
 
     //bet
@@ -564,12 +573,15 @@ public class myGUI : MonoBehaviour {
     {
         Text text = GameObject.Find("TxtBet" + number).GetComponent<Text>();
         int value = System.Convert.ToInt32(text.text);
-        if (value < 99 && presentCoin > 0)
+        if (presentCoin < 1)
+        {
+            Notification.messageError("Xèng của bạn không đủ để chơi tiếp. Vào shop để mua xèng", Notification.END_COIN);
+        }
+        else if (value < 99 && presentCoin > 0)
         {
             value++;
             presentCoin--;
             textCoin.text = presentCoin + "";
-
         }
         if (value < 10)
         {
@@ -604,6 +616,7 @@ public class myGUI : MonoBehaviour {
 
     private IEnumerator countdown()
     {
+        StartCoroutine(stopBetClick);
         isCountdownRunning = true;
         while (endTime > DateTime.Now)
         {
@@ -612,12 +625,12 @@ public class myGUI : MonoBehaviour {
                 break;            
             }
         }
-        Debug.Log(isLogout);
         if (!isLogout)
         {
             isCycleRunning = true;
+            StopCoroutine(stopBetClick);
             btnLogout.GetComponent<Button>().interactable = false;
-            if (checkBet() && Notification.isConectInternet())
+            if (checkBet())
             {
                 StartCoroutine(cycleAnimal(listAnimal.Count, random(1, 2)));
                 Bet.bet.betRequest();

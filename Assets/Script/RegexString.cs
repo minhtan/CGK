@@ -4,8 +4,8 @@ using UnityEngine.UI;
 using System.Text.RegularExpressions;
 public class RegexString : MonoBehaviour {
 
-    public static Regex usernameReg = new Regex("([a-zA-Z]+)");
-    public static Regex passReg = new Regex("([a-zA-Z!@#$%^&*0-9]+)");
+    public static Regex usernameReg = new Regex("([a-zA-Z]+)([a-zA-Z0-9]+)");
+    public static Regex passReg = new Regex("([a-zA-Z0-9!@#$%^&*]+)");
     public static Regex phoneReg = new Regex("[0-9]{9,11}");
     public static Regex emailReg = new Regex("(\\w+)(@)(\\w+)(\\.)(\\w+)");
 
