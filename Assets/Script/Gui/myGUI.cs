@@ -11,7 +11,6 @@ public class myGUI : MonoBehaviour {
     private int flag;
     private bool isHeldDown;
     // animation cac button;
-    public Animator animSetting;
     public Animator animShop;
     // nut start bet
     private DateTime endTime;
@@ -39,8 +38,6 @@ public class myGUI : MonoBehaviour {
     //panel animal
     public GameObject panelAnimal;
     private RectTransform rectAnimal;
-    public Sprite spriteAnimal;
-    public Sprite spriteIdleAnimal;
     private List <GameObject> listAnimal;
     private bool isCycleRunning = false;
     private bool serverFlag = false;
@@ -89,10 +86,6 @@ public class myGUI : MonoBehaviour {
 
     void Start() {
         mg = this;
-        RectTransform transform = animSetting.gameObject.transform as RectTransform;
-        Vector2 position = transform.anchoredPosition;
-        position.y -= transform.rect.height;
-        transform.anchoredPosition = position;
         checkCurrentUser();
         
         StartCoroutine((stopBetClick));
@@ -478,7 +471,6 @@ public class myGUI : MonoBehaviour {
         isLogout = true;
         animCanvasLogin.SetTrigger("closeSignIn");
         StartCoroutine(guiReset());
-        isSetting = false;
         isStartTime = false;
         btnLogin.GetComponent<Button>().interactable = true;
     }
@@ -489,12 +481,10 @@ public class myGUI : MonoBehaviour {
         if (isSetting)
         {
             panelOverSetting.SetActive(true);
-            animSetting.SetTrigger("closeSetting");
             isSetting = false;
         }
         else {
             panelOverSetting.SetActive(false);
-            animSetting.SetTrigger("openSetting");
             isSetting = true;
         }
     }
@@ -515,7 +505,6 @@ public class myGUI : MonoBehaviour {
     }
 
     private void exitShop() {
-        animSetting.SetTrigger("closeSetting");
         animShop.SetTrigger("closeShop");
         btnShop.GetComponent<Button>().interactable = true;
         isSetting = false;

@@ -6,16 +6,8 @@ public class SizeFolowCanvas : MonoBehaviour {
     private RectTransform rectCanvas;
     public int heightScreenStandard = 768;
     // chinh size cho nut setting 
-    public GameObject btnSetting;
-    public float sizeBtnSetting = 128.0f;
-    public GameObject panelMash;
-    public float heightPanelMash = 512;
-    public GameObject btnMusic;
-    public GameObject btnShop;
-    public GameObject btnShare;
     public Text txtCoin;
     public GameObject btnLogout;
-    private RectTransform rectSetting;
     // chinh size cho panel Bet
     public GameObject panelBet;
     private RectTransform rectPanelBet;
@@ -37,7 +29,6 @@ public class SizeFolowCanvas : MonoBehaviour {
 
     void Awake(){
         rectCanvas = GetComponent<RectTransform>();
-        rectSetting = btnSetting.GetComponent<RectTransform>();
         rectPanelBet = panelBet.GetComponent<RectTransform>();
         rectPanelAnimal = panelAnimal.GetComponent<RectTransform>();
         //rectTimeBet = panelTimeBet.GetComponent<RectTransform>();
@@ -48,9 +39,8 @@ public class SizeFolowCanvas : MonoBehaviour {
 	void Start () {
         float widthCanvas = rectCanvas.sizeDelta.x;
         float ratioScreen = Screen.width / widthCanvas;
-        float heightBet = sizeBtnSetting + sizeBtnSetting / 2;
+        float heightBet = 192f;
         float ratioBetVsScreen = heightBet / heightScreenStandard;
-        btnSettingSize(ratioScreen);
         panelBetSize(ratioScreen, widthCanvas, ratioBetVsScreen, rectPanelBet);
         panelBetSize(ratioScreen, widthCanvas, ratioBetVsScreen, rectCoverPnlBet);
         panelAnimalVsTimeBetSize(heightBet, ratioScreen, widthCanvas, ratioBetVsScreen, rectPanelAnimal);
@@ -65,33 +55,23 @@ public class SizeFolowCanvas : MonoBehaviour {
 
 	}
 
-    private void btnSettingSize(float ratioScreen) {
-        rectSetting.sizeDelta = new Vector2(sizeBtnSetting, sizeBtnSetting);
-        changeSize(panelMash, sizeBtnSetting, heightPanelMash);
-        changeSize(btnMusic, sizeBtnSetting, sizeBtnSetting);
-        changeSize(btnShare, sizeBtnSetting, sizeBtnSetting);
-        changeSize(btnShop, sizeBtnSetting, sizeBtnSetting);
-        changeSize(btnLogout, sizeBtnSetting, sizeBtnSetting);
-        txtCoin.GetComponent<RectTransform>().sizeDelta = new Vector2(sizeBtnSetting, sizeBtnSetting / 2);
-    }
-
     private void changeSize(GameObject obj, float width, float height) {
         obj.GetComponent<RectTransform>().sizeDelta = new Vector2(width, height);
     }
 
-    private void panelBetSize(float ratioScreen, float widthCanvas, float ratioBetVsScreen, RectTransform rect)
+    private void panelBetSize(float ratio, float widthCanvas, float ratioBetVsScreen, RectTransform rect)
     {
-        float widthBet = Screen.width / ratioScreen - sizeBtnSetting;
-        rect.anchorMax = new Vector2(widthBet / widthCanvas, ratioBetVsScreen);
+        float height = Screen.width / ratio;
+        rect.anchorMax = new Vector2(height/widthCanvas, ratioBetVsScreen);
     }
 
     private void panelAnimalVsTimeBetSize(float heightBet, float ratioScreen, float widthCanvas, float ratioBetVsScreen, RectTransform rect)
     { 
-        float height = heightScreenStandard - heightBet;
+        float height = heightScreenStandard - heightBet - 46;
         float width = Screen.width / ratioScreen;
         
-        rect.anchorMin = new Vector2(0, ratioBetVsScreen);
-        rect.anchorMax = new Vector2(width / widthCanvas, height / heightScreenStandard + ratioBetVsScreen);
+        rect.anchorMin = new Vector2(0, ratioBetVsScreen + 0.085f);
+        rect.anchorMax = new Vector2(width / widthCanvas, height / heightScreenStandard + ratioBetVsScreen + 0.055f);
     }
 
     private float getDeltaAnchorPanelAnimal(float anchorMiny, float anchorMaxY) {
@@ -106,7 +86,7 @@ public class SizeFolowCanvas : MonoBehaviour {
         int paddingSide = gridLayout.padding.left;
         int paddingTall = gridLayout.padding.top;
         float cellsize = (float)(((Screen.width / ratioScreen) - (9 * spacing) - (paddingSide * 2)) / 10);
-        float panelheight = (float)((Screen.height / ratioScreen) * 0.7);
+        float panelheight = (float)((Screen.height / ratioScreen) * 0.665);
         if ((cellsize * 4 + paddingTall * 2 + spacing * 3) > panelheight)
         {
             cellsize = (panelheight - paddingTall * 2 - spacing * 3) / 4;
@@ -119,6 +99,7 @@ public class SizeFolowCanvas : MonoBehaviour {
             paddingTall = System.Convert.ToInt32((panelheight - 3 * spacing - cellsize * 4) / 2);
             gridLayout.padding.top = paddingTall;
             gridLayout.padding.bottom = paddingTall;
+            
         }
         gridLayout.cellSize = new Vector2((cellsize), (cellsize));
     }
