@@ -67,7 +67,6 @@ public class myGUI : MonoBehaviour {
     private bool isLogout = false;
     public GameObject btnLogout;
     // setting
-    private bool isSetting = false;
     public GameObject panelOverSetting;
     private bool[] test;
     private IEnumerator stopBetClick;
@@ -475,20 +474,6 @@ public class myGUI : MonoBehaviour {
         btnLogin.GetComponent<Button>().interactable = true;
     }
 
-    //setting
-    public void btnSettingClick()
-    {
-        if (isSetting)
-        {
-            panelOverSetting.SetActive(true);
-            isSetting = false;
-        }
-        else {
-            panelOverSetting.SetActive(false);
-            isSetting = true;
-        }
-    }
-
     public void btnShopClick() {
         showShop();
     }
@@ -507,7 +492,6 @@ public class myGUI : MonoBehaviour {
     private void exitShop() {
         animShop.SetTrigger("closeShop");
         btnShop.GetComponent<Button>().interactable = true;
-        isSetting = false;
     }
 
     //bet
