@@ -29,6 +29,7 @@ public class myGUI : MonoBehaviour {
     public GameObject panelDoorLeft;
     public GameObject panelDoorRight;
     public GameObject btnLogin;
+	private bool isLoginFalse = false;
     //panel error
     public GameObject panelError;
     public GameObject btnExitError;
@@ -60,6 +61,7 @@ public class myGUI : MonoBehaviour {
     public Animator animSignUp;
     public GameObject pnlCover;
     private bool isSignUpSuccess = false;
+	public GameObject pnlSignUp;
     //shop
     public GameObject panelShop;
     public GameObject btnShop;
@@ -654,14 +656,10 @@ public class myGUI : MonoBehaviour {
         pnlSignUp.SetActive(false);
     }
 
-    public GameObject pnlSignUp;
-
     public void openSignUp(){
         pnlSignUp.SetActive(true);
         animSignUp.SetTrigger("closeSignUp");
-    }
-
-    
+    }   
 
     private string getUsernameInput()
     {
@@ -672,11 +670,25 @@ public class myGUI : MonoBehaviour {
     {
         return inputPass.GetComponent<InputField>().text;
     }
-
-    private bool isLoginFalse = false;
-
+	
     public static void loginFaild()
     {
         mg.isLoginFalse = true;
     }
+
+	private bool isMusic = false;
+
+	public void btnMusicClick(){
+		if(isMusic){
+			SoundControlCS.sound.adjustVol(true);
+			Debug.Log(isMusic);
+			isMusic = false;
+
+		}else{
+			SoundControlCS.sound.adjustVol(false);
+			Debug.Log(isMusic);
+			isMusic = true;
+		}
+	}
+
 }

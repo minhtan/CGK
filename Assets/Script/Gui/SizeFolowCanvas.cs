@@ -6,13 +6,12 @@ public class SizeFolowCanvas : MonoBehaviour {
     private RectTransform rectCanvas;
     public int heightScreenStandard = 768;
     // chinh size cho nut setting 
-    public Text txtCoin;
-    public GameObject btnLogout;
     // chinh size cho panel Bet
     public GameObject panelBet;
     private RectTransform rectPanelBet;
     //chinh size cho panel Animal
     public GameObject panelAnimal;
+	public GameObject panelMainAnimal;
     private RectTransform rectPanelAnimal;
     //chinh size cho panel time bet
    // public GameObject panelTimeBet;
@@ -26,7 +25,8 @@ public class SizeFolowCanvas : MonoBehaviour {
     public GameObject pnlMainShop;
     public GameObject pnlListItem;
     public float ratioHeightShop = 0.8f;
-
+	//thu win hien len
+	public GameObject imgAnimalWin;
     void Awake(){
         rectCanvas = GetComponent<RectTransform>();
         rectPanelBet = panelBet.GetComponent<RectTransform>();
@@ -81,7 +81,7 @@ public class SizeFolowCanvas : MonoBehaviour {
     private void positionAnimal(float ratioScreen)
     {
         GridLayoutGroup gridLayout;
-        gridLayout = panelAnimal.GetComponent<GridLayoutGroup>();
+        gridLayout = panelMainAnimal.GetComponent<GridLayoutGroup>();
         float spacing = gridLayout.spacing.x;
         int paddingSide = gridLayout.padding.left;
         int paddingTall = gridLayout.padding.top;
@@ -102,7 +102,15 @@ public class SizeFolowCanvas : MonoBehaviour {
             
         }
         gridLayout.cellSize = new Vector2((cellsize), (cellsize));
+		positionAnimalWin(panelheight, paddingTall, cellsize);
     }
+
+	private void positionAnimalWin(float heightPnlMain, float padding, float cellSize){
+		RectTransform rect;
+		rect = imgAnimalWin.GetComponent<RectTransform>();
+		float height =  heightPnlMain - cellSize * 2 - padding * 2;
+		rect.sizeDelta = new Vector2(height, height);
+	}
 }
 
  
