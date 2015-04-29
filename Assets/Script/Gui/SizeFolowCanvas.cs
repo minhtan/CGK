@@ -27,6 +27,14 @@ public class SizeFolowCanvas : MonoBehaviour {
     public float ratioHeightShop = 0.8f;
 	//thu win hien len
 	public GameObject imgAnimalWin;
+	//chinh size cho cac o bet
+	public GameObject imgBet;
+	private RectTransform rectImgBet;
+	private float numBet = 46.0f;
+	private float Size_IMG_BET = 115.2f;
+	private RectTransform rectTxtBet;
+	public GameObject pnlTxtBet;
+
     void Awake(){
         rectCanvas = GetComponent<RectTransform>();
         rectPanelBet = panelBet.GetComponent<RectTransform>();
@@ -34,12 +42,14 @@ public class SizeFolowCanvas : MonoBehaviour {
         //rectTimeBet = panelTimeBet.GetComponent<RectTransform>();
         rectCoverPnlBet = panelCoverPanelBet.GetComponent<RectTransform>();
         //rectAcount = panelAcount.GetComponent<RectTransform>();
+		rectImgBet = imgBet.GetComponent<RectTransform>();
+		rectTxtBet = pnlTxtBet.GetComponent<RectTransform>();
     }
 
 	void Start () {
         float widthCanvas = rectCanvas.sizeDelta.x;
         float ratioScreen = Screen.width / widthCanvas;
-        float heightBet = 192f;
+        float heightBet = 192.0f;
         float ratioBetVsScreen = heightBet / heightScreenStandard;
         panelBetSize(ratioScreen, widthCanvas, ratioBetVsScreen, rectPanelBet);
         panelBetSize(ratioScreen, widthCanvas, ratioBetVsScreen, rectCoverPnlBet);
@@ -49,9 +59,10 @@ public class SizeFolowCanvas : MonoBehaviour {
         changeSize(panelShop, widthCanvas, heightScreenStandard);
         //shop
         float spacingItem = pnlListItem.GetComponent<HorizontalLayoutGroup>().spacing;
-        float heightShop = spacingItem / 768;
+        float heightShop = spacingItem / heightScreenStandard;
         pnlMainShop.GetComponent<RectTransform>().anchorMin = new Vector2(spacingItem/widthCanvas, heightShop);
         pnlMainShop.GetComponent<RectTransform>().anchorMax = new Vector2(1 - spacingItem / widthCanvas, ratioHeightShop- heightShop); ;
+		getSizeImgBet(widthCanvas);
 
 	}
 
@@ -67,7 +78,7 @@ public class SizeFolowCanvas : MonoBehaviour {
 
     private void panelAnimalVsTimeBetSize(float heightBet, float ratioScreen, float widthCanvas, float ratioBetVsScreen, RectTransform rect)
     { 
-        float height = heightScreenStandard - heightBet - 46;
+        float height = heightScreenStandard - heightBet - numBet;
         float width = Screen.width / ratioScreen;
         
         rect.anchorMin = new Vector2(0, ratioBetVsScreen + 0.085f);
@@ -110,6 +121,19 @@ public class SizeFolowCanvas : MonoBehaviour {
 		rect = imgAnimalWin.GetComponent<RectTransform>();
 		float height =  heightPnlMain - cellSize * 2 - padding * 2;
 		rect.sizeDelta = new Vector2(height, height);
+	}
+
+	private void getSizeImgBet(float widthCanvas){
+		float widthCellBet = 0.125f * widthCanvas;
+		float marginImgBet = (widthCellBet -  Size_IMG_BET) /2;
+		float ratioMarginVsCanvas = marginImgBet / widthCanvas;
+		float ratioImgBet = Size_IMG_BET / widthCanvas;
+		float number = 0f;
+		foreach (RectTransform rectBetNumber in rectTxtBet) {
+			rectBetNumber.anchorMin = new Vector2(ratioMarginVsCanvas + number, 0.1f);
+			rectBetNumber.anchorMax = new Vector2(ratioMarginVsCanvas + ratioImgBet + number, 0.9f);
+			number += 0.125f; 
+		}
 	}
 }
 
