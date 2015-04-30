@@ -53,7 +53,7 @@ public class Bet : MonoBehaviour {
 		    IDictionary<string,object> dict = new Dictionary<string, object>();
 
 		    for (int i = 0; i < 8; i++) {
-			    dict.Add("bet"+i, int.Parse(GameObject.Find("TxtBet"+i).GetComponent<Text> ().text));
+			    dict.Add("bet" + i, int.Parse(GameObject.Find("ImgNumber" + i + "/TxtBet" + i).GetComponent<Text> ().text));
 		    }
 
 		    ParseCloud.CallFunctionAsync<IDictionary<string, object>> ("takeMyBet", dict).ContinueWith (t => {

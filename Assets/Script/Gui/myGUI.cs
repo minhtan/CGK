@@ -241,7 +241,7 @@ public class myGUI : MonoBehaviour {
         presentCoin = System.Convert.ToInt32(textCoin.text);
         for (int i = 0; i < 8; i ++)
         {
-            GameObject.Find("TxtBet" + i).GetComponent<Text>().text = "00";
+            GameObject.Find("ImgNumber" + i + "/TxtBet" + i).GetComponent<Text>().text = "00";
         }
         for (int i = 0; i < listAnimal.Count; i++)
         {
@@ -457,7 +457,7 @@ public class myGUI : MonoBehaviour {
     private IEnumerator guiReset() {
         for (int i = 0; i < 8; i++)
         {
-            GameObject.Find("TxtBet" + i).GetComponent<Text>().text = "00";
+            GameObject.Find("ImgNumber" + i + "/TxtBet" + i).GetComponent<Text>().text = "00";
         }
         for (int i = 0; i < listAnimal.Count; i++)
         {
@@ -546,7 +546,7 @@ public class myGUI : MonoBehaviour {
 
     private void btnBetClick(int number)
     {
-        Text text = GameObject.Find("TxtBet" + number).GetComponent<Text>();
+        Text text = GameObject.Find("ImgNumber" + number + "/TxtBet" + number).GetComponent<Text>();
         int value = System.Convert.ToInt32(text.text);
         if (presentCoin < 1)
         {
@@ -624,7 +624,7 @@ public class myGUI : MonoBehaviour {
     {
         for (int i = 0; i < 8; i++)
         {
-            int coin = System.Convert.ToInt32(GameObject.Find("TxtBet" + i).GetComponent<Text>().text);
+            int coin = System.Convert.ToInt32(GameObject.Find("ImgNumber" + i + "/TxtBet" + i).GetComponent<Text>().text);
             if (coin > 0)
             {
                 return true;
