@@ -60,8 +60,8 @@ public class SizeFolowCanvas : MonoBehaviour {
         //shop
         float spacingItem = pnlListItem.GetComponent<HorizontalLayoutGroup>().spacing;
         float heightShop = spacingItem / heightScreenStandard;
-        pnlMainShop.GetComponent<RectTransform>().anchorMin = new Vector2(spacingItem/widthCanvas, heightShop);
-        pnlMainShop.GetComponent<RectTransform>().anchorMax = new Vector2(1 - spacingItem / widthCanvas, ratioHeightShop- heightShop); ;
+        pnlMainShop.GetComponent<RectTransform>().anchorMin = new Vector2(0, heightShop);
+        pnlMainShop.GetComponent<RectTransform>().anchorMax = new Vector2(1, ratioHeightShop- heightShop); ;
 		getSizeImgBet(widthCanvas);
 
 	}
