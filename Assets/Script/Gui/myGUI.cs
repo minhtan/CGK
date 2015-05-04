@@ -52,7 +52,7 @@ public class myGUI : MonoBehaviour {
     private int presentCoin;
     private bool isRepeatCycle = false;
     //timer
-    private int totalTimeRuning = 10;
+    private int totalTimeRuning = 30;
     private bool isCoinServer = false;
     public GameObject txtTimer;
     // SignUp
@@ -199,34 +199,40 @@ public class myGUI : MonoBehaviour {
 
     //anim so coin tang len hoac giam di 
     private IEnumerator animCoin(int lastCoin) {
-        if (coinServer > lastCoin)
+		int deltaCoin = coinServer - lastCoin;
+		Debug.Log(lastCoin + "last coin");
+		Debug.Log(deltaCoin + "delta coin");
+		float deltaTime = 0;
+        if (deltaCoin > 0)
         {
             SoundControlCS.sound.playWinCoin();
-            if (coinServer - lastCoin > 999)
+            if (deltaCoin < 50)
             {
-                for (int i = lastCoin; i <= coinServer; i += 2)
-                {
-                    yield return new WaitForSeconds(0.05f);
-                    textCoin.text = i + "";
-                }
-            }
-            else {
-                for (int i = lastCoin; i <= coinServer; i++)
-                {
-                    yield return new WaitForSeconds(0.1f);
-                    textCoin.text = i + "";
-                }
-            }         
-        }
-        else {
-            for (int i = coinServer; i >= lastCoin; i--)
-            {
-                yield return new WaitForSeconds(0.05f);
-                textCoin.text = i + "";
-            }
+				deltaTime = 0.25f;
+			}else if(deltaCoin >= 50 && deltaCoin < 100){
+				deltaTime = 0.125f;
+				Debug.Log("11111111111");
+			}else if(deltaCoin >= 100 && deltaCoin < 200){
+				deltaTime = 0.083333f;
+				Debug.Log("11111111111");
+			}else if(deltaCoin >= 200 && deltaCoin < 400){
+				deltaTime = 0.05f;
+			}else if(deltaCoin >= 400 && deltaCoin < 800){
+				deltaTime = 0.03333f;
+			}else if(deltaCoin >= 800 && deltaCoin < 1600){
+				deltaTime = 0.025f;
+			}else if(deltaCoin >= 1600 && deltaCoin < 3001){
+				deltaTime = 0.02f;
+			}    
+			Debug.Log(deltaTime);
+			for (int i = lastCoin; i <= coinServer; i ++)
+			{
+				yield return new WaitForSeconds(deltaTime);
+				textCoin.text = i + "";
+			}
         }
         SoundControlCS.sound.stopWinCoin();
-        yield return new WaitForSeconds(3f);        
+        yield return new WaitForSeconds(2f);        
         isRepeatCycle = true;
         btnLogout.GetComponent<Button>().interactable = true;
     }
@@ -572,7 +578,7 @@ public class myGUI : MonoBehaviour {
     private IEnumerator btnBetDown()
     {
             btnBetClick(flag);
-            yield return new WaitForSeconds(0.05f);
+            yield return new WaitForSeconds(0.01f);
             textCoin.text = presentCoin + "";
     }
 
