@@ -20,8 +20,8 @@ public class SoundControlCS : MonoBehaviour {
 	
     private void getSource(){
 	    AudioSource[] sources = GetComponents<AudioSource>();
-	    soundEfct = sources[0];
-		soundBG = sources[1];
+	    soundEfct = sources[1];
+		soundBG = sources[0];
 	    loadSoundPref();
     }
 
