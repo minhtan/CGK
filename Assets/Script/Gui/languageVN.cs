@@ -26,6 +26,11 @@ public class languageVN : MonoBehaviour {
     public Text txtEmail;
     public Text txtPhone;
     public Text btnSignUp;
+    //text EditAccount
+    public Text txtEditPass;
+    public Text txtEditEmail;
+    public Text txtEditPhone;
+    public Text txtOldPass;
 
 	void Start () {
         txtLogin.text = "Đăng nhập";
@@ -46,5 +51,9 @@ public class languageVN : MonoBehaviour {
         txtPhone.text = "Số điện thoại";
         txtPassReUp.text = "Xác nhận mật khẩu";
         btnSignUp.text = "Đăng ký";
+        txtEditPass.text = "Đổi mật khẩu";
+        txtEditEmail.text = "Đổi email";
+        txtEditPhone.text = "Đổi số điện thoại";
+        txtOldPass.text = "Mật khẩu cũ";
 	}
 }

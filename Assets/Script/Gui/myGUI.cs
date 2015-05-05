@@ -9,7 +9,6 @@ public class myGUI : MonoBehaviour {
     public GameObject storePanel;
     private static myGUI mg;
     private int flag;
-    private bool isHeldDown;
     // animation cac button;
     public Animator animShop;
     // nut start bet
@@ -52,7 +51,7 @@ public class myGUI : MonoBehaviour {
     private int presentCoin;
     private bool isRepeatCycle = false;
     //timer
-    private int totalTimeRuning = 30;
+    private int totalTimeRuning = 50;
     private bool isCoinServer = false;
     public GameObject txtTimer;
     // SignUp
@@ -68,19 +67,20 @@ public class myGUI : MonoBehaviour {
     //logout
     private bool isLogout = false;
     public GameObject btnLogout;
-    // setting
-    public GameObject panelOverSetting;
-    private bool[] test;
+    // array button bet
+    private bool[] arrayBtnBet;
     private IEnumerator stopBetClick;
+    //
+    public GameObject pnlEditProfile;
 
     void Awake() { 
         rectAnimal = panelAnimal.GetComponent<RectTransform>();
         listAnimal = new List<GameObject>();
         swapListAnimal(addListAnimal());
-        test = new bool[8];
+        arrayBtnBet = new bool[8];
         for (int i = 0; i < 8; i++)
         {
-            test[i] = false;
+            arrayBtnBet[i] = false;
         }
         stopBetClick = betClick();
     }
@@ -489,7 +489,6 @@ public class myGUI : MonoBehaviour {
     private void showShop() {
         panelShop.SetActive(true);
         btnShop.GetComponent<Button>().interactable = false;
-        panelOverSetting.SetActive(true);
         animShop.SetTrigger("openShop");
     }
 
@@ -510,7 +509,6 @@ public class myGUI : MonoBehaviour {
         {
             timer.enabled = false;
             panelCoverPnlBet.SetActive(true);
-            isHeldDown = false;
         }
         else
         {
@@ -541,7 +539,7 @@ public class myGUI : MonoBehaviour {
         {
             for (int i = 0; i < 8; i++)
             {
-                if (test[i] == true)
+                if (arrayBtnBet[i] == true)
                 {
                     btnBetClick(i);
                 }
@@ -584,15 +582,13 @@ public class myGUI : MonoBehaviour {
 
     public void btnDown(int number)
     {
-        test[number] = true;
-        isHeldDown = true;
+        arrayBtnBet[number] = true;
         flag = number;
     }
 
     public void btnUp(int number)
     {
-        test[number] = false;
-        isHeldDown = false;
+        arrayBtnBet[number] = false;
     }
 
     private IEnumerator countdown()
@@ -697,4 +693,12 @@ public class myGUI : MonoBehaviour {
 		}
 	}
 
+    // edit profile
+    public void editAccountClick() {
+        pnlEditProfile.SetActive(true);
+    }
+
+    public void btnExitEditAcc() {
+        pnlEditProfile.SetActive(false);
+    }
 }

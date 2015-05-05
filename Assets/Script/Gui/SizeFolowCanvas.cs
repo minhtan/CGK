@@ -29,7 +29,6 @@ public class SizeFolowCanvas : MonoBehaviour {
 	public GameObject imgAnimalWin;
 	//chinh size cho cac o bet
 	public GameObject imgBet;
-	private RectTransform rectImgBet;
 	private float numBet = 46.0f;
 	private float Size_IMG_BET = 115.2f;
 	private RectTransform rectTxtBet;
@@ -42,7 +41,6 @@ public class SizeFolowCanvas : MonoBehaviour {
         //rectTimeBet = panelTimeBet.GetComponent<RectTransform>();
         rectCoverPnlBet = panelCoverPanelBet.GetComponent<RectTransform>();
         //rectAcount = panelAcount.GetComponent<RectTransform>();
-		rectImgBet = imgBet.GetComponent<RectTransform>();
 		rectTxtBet = pnlTxtBet.GetComponent<RectTransform>();
     }
 
