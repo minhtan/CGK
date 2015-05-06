@@ -7,48 +7,18 @@ using Parse;
 
 public class Account : MonoBehaviour {
 
-    //signUp
-    public Text inpEmail;
-    public Text inpPhone;
-    public Text inpUsername_Up;
-    public InputField inRePassword;
-    public InputField inpPassword_Up;
+    private GetMyInput getInput;
 
-    //change account
-
-    private string getEmailInput() {
-        return inpEmail.text;
-    }
-
-    private string getPhoneInput() {
-        return inpPhone.text;
-    }
-
-    private string getUsernameUp() {
-        return inpUsername_Up.text;
-    }
-
-    private string getPasswordUp() {
-        return inpPassword_Up.text;
-    }
-    private bool checkString(string username, string password) {
-        if (username.Length > 2 && password.Length > 2)
-        { 
-            return true;
-        }        
-        return false;
-    }
-
-    private string getRePassword() {
-        return inRePassword.text;
+    void Start() {
+        getInput = GameObject.Find("GetMyInput").GetComponent<GetMyInput>();
     }
 
 	public void signUp(){
-		string username = getUsernameUp ();
-		string password = getPasswordUp ();
-        string rePassword = getRePassword();
-        string email = getEmailInput();
-        string phone = getPhoneInput();
+		string username = getInput.getUsernameUp ();
+        string password = getInput.getPasswordUp();
+        string rePassword = getInput.getRePassword();
+        string email = getInput.getEmailInput();
+        string phone = getInput.getPhoneInput();
         if (!RegexString.checkString(username, password))
         {
             Notification.messageError("Tên người dùng hoặc mật khẩu phải có nhiều hơn 2 kí tự", Notification.WARRNING_ERROR);
@@ -186,4 +156,52 @@ public class Account : MonoBehaviour {
             }
         });
     }
+
+    public void changePass() {
+        string oldPass = getInput.getOldPass();
+        string newPass = getInput.getNewPass();
+        IDictionary<string, object> dict = new Dictionary<string, object>()
+		    {
+			    {"oldPass", oldPass},
+			    {"newPass", newPass}
+		    };
+        ParseCloud.CallFunctionAsync<IDictionary<string, object>>("changePass", dict).ContinueWith(t =>
+        {
+            if (t.IsFaulted)
+            {
+                using (IEnumerator<System.Exception> enumerator = t.Exception.InnerExceptions.GetEnumerator())
+                {
+                    if (enumerator.MoveNext())
+                    {
+                        ParseException error = (ParseException)enumerator.Current;
+                        Debug.Log("Error: " + error.Code + ", " + error.Message);
+                        //Notification.messageError("Không có kết nối mạng", Notification.WARRNING_ERROR);
+                    }
+                }
+            }
+            else
+            {
+                IDictionary<string, object> result = t.Result;
+                object errorCode;
+                if (result.TryGetValue("errorCode", out errorCode))
+                {
+                    Debug.Log("Error: " + result["errorCode"] + ", " + result["message"]);
+                    int numberError = System.Convert.ToInt32(result["errorCode"]);
+                    if (numberError == 3)
+                    {
+                        Notification.messageError("Người dùng không hợp lệ", Notification.WARRNING_ERROR);
+                    }else if(numberError == 7){
+                        Notification.messageError("Mật khẩu cũ không đúng", Notification.WARRNING_ERROR);
+                    }
+                }
+                else
+                {
+                    Notification.messageError("Đổi mật khẩu thành công", Notification.WARRNING_ERROR);
+                    Debug.Log("Success: " + result["successCode"]);
+                }
+            }
+        });
+
+    }
+
 }

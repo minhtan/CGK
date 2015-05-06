@@ -5,10 +5,10 @@ using System;
 using System.Collections.Generic;
 public class myGUI : MonoBehaviour {
 
-    //public GameObject signInPanel;
     public GameObject storePanel;
     private static myGUI mg;
     private int flag;
+    private GetMyInput getInput;
     // animation cac button;
     public Animator animShop;
     // nut start bet
@@ -21,10 +21,6 @@ public class myGUI : MonoBehaviour {
     //panel login
     public Account account;
     public Animator animCanvasLogin;
-    public Text placeHolderUsername;
-    public Text placeHolderPass;
-    public GameObject inputPass;
-    public GameObject inputUser;
     public GameObject panelDoorLeft;
     public GameObject panelDoorRight;
     public GameObject btnLogin;
@@ -77,12 +73,7 @@ public class myGUI : MonoBehaviour {
     public GameObject pnlEditPhone;
     private bool isClickEdit = false;
     private int numberBtnEdit;
-    //Edit pass
-    public InputField inputOldPass;
-    public InputField inputNewPass;
-    public InputField inputReNewPass;
-    //edit email
-    public InputField inputNewEmail;
+
 
     void Awake() { 
         rectAnimal = panelAnimal.GetComponent<RectTransform>();
@@ -99,7 +90,7 @@ public class myGUI : MonoBehaviour {
     void Start() {
         mg = this;
         checkCurrentUser();
-        
+        getInput = GameObject.Find("GetMyInput").GetComponent<GetMyInput>();
         StartCoroutine((stopBetClick));
     }
 
@@ -484,8 +475,8 @@ public class myGUI : MonoBehaviour {
         {
             Notification.messageError("Tên người dùng hoặc mật khẩu không hợp lệ", Notification.WARRNING_ERROR);
         }
-        inputPass.GetComponent<InputField>().text = "";
-        inputUser.GetComponent<InputField>().text = "";
+        getInput.inputPass.text = "";
+        getInput.inputUser.text = "";
     }
 
     private IEnumerator guiReset() {
@@ -693,12 +684,12 @@ public class myGUI : MonoBehaviour {
 
     private string getUsernameInput()
     {
-        return inputUser.GetComponent<InputField>().text;
+        return getInput.inputUser.GetComponent<InputField>().text;
     }
 
     private string getPasswordInput()
     {
-        return inputPass.GetComponent<InputField>().text;
+        return getInput.inputPass.GetComponent<InputField>().text;
     }
 	
     public static void loginFaild()
@@ -741,18 +732,4 @@ public class myGUI : MonoBehaviour {
         pnlEditEmail.SetActive(isEmail);
         pnlEditPhone.SetActive(isPhone);
     }
-
-    private string getOldPass() {
-        return inputOldPass.GetComponent<InputField>().text;
-    }
-
-    private string getNewPass() { 
-        return inputNewPass.GetComponent<InputField>().text;
-    }
-
-    private string getReNewPass() { 
-        return inputReNewPass.GetComponent<InputField>().text;
-    }
-
-
 }
