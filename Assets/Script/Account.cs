@@ -14,6 +14,8 @@ public class Account : MonoBehaviour {
     public InputField inRePassword;
     public InputField inpPassword_Up;
 
+    //change account
+
     private string getEmailInput() {
         return inpEmail.text;
     }
