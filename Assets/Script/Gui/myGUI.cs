@@ -70,8 +70,13 @@ public class myGUI : MonoBehaviour {
     // array button bet
     private bool[] arrayBtnBet;
     private IEnumerator stopBetClick;
-    //
+    //edit account
     public GameObject pnlEditProfile;
+    public GameObject pnlEditPass;
+    public GameObject pnlEditEmail;
+    public GameObject pnlEditPhone;
+    private bool isClickEdit = false;
+    private int numberBtnEdit;
 
     void Awake() { 
         rectAnimal = panelAnimal.GetComponent<RectTransform>();
@@ -142,6 +147,23 @@ public class myGUI : MonoBehaviour {
         if (isRepeatCycle && !isLogout)
         {
             resetCycle();
+        }
+        if(isClickEdit){
+            isClickEdit = false;
+            switch(numberBtnEdit){
+                case 0:
+                    setActivePnlEdit(true, false, false);
+                    break;
+                case 1:
+                    setActivePnlEdit(false, true, false);
+                    break;
+                case 2:
+                    setActivePnlEdit(false, false, true);
+                    break;
+                default:
+                    setActivePnlEdit(true, false, false);
+                    break;
+            }
         }
     }
 
@@ -700,5 +722,17 @@ public class myGUI : MonoBehaviour {
 
     public void btnExitEditAcc() {
         pnlEditProfile.SetActive(false);
+    }
+
+
+    public void btnEditPass(int number) {
+        isClickEdit = true;
+        numberBtnEdit = number;
+    }
+
+    private void setActivePnlEdit(bool isPass, bool isEmail, bool isPhone) {
+        pnlEditPass.SetActive(isPass);
+        pnlEditEmail.SetActive(isEmail);
+        pnlEditPhone.SetActive(isPhone);
     }
 }
