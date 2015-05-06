@@ -28,6 +28,7 @@ public class SoundControlCS : MonoBehaviour {
     public void playWinCoin(){
 	    soundEfct.clip = soundWinCoin;
 	    soundEfct.Play();
+        soundBG.Stop();
     }
 
     public void adjustVol(bool musicState){
@@ -58,6 +59,7 @@ public class SoundControlCS : MonoBehaviour {
 
     public void stopWinCoin() {
         soundEfct.Stop();
+        soundBG.Play();
     }
 
 	public void stopBgSound(){

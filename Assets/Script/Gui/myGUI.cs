@@ -51,7 +51,7 @@ public class myGUI : MonoBehaviour {
     private int presentCoin;
     private bool isRepeatCycle = false;
     //timer
-    private int totalTimeRuning = 50;
+    private int totalTimeRuning = 10;
     private bool isCoinServer = false;
     public GameObject txtTimer;
     // SignUp
