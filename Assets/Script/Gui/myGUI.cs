@@ -77,6 +77,12 @@ public class myGUI : MonoBehaviour {
     public GameObject pnlEditPhone;
     private bool isClickEdit = false;
     private int numberBtnEdit;
+    //Edit pass
+    public InputField inputOldPass;
+    public InputField inputNewPass;
+    public InputField inputReNewPass;
+    //edit email
+    public InputField inputNewEmail;
 
     void Awake() { 
         rectAnimal = panelAnimal.GetComponent<RectTransform>();
@@ -725,7 +731,7 @@ public class myGUI : MonoBehaviour {
     }
 
 
-    public void btnEditPass(int number) {
+    public void btnEditAccount(int number) {
         isClickEdit = true;
         numberBtnEdit = number;
     }
@@ -735,4 +741,18 @@ public class myGUI : MonoBehaviour {
         pnlEditEmail.SetActive(isEmail);
         pnlEditPhone.SetActive(isPhone);
     }
+
+    private string getOldPass() {
+        return inputOldPass.GetComponent<InputField>().text;
+    }
+
+    private string getNewPass() { 
+        return inputNewPass.GetComponent<InputField>().text;
+    }
+
+    private string getReNewPass() { 
+        return inputReNewPass.GetComponent<InputField>().text;
+    }
+
+
 }

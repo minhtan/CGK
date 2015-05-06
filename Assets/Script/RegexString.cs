@@ -36,4 +36,11 @@ public class RegexString : MonoBehaviour {
         }
         return false;
     }
+
+    public static bool checkString3(string text1, string text2, string text3) { 
+        if(text1.Length > 2 && text2.Length > 2 && text3.Length > 2){
+            return true;
+        }
+        return false;
+    }
 }
