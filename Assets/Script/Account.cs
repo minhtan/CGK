@@ -21,7 +21,7 @@ public class Account : MonoBehaviour {
         string phone = getInput.getPhoneInput();
         if (!RegexString.checkString(username, password))
         {
-            Notification.messageError("Tên người dùng hoặc mật khẩu phải có nhiều hơn 2 kí tự", Notification.WARRNING_ERROR);
+            Notification.messageError("Tên người dùng hoặc ", Notification.WARRNING_ERROR);
         }
         else if (RegexString.isValid(username, RegexString.usernameReg) && RegexString.isValid(password, RegexString.passReg)
         && RegexString.checkRePass(password, rePassword) && RegexString.isValid(email, RegexString.emailReg) && RegexString.isValid(phone, RegexString.phoneReg))
@@ -160,48 +160,61 @@ public class Account : MonoBehaviour {
     public void changePass() {
         string oldPass = getInput.getOldPass();
         string newPass = getInput.getNewPass();
-        IDictionary<string, object> dict = new Dictionary<string, object>()
-		    {
-			    {"oldPass", oldPass},
-			    {"newPass", newPass}
-		    };
-        ParseCloud.CallFunctionAsync<IDictionary<string, object>>("changePass", dict).ContinueWith(t =>
-        {
-            if (t.IsFaulted)
-            {
-                using (IEnumerator<System.Exception> enumerator = t.Exception.InnerExceptions.GetEnumerator())
-                {
-                    if (enumerator.MoveNext())
-                    {
-                        ParseException error = (ParseException)enumerator.Current;
-                        Debug.Log("Error: " + error.Code + ", " + error.Message);
-                        //Notification.messageError("Không có kết nối mạng", Notification.WARRNING_ERROR);
-                    }
-                }
-            }
-            else
-            {
-                IDictionary<string, object> result = t.Result;
-                object errorCode;
-                if (result.TryGetValue("errorCode", out errorCode))
-                {
-                    Debug.Log("Error: " + result["errorCode"] + ", " + result["message"]);
-                    int numberError = System.Convert.ToInt32(result["errorCode"]);
-                    if (numberError == 3)
-                    {
-                        Notification.messageError("Người dùng không hợp lệ", Notification.WARRNING_ERROR);
-                    }else if(numberError == 7){
-                        Notification.messageError("Mật khẩu cũ không đúng", Notification.WARRNING_ERROR);
-                    }
-                }
-                else
-                {
-                    Notification.messageError("Đổi mật khẩu thành công", Notification.WARRNING_ERROR);
-                    Debug.Log("Success: " + result["successCode"]);
-                }
-            }
-        });
+		string reNewPass = getInput.getRePassword();
+		if(RegexString.checkString3(oldPass, newPass, reNewPass)){
+			if(RegexString.checkRePass(newPass, reNewPass)){
+				if(RegexString.isValid(newPass, RegexString.passReg)){
+					IDictionary<string, object> dict = new Dictionary<string, object>()
+					{
+						{"oldPass", oldPass},
+						{"newPass", newPass}
+					};
+					ParseCloud.CallFunctionAsync<IDictionary<string, object>>("changePass", dict).ContinueWith(t =>
+					                                                                                           {
+						if (t.IsFaulted)
+						{
+							using (IEnumerator<System.Exception> enumerator = t.Exception.InnerExceptions.GetEnumerator())
+							{
+								if (enumerator.MoveNext())
+								{
+									ParseException error = (ParseException)enumerator.Current;
+									Debug.Log("Error: " + error.Code + ", " + error.Message);
+									//Notification.messageError("Không có kết nối mạng", Notification.WARRNING_ERROR);
+								}
+							}
+						}
+						else
+						{
+							IDictionary<string, object> result = t.Result;
+							object errorCode;
+							if (result.TryGetValue("errorCode", out errorCode))
+							{
+								Debug.Log("Error: " + result["errorCode"] + ", " + result["message"]);
+								int numberError = System.Convert.ToInt32(result["errorCode"]);
+								if (numberError == 3)
+								{
+									Notification.messageError("Người dùng không hợp lệ", Notification.WARRNING_ERROR);
+								}else if(numberError == 7){
+									Notification.messageError("Mật khẩu cũ không đúng", Notification.WARRNING_ERROR);
+								}
+							}
+							else
+							{
+								Notification.messageError("Đổi mật khẩu thành công", Notification.WARRNING_ERROR);
+								Debug.Log("Success: " + result["successCode"]);
+							}
+						}
+					});
+				}else{
+					Notification.messageError("Mật khẩu không được chứa ký tự đặc biệt", Notification.WARRNING_ERROR);
+				}
 
+			}else{
+				Notification.messageError("Nhập lại mật khẩu không đúng", Notification.WARRNING_ERROR);
+			}
+		}else{
+			Notification.messageError("Mật khẩu phải có nhiều hơn 2 kí tự", Notification.WARRNING_ERROR);
+		}
     }
 
 }

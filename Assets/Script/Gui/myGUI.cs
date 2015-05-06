@@ -227,7 +227,7 @@ public class myGUI : MonoBehaviour {
             SoundControlCS.sound.playWinCoin();
             if (deltaCoin < 50)
             {
-				deltaTime = 0.25f;
+				deltaTime = 0.15f;
 			}else if(deltaCoin >= 50 && deltaCoin < 100){
 				deltaTime = 0.125f;
 				Debug.Log("11111111111");
