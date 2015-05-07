@@ -68,7 +68,6 @@ public class Account : MonoBehaviour {
                     }
                     else
                     {
-                        myGUI.checkCurrentUser();
                         Notification.messageError("Đăng ký thành công", Notification.WARRNING_ERROR);
                         Debug.Log("Success: " + result["successCode"]);
                     }
@@ -100,14 +99,13 @@ public class Account : MonoBehaviour {
                         }
                     }
                 }
-                
-                
                 myGUI.loginFaild();
             }
             else
             {
                 Debug.Log("Sign in successfully");
                 Bet.bet.getMyCoin();
+                Debug.Log(ParseUser.CurrentUser.ToString());
             }
         });
 	}
@@ -214,4 +212,119 @@ public class Account : MonoBehaviour {
         }
     }
 
+    public void changeEmail() {
+        string newEmail = getInput.getNewEmail();
+        string confirmEmail = getInput.getPassConfirmEmail();
+        if(!RegexString.isValid(newEmail, RegexString.emailReg)){
+            Notification.messageError("Email không hợp lệ", Notification.WARRNING_ERROR);
+        }
+        else if (!RegexString.isValid(confirmEmail, RegexString.passReg))
+        {
+            Notification.messageError("Mật khẩu không hợp lệ", Notification.WARRNING_ERROR);
+        }
+        else {
+            IDictionary<string, object> dict = new Dictionary<string, object>()
+			{
+				{"newEmail", newEmail},
+				{"oldPass", confirmEmail}
+			};
+            ParseCloud.CallFunctionAsync<IDictionary<string, object>>("changeEmail", dict).ContinueWith(t =>
+            {
+                if (t.IsFaulted)
+                {
+                    using (IEnumerator<System.Exception> enumerator = t.Exception.InnerExceptions.GetEnumerator())
+                    {
+                        if (enumerator.MoveNext())
+                        {
+                            ParseException error = (ParseException)enumerator.Current;
+                            Debug.Log("Error: " + error.Code + ", " + error.Message);
+                            //Notification.messageError("Không có kết nối mạng", Notification.WARRNING_ERROR);
+                        }
+                    }
+                }
+                else
+                {
+                    IDictionary<string, object> result = t.Result;
+                    object errorCode;
+                    if (result.TryGetValue("errorCode", out errorCode))
+                    {
+                        Debug.Log("Error: " + result["errorCode"] + ", " + result["message"]);
+                        int numberError = System.Convert.ToInt32(result["errorCode"]);
+                        if (numberError == 3)
+                        {
+                            Notification.messageError("Người dùng không hợp lệ", Notification.WARRNING_ERROR);
+                        }
+                        else if (numberError == 7)
+                        {
+                            Notification.messageError("Mật khẩu không đúng", Notification.WARRNING_ERROR);
+                        }
+                    }
+                    else
+                    {
+                        myGUI.successChangeEmail(System.Convert.ToString(result["newMail"]));
+                        Notification.messageError("Đổi email thành công", Notification.WARRNING_ERROR);
+                        Debug.Log("Success: " + result["successCode"]);
+                    }
+                }
+            });
+        }
+    }
+
+    public void changePhone() {
+        string newPhone = getInput.getNewPhone();
+        string passConfirmPhone = getInput.getPassConfirmPhone();
+        if(!RegexString.isValid(newPhone, RegexString.phoneReg)){
+            Notification.messageError("Số điện thoại không hợp lệ", Notification.WARRNING_ERROR);
+        }
+        else if (!RegexString.isValid(passConfirmPhone, RegexString.passReg))
+        {
+            Notification.messageError("Mật khẩu không hợp lệ", Notification.WARRNING_ERROR);
+        }
+        else {
+            IDictionary<string, object> dict = new Dictionary<string, object>()
+			{
+				{"newPhone", newPhone},
+				{"oldPass", passConfirmPhone}
+			};
+            ParseCloud.CallFunctionAsync<IDictionary<string, object>>("changePhone", dict).ContinueWith(t =>
+            {
+                if (t.IsFaulted)
+                {
+                    using (IEnumerator<System.Exception> enumerator = t.Exception.InnerExceptions.GetEnumerator())
+                    {
+                        if (enumerator.MoveNext())
+                        {
+                            ParseException error = (ParseException)enumerator.Current;
+                            Debug.Log("Error: " + error.Code + ", " + error.Message);
+                            //Notification.messageError("Không có kết nối mạng", Notification.WARRNING_ERROR);
+                        }
+                    }
+                }
+                else
+                {
+                    IDictionary<string, object> result = t.Result;
+                    object errorCode;
+                    if (result.TryGetValue("errorCode", out errorCode))
+                    {
+                        Debug.Log("Error: " + result["errorCode"] + ", " + result["message"]);
+                        int numberError = System.Convert.ToInt32(result["errorCode"]);
+                        if (numberError == 3)
+                        {
+                            Notification.messageError("Người dùng không hợp lệ", Notification.WARRNING_ERROR);
+                        }
+                        else if (numberError == 7)
+                        {
+                            Notification.messageError("Mật khẩu không đúng", Notification.WARRNING_ERROR);
+                        }
+                    }
+                    else
+                    {
+                        myGUI.successChangePhone(System.Convert.ToString(result["newPhone"]));
+                        Notification.messageError("Đổi số điện thoại thành công", Notification.WARRNING_ERROR);
+                        Debug.Log("Success: " + result["successCode"]);
+                    }
+                }
+            });
+        }
+    }
 }

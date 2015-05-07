@@ -73,7 +73,10 @@ public class myGUI : MonoBehaviour {
     public GameObject pnlEditPhone;
     private bool isClickEdit = false;
     private int numberBtnEdit;
-
+    private string currentPhone;
+    public Text txtCurrentPhone;
+    public Text txtCurrentEmail;
+    private string currentEmail;
 
     void Awake() { 
         rectAnimal = panelAnimal.GetComponent<RectTransform>();
@@ -92,12 +95,13 @@ public class myGUI : MonoBehaviour {
         checkCurrentUser();
         getInput = GameObject.Find("GetMyInput").GetComponent<GetMyInput>();
         StartCoroutine((stopBetClick));
+
     }
 
-    public static void checkCurrentUser(){
+    private void checkCurrentUser(){
         if (Account.hasCurrentUser())
         {
-            mg.animCanvasLogin.SetTrigger("login_skip_gd1");
+            animCanvasLogin.SetTrigger("login_skip_gd1");
             Bet.bet.getMyCoin();
         }
     }
@@ -133,6 +137,8 @@ public class myGUI : MonoBehaviour {
             animCanvasLogin.SetTrigger("login_gd3");
             canvasGame.SetActive(true);
             textCoin.text = presentCoin + "";
+            txtCurrentPhone.text = currentPhone;
+            txtCurrentEmail.text = currentEmail;
         }
 
         if (serverFlag && !isCycleRunning)
@@ -162,11 +168,21 @@ public class myGUI : MonoBehaviour {
                     break;
             }
         }
+        if(isChangeEmail){
+            isChangeEmail = false;
+            txtCurrentEmail.text = currentEmail;
+        }
+        if(isChangePhone){
+            isChangePhone = false;
+            txtCurrentPhone.text = currentPhone;
+        }
     }
 
     //lay coin tu server ve khi login
-    public static void getCoinServer(int coin) {
+    public static void getUserInfo(int coin, string phone, string email) {
         mg.presentCoin = coin;
+        mg.currentPhone = phone;
+        mg.currentEmail = email;
         mg.isCoinServer = true;
     }
 
@@ -732,4 +748,19 @@ public class myGUI : MonoBehaviour {
         pnlEditEmail.SetActive(isEmail);
         pnlEditPhone.SetActive(isPhone);
     }
+
+    private bool isChangeEmail = false;
+    private bool isChangePhone = false;
+
+    public static void successChangeEmail(string newEmail) {
+        mg.isChangeEmail = true;
+        mg.currentEmail = newEmail;
+    }
+
+    public static void successChangePhone(string newPhone) {
+        mg.isChangePhone = true;
+        mg.currentPhone = newPhone; 
+    }
+
+    
 }

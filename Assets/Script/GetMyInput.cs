@@ -20,6 +20,12 @@ public class GetMyInput : MonoBehaviour {
     public InputField inputOldPass;
     public InputField inputNewPass;
     public InputField inputReNewPass;
+    //edit email
+    public InputField inputNewEmail;
+    public InputField inputPassMail;
+    //edit phone
+    public InputField inputNewPhone;
+    public InputField inputPassPhone;
 
     public string getEmailInput()
     {
@@ -61,5 +67,22 @@ public class GetMyInput : MonoBehaviour {
     {
         return inputReNewPass.text;
     }
-    
+    //edit mail
+    public string getNewEmail() {
+        return inputNewEmail.text;
+    }
+
+    public string getPassConfirmEmail() {
+        return inputPassMail.text;
+    }
+
+    //edit phone
+    public string getNewPhone() {
+        return inputNewPhone.text;
+    }
+
+    public string getPassConfirmPhone() {
+        return inputPassPhone.text;
+    }
+
 }

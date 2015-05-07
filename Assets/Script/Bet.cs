@@ -38,7 +38,7 @@ public class Bet : MonoBehaviour {
 					} else {
 						coin = Convert.ToInt32(result["coin"]);
 						Debug.Log(coin);
-                        myGUI.getCoinServer(coin);
+                        myGUI.getUserInfo(coin, System.Convert.ToString(result["phone"]), ParseUser.CurrentUser.Email);
 					}
 				}
 			});
