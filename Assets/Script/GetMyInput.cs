@@ -49,17 +49,17 @@ public class GetMyInput : MonoBehaviour {
     //edit pass
     public string getOldPass()
     {
-        return inputOldPass.GetComponent<InputField>().text;
+        return inputOldPass.text;
     }
 
     public string getNewPass()
     {
-        return inputNewPass.GetComponent<InputField>().text;
+        return inputNewPass.text;
     }
 
     public string getReNewPass()
     {
-        return inputReNewPass.GetComponent<InputField>().text;
+        return inputReNewPass.text;
     }
     
 }
