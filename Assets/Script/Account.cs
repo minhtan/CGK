@@ -181,7 +181,7 @@ public class Account : MonoBehaviour {
                         {
                             ParseException error = (ParseException)enumerator.Current;
                             Debug.Log("Error: " + error.Code + ", " + error.Message);
-                            //Notification.messageError("Không có kết nối mạng", Notification.WARRNING_ERROR);
+                            Notification.messageError("Không có kết nối mạng", Notification.WARRNING_ERROR);
                         }
                     }
                 }
@@ -238,7 +238,7 @@ public class Account : MonoBehaviour {
                         {
                             ParseException error = (ParseException)enumerator.Current;
                             Debug.Log("Error: " + error.Code + ", " + error.Message);
-                            //Notification.messageError("Không có kết nối mạng", Notification.WARRNING_ERROR);
+                            Notification.messageError("Không có kết nối mạng", Notification.WARRNING_ERROR);
                         }
                     }
                 }
@@ -296,7 +296,7 @@ public class Account : MonoBehaviour {
                         {
                             ParseException error = (ParseException)enumerator.Current;
                             Debug.Log("Error: " + error.Code + ", " + error.Message);
-                            //Notification.messageError("Không có kết nối mạng", Notification.WARRNING_ERROR);
+                            Notification.messageError("Không có kết nối mạng", Notification.WARRNING_ERROR);
                         }
                     }
                 }

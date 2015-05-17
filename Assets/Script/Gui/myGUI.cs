@@ -235,8 +235,6 @@ public class myGUI : MonoBehaviour {
     //anim so coin tang len hoac giam di 
     private IEnumerator animCoin(int lastCoin) {
 		int deltaCoin = coinServer - lastCoin;
-		Debug.Log(lastCoin + "last coin");
-		Debug.Log(deltaCoin + "delta coin");
 		float deltaTime = 0;
         if (deltaCoin > 0)
         {
@@ -246,10 +244,8 @@ public class myGUI : MonoBehaviour {
 				deltaTime = 0.15f;
 			}else if(deltaCoin >= 50 && deltaCoin < 100){
 				deltaTime = 0.125f;
-				Debug.Log("11111111111");
 			}else if(deltaCoin >= 100 && deltaCoin < 200){
 				deltaTime = 0.083333f;
-				Debug.Log("11111111111");
 			}else if(deltaCoin >= 200 && deltaCoin < 400){
 				deltaTime = 0.05f;
 			}else if(deltaCoin >= 400 && deltaCoin < 800){
@@ -259,7 +255,6 @@ public class myGUI : MonoBehaviour {
 			}else if(deltaCoin >= 1600 && deltaCoin < 3001){
 				deltaTime = 0.02f;
 			}    
-			Debug.Log(deltaTime);
 			for (int i = lastCoin; i <= coinServer; i ++)
 			{
 				yield return new WaitForSeconds(deltaTime);
@@ -579,7 +574,7 @@ public class myGUI : MonoBehaviour {
                     btnBetClick(i);
                 }
             }
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.05f);
         }
     }
 
@@ -608,17 +603,9 @@ public class myGUI : MonoBehaviour {
 
     }
 
-    private IEnumerator btnBetDown()
-    {
-            btnBetClick(flag);
-            yield return new WaitForSeconds(0.01f);
-            textCoin.text = presentCoin + "";
-    }
-
     public void btnDown(int number)
     {
         arrayBtnBet[number] = true;
-        flag = number;
     }
 
     public void btnUp(int number)
