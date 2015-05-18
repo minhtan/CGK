@@ -21,7 +21,7 @@ public class Account : MonoBehaviour {
         string phone = getInput.getPhoneInput();
         if (!RegexString.checkString(username, password))
         {
-            Notification.messageError("Tên người dùng hoặc ", Notification.WARRNING_ERROR);
+            Notification.messageError("Tên người dùng hoặc mật khẩu phải dài hơn 2 ký tự", "Lỗi đăng ký", Notification.WARRNING_ERROR);
         }
         else if (RegexString.isValid(username, RegexString.usernameReg) && RegexString.isValid(password, RegexString.passReg)
         && RegexString.checkRePass(password, rePassword) && RegexString.isValid(email, RegexString.emailReg) && RegexString.isValid(phone, RegexString.phoneReg))
@@ -43,7 +43,7 @@ public class Account : MonoBehaviour {
                         {
                             ParseException error = (ParseException)enumerator.Current;
                             Debug.Log("Error: " + error.Code + ", " + error.Message);
-                            Notification.messageError("Không có kết nối mạng", Notification.WARRNING_ERROR);
+                            Notification.messageError("Không có kết nối mạng, kiểm tra kết nối mạng", "Lỗi mạng", Notification.WARRNING_ERROR);
                         }
                     }
                 }
@@ -57,25 +57,25 @@ public class Account : MonoBehaviour {
                         int numberError = System.Convert.ToInt32(result["errorCode"]);
                         if (numberError== 203)
                         {
-                            Notification.messageError("Email đăng ký đã tồn tại", Notification.WARRNING_ERROR);
+                            Notification.messageError("Email đăng ký đã tồn tại", "Lỗi đăng ký", Notification.WARRNING_ERROR);
                         }
                         else if (numberError == 202)
                         {
-                            Notification.messageError("Tên đăng ký đã tồn tại", Notification.WARRNING_ERROR);
+                            Notification.messageError("Tên đăng ký đã tồn tại", "Lỗi đăng ký", Notification.WARRNING_ERROR);
                         }else if(numberError == 2){
-                            Notification.messageError("Đăng ký không hợp lệ", Notification.WARRNING_ERROR);
+                            Notification.messageError("Đăng ký không hợp lệ", "Lỗi đăng ký", Notification.WARRNING_ERROR);
                         }
                     }
                     else
                     {
-                        Notification.messageError("Đăng ký thành công", Notification.WARRNING_ERROR);
+                        Notification.messageError("Đăng ký thành công", "", Notification.WARRNING_ERROR);
                         Debug.Log("Success: " + result["successCode"]);
                     }
                 }
             });
         }
         else {
-            Notification.messageError("Đọc hướng dẫn trước khi đăng ký", Notification.WARRNING_ERROR);
+            Notification.messageError("Đọc hướng dẫn trước khi đăng ký", "Lỗi đăng ký", Notification.WARRNING_ERROR);
         }	
 	}
 
@@ -92,10 +92,10 @@ public class Account : MonoBehaviour {
                         string[] errorNumber = System.Convert.ToString(error.Message).Split(' ');
                         if (errorNumber[0].Equals("404"))
                         {
-                            Notification.messageError("Lỗi đăng nhập", Notification.FORGOT_ERROR);
+                            Notification.messageError("Đăng nhập sai tài khoản", "Lỗi đăng nhập", Notification.FORGOT_ERROR);
                         }
                         else {
-                            Notification.messageError("Không có kết nối mạng", Notification.NETWORK_ERROR);
+                            Notification.messageError("Không có kết nối mạng", "Lỗi mạng", Notification.NETWORK_ERROR);
                         }
                     }
                 }
@@ -160,11 +160,11 @@ public class Account : MonoBehaviour {
         string newPass = getInput.getNewPass();
 		string reNewPass = getInput.getReNewPass();
 		if(!RegexString.checkString(oldPass, newPass)){
-            Notification.messageError("Mật khẩu phải có nhiều hơn 2 kí tự", Notification.WARRNING_ERROR);
+            Notification.messageError("Mật khẩu phải có nhiều hơn 2 kí tự", "Lỗi thay mật khẩu", Notification.WARRNING_ERROR);
         }else if(!RegexString.checkRePass(newPass, reNewPass)){
-            Notification.messageError("Nhập lại mật khẩu không đúng *", Notification.WARRNING_ERROR);
+            Notification.messageError("Nhập lại mật khẩu không đúng", "Lỗi thay mật khẩu", Notification.WARRNING_ERROR);
         }else if(!RegexString.isValid(newPass, RegexString.passReg)){
-            Notification.messageError("Mật khẩu không được chứa ký tự đặc biệt", Notification.WARRNING_ERROR);
+            Notification.messageError("Mật khẩu không được chứa ký tự đặc biệt", "Lỗi thay mật khẩu", Notification.WARRNING_ERROR);
         }else{
             IDictionary<string, object> dict = new Dictionary<string, object>()
 			{
@@ -181,7 +181,7 @@ public class Account : MonoBehaviour {
                         {
                             ParseException error = (ParseException)enumerator.Current;
                             Debug.Log("Error: " + error.Code + ", " + error.Message);
-                            Notification.messageError("Không có kết nối mạng", Notification.WARRNING_ERROR);
+                            Notification.messageError("Không có kết nối mạng, kiểm tra kết nối mạng", "Lỗi mạng", Notification.WARRNING_ERROR);
                         }
                     }
                 }
@@ -195,16 +195,16 @@ public class Account : MonoBehaviour {
                         int numberError = System.Convert.ToInt32(result["errorCode"]);
                         if (numberError == 3)
                         {
-                            Notification.messageError("Người dùng không hợp lệ", Notification.WARRNING_ERROR);
+                            Notification.messageError("Người dùng không hợp lệ", "Lỗi thay mật khẩu", Notification.WARRNING_ERROR);
                         }
                         else if (numberError == 7)
                         {
-                            Notification.messageError("Mật khẩu cũ không đúng", Notification.WARRNING_ERROR);
+                            Notification.messageError("Mật khẩu cũ không đúng", "Lỗi thay mật khẩu", Notification.WARRNING_ERROR);
                         }
                     }
                     else
                     {
-                        Notification.messageError("Đổi mật khẩu thành công", Notification.WARRNING_ERROR);
+                        Notification.messageError("Đổi mật khẩu thành công", "", Notification.WARRNING_ERROR);
                         Debug.Log("Success: " + result["successCode"]);
                     }
                 }
@@ -216,11 +216,11 @@ public class Account : MonoBehaviour {
         string newEmail = getInput.getNewEmail();
         string confirmEmail = getInput.getPassConfirmEmail();
         if(!RegexString.isValid(newEmail, RegexString.emailReg)){
-            Notification.messageError("Email không hợp lệ", Notification.WARRNING_ERROR);
+            Notification.messageError("Email không hợp lệ", "Lỗi thay đổi email", Notification.WARRNING_ERROR);
         }
         else if (!RegexString.isValid(confirmEmail, RegexString.passReg))
         {
-            Notification.messageError("Mật khẩu không hợp lệ", Notification.WARRNING_ERROR);
+            Notification.messageError("Mật khẩu không hợp lệ", "Lỗi thay đổi email", Notification.WARRNING_ERROR);
         }
         else {
             IDictionary<string, object> dict = new Dictionary<string, object>()
@@ -238,7 +238,7 @@ public class Account : MonoBehaviour {
                         {
                             ParseException error = (ParseException)enumerator.Current;
                             Debug.Log("Error: " + error.Code + ", " + error.Message);
-                            Notification.messageError("Không có kết nối mạng", Notification.WARRNING_ERROR);
+                            Notification.messageError("Không có kết nối mạng", "Lỗi mạng", Notification.WARRNING_ERROR);
                         }
                     }
                 }
@@ -252,17 +252,17 @@ public class Account : MonoBehaviour {
                         int numberError = System.Convert.ToInt32(result["errorCode"]);
                         if (numberError == 3)
                         {
-                            Notification.messageError("Người dùng không hợp lệ", Notification.WARRNING_ERROR);
+                            Notification.messageError("Người dùng không hợp lệ", "Lỗi thay đổi email", Notification.WARRNING_ERROR);
                         }
                         else if (numberError == 7)
                         {
-                            Notification.messageError("Mật khẩu không đúng", Notification.WARRNING_ERROR);
+                            Notification.messageError("Mật khẩu không đúng", "Lỗi thay đổi email", Notification.WARRNING_ERROR);
                         }
                     }
                     else
                     {
                         myGUI.successChangeEmail(System.Convert.ToString(result["newMail"]));
-                        Notification.messageError("Đổi email thành công", Notification.WARRNING_ERROR);
+                        Notification.messageError("Đổi email thành công", "", Notification.WARRNING_ERROR);
                         Debug.Log("Success: " + result["successCode"]);
                     }
                 }
@@ -274,11 +274,11 @@ public class Account : MonoBehaviour {
         string newPhone = getInput.getNewPhone();
         string passConfirmPhone = getInput.getPassConfirmPhone();
         if(!RegexString.isValid(newPhone, RegexString.phoneReg)){
-            Notification.messageError("Số điện thoại không hợp lệ", Notification.WARRNING_ERROR);
+            Notification.messageError("Số điện thoại không hợp lệ", "Lỗi thay đổi số điện thoại", Notification.WARRNING_ERROR);
         }
         else if (!RegexString.isValid(passConfirmPhone, RegexString.passReg))
         {
-            Notification.messageError("Mật khẩu không hợp lệ", Notification.WARRNING_ERROR);
+            Notification.messageError("Mật khẩu không hợp lệ", "Lỗi thay đổi số điện thoại", Notification.WARRNING_ERROR);
         }
         else {
             IDictionary<string, object> dict = new Dictionary<string, object>()
@@ -296,7 +296,7 @@ public class Account : MonoBehaviour {
                         {
                             ParseException error = (ParseException)enumerator.Current;
                             Debug.Log("Error: " + error.Code + ", " + error.Message);
-                            Notification.messageError("Không có kết nối mạng", Notification.WARRNING_ERROR);
+                            Notification.messageError("Không có kết nối mạng", "Lỗi mạng", Notification.WARRNING_ERROR);
                         }
                     }
                 }
@@ -310,17 +310,17 @@ public class Account : MonoBehaviour {
                         int numberError = System.Convert.ToInt32(result["errorCode"]);
                         if (numberError == 3)
                         {
-                            Notification.messageError("Người dùng không hợp lệ", Notification.WARRNING_ERROR);
+                            Notification.messageError("Người dùng không hợp lệ", "Lỗi thay đổi số điện thoại", Notification.WARRNING_ERROR);
                         }
                         else if (numberError == 7)
                         {
-                            Notification.messageError("Mật khẩu không đúng", Notification.WARRNING_ERROR);
+                            Notification.messageError("Mật khẩu không đúng", "Lỗi thay đổi số điện thoại", Notification.WARRNING_ERROR);
                         }
                     }
                     else
                     {
                         myGUI.successChangePhone(System.Convert.ToString(result["newPhone"]));
-                        Notification.messageError("Đổi số điện thoại thành công", Notification.WARRNING_ERROR);
+                        Notification.messageError("Đổi số điện thoại thành công", "", Notification.WARRNING_ERROR);
                         Debug.Log("Success: " + result["successCode"]);
                     }
                 }

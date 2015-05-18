@@ -6,11 +6,13 @@ public class Notification : MonoBehaviour {
 
     public GameObject panelError;
     public Text message;
+    public Text titleError;
     public static Notification notify;
     System.Net.WebClient client;
     System.IO.Stream stream;
     private bool isError = false;
     private string textError;
+    private string textTitle;
     public GameObject btnSignIn;
     public GameObject txtForgotMeNot;
     private bool isForgotError = false;
@@ -20,7 +22,6 @@ public class Notification : MonoBehaviour {
     public static int END_COIN = 3;
     public static int RELOAD_SENCE = 4;
     private bool isNetworkError = false;
-    public GameObject panelZeroCoin;
     public Animator animShop;
     public GameObject panelMainError;
     private bool isReloadSence = false;
@@ -36,6 +37,7 @@ public class Notification : MonoBehaviour {
         {
             panelError.SetActive(true);
             message.text = textError;
+            titleError.text = textTitle;
         }
         else {
             panelError.SetActive(false);
@@ -69,7 +71,7 @@ public class Notification : MonoBehaviour {
         btnSignIn.GetComponent<Button>().interactable = true;     
     }
 
-    public static void messageError(string message, int errorCode)
+    public static void messageError(string message, string title, int errorCode)
     {
         switch(errorCode){
             case 0:
@@ -85,7 +87,8 @@ public class Notification : MonoBehaviour {
                 break;
         }
         notify.isError = true;
-        notify.textError = message;   
+        notify.textError = message;
+        notify.textTitle = title;
     }
 
     public static bool isConectInternet()
@@ -101,7 +104,7 @@ public class Notification : MonoBehaviour {
         catch (Exception ex)
         {
             Debug.Log(ex);
-            messageError("Không có kết nối mạng", Notification.NETWORK_ERROR);
+            messageError("Không có kết nối mạng, kiểm tra kết nối mạng", "Lỗi mạng", Notification.NETWORK_ERROR);
             return false;
         }
     }

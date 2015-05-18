@@ -475,7 +475,7 @@ public class myGUI : MonoBehaviour {
         isLogout = false;
         if (!RegexString.checkString(username, password))
         {
-            Notification.messageError("Tên người dùng hoặc mật khẩu phải có nhiều hơn 2 kí tự", Notification.WARRNING_ERROR);
+            Notification.messageError("Tên người dùng hoặc mật khẩu phải có nhiều hơn 2 kí tự", "Lỗi đăng nhập", Notification.WARRNING_ERROR);
         }
         else if (RegexString.isValid(username, RegexString.usernameReg) && RegexString.isValid(password, RegexString.passReg))
         {
@@ -484,7 +484,7 @@ public class myGUI : MonoBehaviour {
         }
         else
         {
-            Notification.messageError("Tên người dùng hoặc mật khẩu không hợp lệ", Notification.WARRNING_ERROR);
+            Notification.messageError("Tên người dùng hoặc mật khẩu không hợp lệ", "Lỗi đăng nhập", Notification.WARRNING_ERROR);
         }
         getInput.inputPass.text = "";
         getInput.inputUser.text = "";
@@ -574,7 +574,7 @@ public class myGUI : MonoBehaviour {
                     btnBetClick(i);
                 }
             }
-            yield return new WaitForSeconds(0.05f);
+            yield return new WaitForSeconds(0.1f);
         }
     }
 
@@ -584,7 +584,7 @@ public class myGUI : MonoBehaviour {
         int value = System.Convert.ToInt32(text.text);
         if (presentCoin < 1)
         {
-            Notification.messageError("Xèng của bạn không đủ để chơi tiếp. Vào shop để mua xèng", Notification.END_COIN);
+            Notification.messageError("Xèng của bạn không đủ để chơi tiếp. Vào shop để mua xèng", "", Notification.END_COIN);
         }
         else if (value < 99 && presentCoin > 0)
         {
@@ -749,5 +749,13 @@ public class myGUI : MonoBehaviour {
         mg.currentPhone = newPhone; 
     }
 
-    
+    public GameObject panelForgotMN;
+
+    public void btnForgotMNClick() {
+        panelForgotMN.SetActive(true);
+    }
+
+    public void btnExitForgotMN() { 
+        panelForgotMN.SetActive(false);
+    }
 }

@@ -9,6 +9,13 @@ public class languageVN : MonoBehaviour {
     public Text txtSignUp;
     public Text txtUser;
     public Text txtPass;
+    public Text txtBtnExit;
+    public Text txtForgotUser;
+    public Text txtTitleForgot;
+    public Text txtContentForgot;
+    public Text txtInputForgot;
+    public Text txtBtnOkForgot;
+    public Text txtBtnExitForgot;
     //text canvas game
     public Text txtStart;
     public Text txtTitleShop;
@@ -18,7 +25,6 @@ public class languageVN : MonoBehaviour {
     public Text txtTitleItem4;
     public Text txtTitleItem5;
     public Text txtTitleItem6;
-
     //text signUp
     public Text txtUserUp;
     public Text txtPassUp;
@@ -76,6 +82,12 @@ public class languageVN : MonoBehaviour {
         //edit phone
         txtNewPhone.text = "Số điện thoại mới";
         txtConfirmPhone.text = "Nhập password để xác nhận";
-
-	}
+        txtBtnExit.text = "Xác nhận";
+        txtForgotUser.text = "Bạn muốn lấy lại mật khẩu?";
+        txtTitleForgot.text = "Lấy lại mật khẩu";
+        txtContentForgot.text = "Mật khẩu của bạn sẽ được gửi vào hòm mail đã được đăng ký.";
+        txtInputForgot.text = "Email của bạn";
+        txtBtnOkForgot.text = "Đồng ý";
+        txtBtnExitForgot.text = "Bỏ qua";
+    }
 }
