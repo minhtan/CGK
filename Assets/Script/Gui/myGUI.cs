@@ -77,7 +77,16 @@ public class myGUI : MonoBehaviour {
     public Text txtCurrentPhone;
     public Text txtCurrentEmail;
     private string currentEmail;
+    public GameObject btnEditEmail;
+    public GameObject btnEditPass;
+    public GameObject btnEditPhone;
+    public Text txtBtnEditPass;
+    public Text txtBtnEditEmail;
+    public Text txtBtnEditPhone;
 
+
+    private bool isChangeEmail = false;
+    private bool isChangePhone = false;
     void Awake() { 
         rectAnimal = panelAnimal.GetComponent<RectTransform>();
         listAnimal = new List<GameObject>();
@@ -151,20 +160,30 @@ public class myGUI : MonoBehaviour {
         {
             resetCycle();
         }
-        if(isClickEdit){
+        if (isClickEdit)
+        {
             isClickEdit = false;
-            switch(numberBtnEdit){
+            switch (numberBtnEdit)
+            {
                 case 0:
                     setActivePnlEdit(true, false, false);
+                    changeColorButton(btnEditPass, btnEditEmail, btnEditPhone);
+                    changeColorText(txtBtnEditPass, txtBtnEditEmail, txtBtnEditPhone);
                     break;
                 case 1:
                     setActivePnlEdit(false, true, false);
+                    changeColorButton(btnEditEmail, btnEditPass, btnEditPhone);
+                    changeColorText(txtBtnEditEmail, txtBtnEditPass, txtBtnEditPhone);
                     break;
                 case 2:
                     setActivePnlEdit(false, false, true);
+                    changeColorButton(btnEditPhone, btnEditPass, btnEditEmail);
+                    changeColorText(txtBtnEditPhone, txtBtnEditEmail, txtBtnEditPass);
                     break;
                 default:
                     setActivePnlEdit(true, false, false);
+                    changeColorButton(btnEditPass, btnEditEmail, btnEditPhone);
+                    changeColorText(txtBtnEditPass, txtBtnEditEmail, txtBtnEditPhone);
                     break;
             }
         }
@@ -736,8 +755,18 @@ public class myGUI : MonoBehaviour {
         pnlEditPhone.SetActive(isPhone);
     }
 
-    private bool isChangeEmail = false;
-    private bool isChangePhone = false;
+    private void changeColorButton(GameObject obj1, GameObject obj2, GameObject obj3) {
+        Color blue = new Vector4(0.03f, 0f, 1f, 1f);
+        obj1.GetComponent<Image>().color = blue;
+        obj2.GetComponent<Image>().color = Color.white;
+        obj3.GetComponent<Image>().color = Color.white;
+    }
+
+    private void changeColorText(Text txt1, Text txt2, Text txt3) {
+        txt1.color = Color.white;
+        txt2.color = Color.black;
+        txt3.color = Color.black;
+    }
 
     public static void successChangeEmail(string newEmail) {
         mg.isChangeEmail = true;
@@ -757,5 +786,10 @@ public class myGUI : MonoBehaviour {
 
     public void btnExitForgotMN() { 
         panelForgotMN.SetActive(false);
+    }
+
+    public void btnEditPassClick() {
+        changeColorButton(btnEditPass, btnEditEmail, btnEditPhone);
+
     }
 }

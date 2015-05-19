@@ -37,6 +37,9 @@ public class languageVN : MonoBehaviour {
     public Text txtEditEmail;
     public Text txtEditPhone;
     public Text txtBtnEditAccount;
+    public Text txtTitleEditAccount;
+    public Text txtBtnChangeEmail;
+    public Text txtBtnChangePhone;
     //text editPass
     public Text txtOldPass;
     public Text txtNewPass;
@@ -89,5 +92,8 @@ public class languageVN : MonoBehaviour {
         txtInputForgot.text = "Email của bạn";
         txtBtnOkForgot.text = "Đồng ý";
         txtBtnExitForgot.text = "Bỏ qua";
+        txtBtnChangeEmail.text = "Đồng ý";
+        txtBtnChangePhone.text = "Đồng ý";
+        txtTitleEditAccount.text = "Thay đổi thông tin";
     }
 }
