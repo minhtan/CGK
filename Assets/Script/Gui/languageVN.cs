@@ -73,7 +73,7 @@ public class languageVN : MonoBehaviour {
         // edit account
         txtEditPass.text = "Đổi mật khẩu";
         txtEditEmail.text = "Đổi email";
-        txtEditPhone.text = "Đổi số điện thoại";
+        txtEditPhone.text = "Đổi điện thoại";
         txtBtnEditAccount.text = "Đồng ý";
         //edit pass
         txtOldPass.text = "Mật khẩu cũ";

@@ -57,6 +57,7 @@ public class myGUI : MonoBehaviour {
     public GameObject pnlCover;
     private bool isSignUpSuccess = false;
 	public GameObject pnlSignUp;
+    public Text txtTerm;
     //shop
     public GameObject panelShop;
     public GameObject btnShop;
@@ -83,10 +84,15 @@ public class myGUI : MonoBehaviour {
     public Text txtBtnEditPass;
     public Text txtBtnEditEmail;
     public Text txtBtnEditPhone;
-
-
+    public Text txtBtnEditExit;
+    public Sprite spriteSoundOff;
+    public Sprite spriteSoundOn;
+    private bool isMusic = false;
+    public GameObject objSound;
+    public GameObject panelForgotMN;
     private bool isChangeEmail = false;
     private bool isChangePhone = false;
+  
     void Awake() { 
         rectAnimal = panelAnimal.GetComponent<RectTransform>();
         listAnimal = new List<GameObject>();
@@ -682,7 +688,7 @@ public class myGUI : MonoBehaviour {
     }
     
     //btn apply term
-    public Text txtTerm;
+    
     public void btnTermClick() {
         pnlCover.SetActive(false);
         txtTerm.text = "Ông Thảo chỉ đạo đối với những cây đã hạ chuyển thì phải thay thế cây xanh mới đảm bảo mật độ theo quy hoạch. Khu vực này cũng phải hoàn thiện hè đường, đảm bảo giao thông đô thị. Chủ tịch thành phố nhắc nhở đơn vị chức năng tổ chức chăm sóc, quản lý theo phân cấp, quy định." +
@@ -719,17 +725,15 @@ public class myGUI : MonoBehaviour {
         mg.isLoginFalse = true;
     }
 
-	private bool isMusic = false;
-
 	public void btnMusicClick(){
 		if(isMusic){
 			SoundControlCS.sound.adjustVol(true);
-			Debug.Log(isMusic);
+            objSound.GetComponent<Image>().sprite = spriteSoundOn;
 			isMusic = false;
 
 		}else{
 			SoundControlCS.sound.adjustVol(false);
-			Debug.Log(isMusic);
+            objSound.GetComponent<Image>().sprite = spriteSoundOff;
 			isMusic = true;
 		}
 	}
@@ -778,8 +782,6 @@ public class myGUI : MonoBehaviour {
         mg.currentPhone = newPhone; 
     }
 
-    public GameObject panelForgotMN;
-
     public void btnForgotMNClick() {
         panelForgotMN.SetActive(true);
     }
@@ -788,8 +790,8 @@ public class myGUI : MonoBehaviour {
         panelForgotMN.SetActive(false);
     }
 
-    public void btnEditPassClick() {
-        changeColorButton(btnEditPass, btnEditEmail, btnEditPhone);
-
+    public void btnEditExitClickDown() {
+        txtBtnEditExit.resizeTextMaxSize = 60;
     }
+
 }
