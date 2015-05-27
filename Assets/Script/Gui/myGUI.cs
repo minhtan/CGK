@@ -25,9 +25,6 @@ public class myGUI : MonoBehaviour {
     public GameObject panelDoorRight;
     public GameObject btnLogin;
 	private bool isLoginFalse = false;
-    //panel error
-    public GameObject panelError;
-    public GameObject btnExitError;
     // canvas game
     public GameObject canvasGame;
     public GameObject canvasLogin;
@@ -84,7 +81,6 @@ public class myGUI : MonoBehaviour {
     public Text txtBtnEditPass;
     public Text txtBtnEditEmail;
     public Text txtBtnEditPhone;
-    public Text txtBtnEditExit;
     public Sprite spriteSoundOff;
     public Sprite spriteSoundOn;
     private bool isMusic = false;
@@ -681,14 +677,10 @@ public class myGUI : MonoBehaviour {
         }
         return false;
     }
-
-    public void btnExitClick()
-    {
-        panelError.SetActive(false);
-    }
     
     //btn apply term
-    
+
+
     public void btnTermClick() {
         pnlCover.SetActive(false);
         txtTerm.text = "Ông Thảo chỉ đạo đối với những cây đã hạ chuyển thì phải thay thế cây xanh mới đảm bảo mật độ theo quy hoạch. Khu vực này cũng phải hoàn thiện hè đường, đảm bảo giao thông đô thị. Chủ tịch thành phố nhắc nhở đơn vị chức năng tổ chức chăm sóc, quản lý theo phân cấp, quy định." +
@@ -698,6 +690,9 @@ public class myGUI : MonoBehaviour {
     public void closeSignUp() {
         animSignUp.SetTrigger("openSignUp");
         StartCoroutine(waitAnimCloseSignUp());
+        pnlCover.SetActive(true);
+        txtTerm.text = "Edit the Expression & Text to see matches. Roll over matches or the expression for details. Undo mistakes with ctrl-z. Save & Share expressions with friends or the Community. A full Reference & Help is available in the Library, or watch the video Tutorial";
+        
     }
 
     private IEnumerator waitAnimCloseSignUp() {
@@ -789,9 +784,4 @@ public class myGUI : MonoBehaviour {
     public void btnExitForgotMN() { 
         panelForgotMN.SetActive(false);
     }
-
-    public void btnEditExitClickDown() {
-        txtBtnEditExit.resizeTextMaxSize = 60;
-    }
-
 }
