@@ -25,6 +25,7 @@ public class myGUI : MonoBehaviour {
     public GameObject panelDoorRight;
     public GameObject btnLogin;
 	private bool isLoginFalse = false;
+    public Text txtLoading;
     // canvas game
     public GameObject canvasGame;
     public GameObject canvasLogin;
@@ -147,6 +148,7 @@ public class myGUI : MonoBehaviour {
             isCoinServer = false;
             animCanvasLogin.SetTrigger("login_gd3");
             canvasGame.SetActive(true);
+            txtLoading.active = false;
             textCoin.text = presentCoin + "";
             txtCurrentPhone.text = currentPhone;
             txtCurrentEmail.text = currentEmail;
@@ -169,22 +171,18 @@ public class myGUI : MonoBehaviour {
             {
                 case 0:
                     setActivePnlEdit(true, false, false);
-                    changeColorButton(btnEditPass, btnEditEmail, btnEditPhone);
                     changeColorText(txtBtnEditPass, txtBtnEditEmail, txtBtnEditPhone);
                     break;
                 case 1:
                     setActivePnlEdit(false, true, false);
-                    changeColorButton(btnEditEmail, btnEditPass, btnEditPhone);
                     changeColorText(txtBtnEditEmail, txtBtnEditPass, txtBtnEditPhone);
                     break;
                 case 2:
                     setActivePnlEdit(false, false, true);
-                    changeColorButton(btnEditPhone, btnEditPass, btnEditEmail);
                     changeColorText(txtBtnEditPhone, txtBtnEditEmail, txtBtnEditPass);
                     break;
                 default:
                     setActivePnlEdit(true, false, false);
-                    changeColorButton(btnEditPass, btnEditEmail, btnEditPhone);
                     changeColorText(txtBtnEditPass, txtBtnEditEmail, txtBtnEditPhone);
                     break;
             }
@@ -501,6 +499,7 @@ public class myGUI : MonoBehaviour {
         else if (RegexString.isValid(username, RegexString.usernameReg) && RegexString.isValid(password, RegexString.passReg))
         {
             animOpenLogin();
+            txtLoading.active = true;
             account.signIn(username, password);
         }
         else
@@ -752,13 +751,6 @@ public class myGUI : MonoBehaviour {
         pnlEditPass.SetActive(isPass);
         pnlEditEmail.SetActive(isEmail);
         pnlEditPhone.SetActive(isPhone);
-    }
-
-    private void changeColorButton(GameObject obj1, GameObject obj2, GameObject obj3) {
-        Color blue = new Vector4(0.03f, 0f, 1f, 1f);
-        obj1.GetComponent<Image>().color = blue;
-        obj2.GetComponent<Image>().color = Color.white;
-        obj3.GetComponent<Image>().color = Color.white;
     }
 
     private void changeColorText(Text txt1, Text txt2, Text txt3) {

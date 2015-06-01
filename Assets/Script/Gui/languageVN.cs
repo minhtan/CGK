@@ -54,7 +54,7 @@ public class languageVN : MonoBehaviour {
     public static languageVN language;
     public string TEXT_OK = "Đồng ý";
     public string TEXT_PASS = "Mật khẩu";
-    public string TEXT_CONFIRM_PASS = "Nhập password để xác nhận";
+    public string TEXT_CONFIRM_PASS = "Nhập mật khẩu xác nhận";
     public string TEXT_OLD_PASS = "Mật khẩu cũ";
     public string TEXT_NEW_PASS = "Mật khẩu mới";
     public string TEXT_RENEW_PASS = "Nhập lại mật khẩu mới";
