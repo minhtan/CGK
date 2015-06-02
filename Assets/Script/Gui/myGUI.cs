@@ -172,18 +172,22 @@ public class myGUI : MonoBehaviour {
                 case 0:
                     setActivePnlEdit(true, false, false);
                     changeColorText(txtBtnEditPass, txtBtnEditEmail, txtBtnEditPhone);
+                    changeColorButton(btnEditPass, btnEditEmail, btnEditPhone);
                     break;
                 case 1:
                     setActivePnlEdit(false, true, false);
                     changeColorText(txtBtnEditEmail, txtBtnEditPass, txtBtnEditPhone);
+                    changeColorButton(btnEditEmail, btnEditPass, btnEditPhone);
                     break;
                 case 2:
                     setActivePnlEdit(false, false, true);
                     changeColorText(txtBtnEditPhone, txtBtnEditEmail, txtBtnEditPass);
+                    changeColorButton(btnEditPhone, btnEditEmail, btnEditPass);
                     break;
                 default:
                     setActivePnlEdit(true, false, false);
                     changeColorText(txtBtnEditPass, txtBtnEditEmail, txtBtnEditPhone);
+                    changeColorButton(btnEditPass, btnEditEmail, btnEditPhone);
                     break;
             }
         }
@@ -258,22 +262,7 @@ public class myGUI : MonoBehaviour {
         if (deltaCoin > 0)
         {
             SoundControlCS.sound.playWinCoin();
-            if (deltaCoin < 50)
-            {
-				deltaTime = 0.15f;
-			}else if(deltaCoin >= 50 && deltaCoin < 100){
-				deltaTime = 0.125f;
-			}else if(deltaCoin >= 100 && deltaCoin < 200){
-				deltaTime = 0.083333f;
-			}else if(deltaCoin >= 200 && deltaCoin < 400){
-				deltaTime = 0.05f;
-			}else if(deltaCoin >= 400 && deltaCoin < 800){
-				deltaTime = 0.03333f;
-			}else if(deltaCoin >= 800 && deltaCoin < 1600){
-				deltaTime = 0.025f;
-			}else if(deltaCoin >= 1600 && deltaCoin < 3001){
-				deltaTime = 0.02f;
-			}    
+            deltaTime = 0.04f;
 			for (int i = lastCoin; i <= coinServer; i ++)
 			{
 				yield return new WaitForSeconds(deltaTime);
@@ -753,8 +742,15 @@ public class myGUI : MonoBehaviour {
         pnlEditPhone.SetActive(isPhone);
     }
 
+    private void changeColorButton(GameObject btn1, GameObject btn2, GameObject btn3) {
+        Color32 color = new Color32(210, 217, 153, 255);
+        btn1.GetComponent<Image>().color = color;
+        btn2.GetComponent<Image>().color = Color.white;
+        btn3.GetComponent<Image>().color = Color.white;
+    }
+
     private void changeColorText(Text txt1, Text txt2, Text txt3) {
-        txt1.color = Color.white;
+        txt1.color = Color.red;
         txt2.color = Color.black;
         txt3.color = Color.black;
     }

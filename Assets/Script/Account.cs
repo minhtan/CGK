@@ -92,7 +92,7 @@ public class Account : MonoBehaviour {
                         string[] errorNumber = System.Convert.ToString(error.Message).Split(' ');
                         if (errorNumber[0].Equals("404"))
                         {
-                            Notification.messageError("Đăng nhập sai tài khoản", "Lỗi đăng nhập", Notification.FORGOT_ERROR);
+                            Notification.messageError("Đăng nhập sai tài khoản. Bạn muốn lấy lại mật khẩu ?", "Lỗi đăng nhập", Notification.FORGOT_ERROR);
                         }
                         else {
                             Notification.messageError("Không có kết nối mạng", "Lỗi mạng", Notification.NETWORK_ERROR);

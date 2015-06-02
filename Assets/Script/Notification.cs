@@ -14,7 +14,7 @@ public class Notification : MonoBehaviour {
     private string textError;
     private string textTitle;
     public GameObject btnSignIn;
-    public GameObject txtForgotMeNot;
+    public GameObject btnForgotMeNot;
     private bool isForgotError = false;
     public static int NETWORK_ERROR = 0;
     public static int WARRNING_ERROR = 1;
@@ -25,7 +25,7 @@ public class Notification : MonoBehaviour {
     public Animator animShop;
     public GameObject panelMainError;
     private bool isReloadSence = false;
-
+    public GameObject btnExit;
 
     void Awake() {
         notify = this;
@@ -44,14 +44,16 @@ public class Notification : MonoBehaviour {
         }
         if (isForgotError)
         {
-            txtForgotMeNot.SetActive(true);
+            btnForgotMeNot.SetActive(true);
+            btnExit.GetComponent<AnchorDelta>().anchorXDelta = 0.5f;
+            btnExit.GetComponent<AnchorDelta>().newAnchorX = 0.5f;
         }
         else {
-            txtForgotMeNot.SetActive(false);
+            btnForgotMeNot.SetActive(false);
         }
     }
 
-    public void btnExitError() {
+    public void btnExitErrorClick() {
         isError = false;
         if (isNetworkError)
         {

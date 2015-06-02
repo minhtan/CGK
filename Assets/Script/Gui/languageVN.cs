@@ -10,12 +10,12 @@ public class languageVN : MonoBehaviour {
     public Text txtUser;
     public Text txtPass;
     public Text txtBtnExit;
-    public Text txtForgotUser;
     public Text txtTitleForgot;
     public Text txtContentForgot;
     public Text txtInputForgot;
     public Text txtBtnOkForgot;
     public Text txtBtnExitForgot;
+    public Text txtBtnOkFGMN;
     //text canvas game
     public Text txtStart;
     public Text txtTitleShop;
@@ -100,8 +100,8 @@ public class languageVN : MonoBehaviour {
         //edit phone
         txtNewPhone.text = TEXT_NEW_PHONE;
         txtConfirmPhone.text = TEXT_CONFIRM_PASS;
-        txtBtnExit.text = "Xác nhận";
-        txtForgotUser.text = "Bạn muốn lấy lại mật khẩu?";
+        txtBtnExit.text = "Bỏ qua";
+        txtBtnOkFGMN.text = TEXT_OK;
         txtTitleForgot.text = "Lấy lại mật khẩu";
         txtContentForgot.text = "Mật khẩu của bạn sẽ được gửi vào hòm mail đã được đăng ký.";
         txtInputForgot.text = TEXT_EMAIL_FORGOTPASS;
