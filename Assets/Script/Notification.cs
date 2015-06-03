@@ -26,6 +26,7 @@ public class Notification : MonoBehaviour {
     public GameObject panelMainError;
     private bool isReloadSence = false;
     public GameObject btnExit;
+    public GameObject txtLoading;
 
     void Awake() {
         notify = this;
@@ -38,6 +39,7 @@ public class Notification : MonoBehaviour {
             panelError.SetActive(true);
             message.text = textError;
             titleError.text = textTitle;
+            txtLoading.SetActive(false);
         }
         else {
             panelError.SetActive(false);
@@ -45,10 +47,12 @@ public class Notification : MonoBehaviour {
         if (isForgotError)
         {
             btnForgotMeNot.SetActive(true);
-            btnExit.GetComponent<AnchorDelta>().anchorXDelta = 0.5f;
-            btnExit.GetComponent<AnchorDelta>().newAnchorX = 0.5f;
+            btnExit.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0f);
+            btnExit.GetComponent<RectTransform>().anchorMax = new Vector2(1f, 0.2f);
         }
         else {
+            btnExit.GetComponent<RectTransform>().anchorMin = new Vector2(0, 0);
+            btnExit.GetComponent<RectTransform>().anchorMax = new Vector2(1, 0.2f);
             btnForgotMeNot.SetActive(false);
         }
     }
