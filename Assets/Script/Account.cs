@@ -327,4 +327,39 @@ public class Account : MonoBehaviour {
             });
         }
     }
+
+    public void forgetMeNot(string email)
+    {
+        IDictionary<string, object> dict = new Dictionary<string, object>()
+		{
+			{"email", email}
+		};
+        ParseCloud.CallFunctionAsync<IDictionary<string, object>>("forgotPassword", dict).ContinueWith(t =>
+        {
+            if (t.IsFaulted)
+            {
+                using (IEnumerator<System.Exception> enumerator = t.Exception.InnerExceptions.GetEnumerator())
+                {
+                    if (enumerator.MoveNext())
+                    {
+                        ParseException error = (ParseException)enumerator.Current;
+                        Debug.Log("Error: " + error.Code + ", " + error.Message);
+                    }
+                }
+            }
+            else
+            {
+                IDictionary<string, object> result = t.Result;
+                object errorCode;
+                if (result.TryGetValue("errorCode", out errorCode))
+                {
+                    Debug.Log("Error: " + result["errorCode"] + ", " + result["message"]);
+                }
+                else
+                {
+                    Debug.Log("test success");
+                }
+            }
+        });
+    }
 }
