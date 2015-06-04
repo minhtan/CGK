@@ -109,7 +109,6 @@ public class Notification : MonoBehaviour {
         }
         catch (Exception ex)
         {
-            Debug.Log(ex);
             messageError("Không có kết nối mạng, kiểm tra kết nối mạng", "Lỗi mạng", Notification.NETWORK_ERROR);
             return false;
         }

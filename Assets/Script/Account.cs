@@ -42,7 +42,6 @@ public class Account : MonoBehaviour {
                         if (enumerator.MoveNext())
                         {
                             ParseException error = (ParseException)enumerator.Current;
-                            Debug.Log("Error: " + error.Code + ", " + error.Message);
                             Notification.messageError("Không có kết nối mạng, kiểm tra kết nối mạng", "Lỗi mạng", Notification.WARRNING_ERROR);
                         }
                     }
@@ -53,7 +52,6 @@ public class Account : MonoBehaviour {
                     object errorCode;
                     if (result.TryGetValue("errorCode", out errorCode))
                     {
-                        Debug.Log("Error: " + result["errorCode"] + ", " + result["message"]);
                         int numberError = System.Convert.ToInt32(result["errorCode"]);
                         if (numberError== 203)
                         {
@@ -69,7 +67,6 @@ public class Account : MonoBehaviour {
                     else
                     {
                         Notification.messageError("Đăng ký thành công", "", Notification.WARRNING_ERROR);
-                        Debug.Log("Success: " + result["successCode"]);
                     }
                 }
             });
@@ -90,12 +87,13 @@ public class Account : MonoBehaviour {
                     {
                         ParseException error = (ParseException)enumerator.Current;
                         string[] errorNumber = System.Convert.ToString(error.Message).Split(' ');
-                        if (errorNumber[0].Equals("404"))
+                        Debug.Log(error);
+                        if (!errorNumber[0].Equals("404"))
                         {
-                            Notification.messageError("Đăng nhập sai tài khoản. Bạn muốn lấy lại mật khẩu ?", "Lỗi đăng nhập", Notification.FORGOT_ERROR);
+                            Notification.messageError("Không có kết nối mạng", "Lỗi mạng", Notification.NETWORK_ERROR);
                         }
                         else {
-                            Notification.messageError("Không có kết nối mạng", "Lỗi mạng", Notification.NETWORK_ERROR);
+                            Notification.messageError("Đăng nhập sai tài khoản. Bạn muốn lấy lại mật khẩu ?", "Lỗi đăng nhập", Notification.FORGOT_ERROR);
                         }
                     }
                 }
@@ -103,9 +101,7 @@ public class Account : MonoBehaviour {
             }
             else
             {
-                Debug.Log("Sign in successfully");
                 Bet.bet.getMyCoin();
-                Debug.Log(ParseUser.CurrentUser.ToString());
             }
         });
 	}
@@ -180,7 +176,6 @@ public class Account : MonoBehaviour {
                         if (enumerator.MoveNext())
                         {
                             ParseException error = (ParseException)enumerator.Current;
-                            Debug.Log("Error: " + error.Code + ", " + error.Message);
                             Notification.messageError("Không có kết nối mạng, kiểm tra kết nối mạng", "Lỗi mạng", Notification.WARRNING_ERROR);
                         }
                     }
@@ -205,7 +200,6 @@ public class Account : MonoBehaviour {
                     else
                     {
                         Notification.messageError("Đổi mật khẩu thành công", "", Notification.WARRNING_ERROR);
-                        Debug.Log("Success: " + result["successCode"]);
                     }
                 }
             });
@@ -237,7 +231,6 @@ public class Account : MonoBehaviour {
                         if (enumerator.MoveNext())
                         {
                             ParseException error = (ParseException)enumerator.Current;
-                            Debug.Log("Error: " + error.Code + ", " + error.Message);
                             Notification.messageError("Không có kết nối mạng", "Lỗi mạng", Notification.WARRNING_ERROR);
                         }
                     }
@@ -248,7 +241,6 @@ public class Account : MonoBehaviour {
                     object errorCode;
                     if (result.TryGetValue("errorCode", out errorCode))
                     {
-                        Debug.Log("Error: " + result["errorCode"] + ", " + result["message"]);
                         int numberError = System.Convert.ToInt32(result["errorCode"]);
                         if (numberError == 3)
                         {
@@ -263,7 +255,6 @@ public class Account : MonoBehaviour {
                     {
                         myGUI.successChangeEmail(System.Convert.ToString(result["newMail"]));
                         Notification.messageError("Đổi email thành công", "", Notification.WARRNING_ERROR);
-                        Debug.Log("Success: " + result["successCode"]);
                     }
                 }
             });
@@ -295,7 +286,6 @@ public class Account : MonoBehaviour {
                         if (enumerator.MoveNext())
                         {
                             ParseException error = (ParseException)enumerator.Current;
-                            Debug.Log("Error: " + error.Code + ", " + error.Message);
                             Notification.messageError("Không có kết nối mạng", "Lỗi mạng", Notification.WARRNING_ERROR);
                         }
                     }
@@ -321,7 +311,6 @@ public class Account : MonoBehaviour {
                     {
                         myGUI.successChangePhone(System.Convert.ToString(result["newPhone"]));
                         Notification.messageError("Đổi số điện thoại thành công", "", Notification.WARRNING_ERROR);
-                        Debug.Log("Success: " + result["successCode"]);
                     }
                 }
             });
