@@ -109,7 +109,7 @@ public class Notification : MonoBehaviour {
         }
         catch (Exception ex)
         {
-            messageError("Không có kết nối mạng, kiểm tra kết nối mạng", "Lỗi mạng", Notification.NETWORK_ERROR);
+            messageError("Không có kết nối mạng, kiểm tra đường truyền internet", "Lỗi mạng", Notification.NETWORK_ERROR);
             return false;
         }
     }

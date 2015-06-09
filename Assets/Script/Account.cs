@@ -19,6 +19,7 @@ public class Account : MonoBehaviour {
         string rePassword = getInput.getRePassword();
         string email = getInput.getEmailInput();
         string phone = getInput.getPhoneInput();
+
         if (!RegexString.checkString(username, password))
         {
             Notification.messageError("Tên người dùng hoặc mật khẩu phải dài hơn 2 ký tự", "Lỗi đăng ký", Notification.WARRNING_ERROR);
@@ -88,13 +89,13 @@ public class Account : MonoBehaviour {
                         ParseException error = (ParseException)enumerator.Current;
                         string[] errorNumber = System.Convert.ToString(error.Message).Split(' ');
                         Debug.Log(error);
-                        if (!errorNumber[0].Equals("404"))
-                        {
-                            Notification.messageError("Không có kết nối mạng", "Lỗi mạng", Notification.NETWORK_ERROR);
-                        }
-                        else {
+                        //if (errorNumber[0].Equals("404"))
+                        //{
+                        //    Notification.messageError("Không có kết nối mạng. Kiểm tra đường truyền internet", "Lỗi mạng", Notification.NETWORK_ERROR);
+                        //}
+                        //else {
                             Notification.messageError("Đăng nhập sai tài khoản. Bạn muốn lấy lại mật khẩu ?", "Lỗi đăng nhập", Notification.FORGOT_ERROR);
-                        }
+                        //}
                     }
                 }
                 myGUI.loginFaild();
@@ -317,8 +318,9 @@ public class Account : MonoBehaviour {
         }
     }
 
-    public void forgetMeNot(string email)
+    public void forgetMeNot()
     {
+        string email = getInput.getForgotMeNot();
         IDictionary<string, object> dict = new Dictionary<string, object>()
 		{
 			{"email", email}

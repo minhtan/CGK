@@ -27,6 +27,10 @@ public class GetMyInput : MonoBehaviour {
     public InputField inputNewPhone;
     public InputField inputPassPhone;
 
+    // forgot me not
+    public InputField inputForgot;
+
+
     public string getEmailInput()
     {
         return inpEmail.text;
@@ -85,4 +89,7 @@ public class GetMyInput : MonoBehaviour {
         return inputPassPhone.text;
     }
 
+    public string getForgotMeNot() {
+        return inputForgot.text;
+    }
 }

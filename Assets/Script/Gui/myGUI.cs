@@ -25,7 +25,7 @@ public class myGUI : MonoBehaviour {
     public GameObject panelDoorRight;
     public GameObject btnLogin;
 	private bool isLoginFalse = false;
-    public Text txtLoading;
+    public GameObject txtLoading;
     // canvas game
     public GameObject canvasGame;
     public GameObject canvasLogin;
@@ -148,7 +148,7 @@ public class myGUI : MonoBehaviour {
             isCoinServer = false;
             animCanvasLogin.SetTrigger("login_gd3");
             canvasGame.SetActive(true);
-            txtLoading.active = false;
+            txtLoading.SetActive(false);
             textCoin.text = presentCoin + "";
             txtCurrentPhone.text = currentPhone;
             txtCurrentEmail.text = currentEmail;
@@ -488,7 +488,7 @@ public class myGUI : MonoBehaviour {
         else if (RegexString.isValid(username, RegexString.usernameReg) && RegexString.isValid(password, RegexString.passReg))
         {
             animOpenLogin();
-            txtLoading.active = true;
+            txtLoading.SetActive(true);
             account.signIn(username, password);
         }
         else
