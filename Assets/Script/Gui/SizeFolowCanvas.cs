@@ -52,7 +52,6 @@ public class SizeFolowCanvas : MonoBehaviour {
         panelBetSize(ratioScreen, widthCanvas, ratioBetVsScreen, rectPanelBet);
         panelBetSize(ratioScreen, widthCanvas, ratioBetVsScreen, rectCoverPnlBet);
         panelAnimalVsTimeBetSize(heightBet, ratioScreen, widthCanvas, ratioBetVsScreen, rectPanelAnimal);
-       // panelAnimalVsTimeBetSize(heightBet, ratioScreen, widthCanvas, ratioBetVsScreen, rectTimeBet);
         positionAnimal(ratioScreen);
         changeSize(panelShop, widthCanvas, heightScreenStandard);
         //shop

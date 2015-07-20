@@ -535,6 +535,7 @@ public class myGUI : MonoBehaviour {
         exitShop();
     }
 
+    public GameObject pnlListItem;
     private void exitShop() {
         animShop.SetTrigger("closeShop");
         btnShop.GetComponent<Button>().interactable = true;
